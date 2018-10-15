@@ -1,6 +1,8 @@
 package com.example.stockdemo.service;
 
 import com.example.stockdemo.mail.MailSendUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 @Component
 public class StockService {
+    Log log = LogFactory.getLog(StockService.class);
     @Autowired
     private RestTemplate restTemplate;
     private final static float TEN_PERCENT=1.1f;
@@ -45,7 +48,7 @@ public class StockService {
         Elements elements = doc.getElementsByClass("tbleft");
         for(int i=0;i<20;i++){
             if(i==9){
-                sb.append(" 24H:");
+                sb.append("<br>24H:");
             }
             Element element = elements.get(i);
             String stockName = element.text();
@@ -54,7 +57,7 @@ public class StockService {
             int length = url.length();
             String code = url.substring(length-9,length-1);
             if(sinajs(code)){
-                System.out.println(stockName+":"+code);
+                log.info(stockName+":"+code);
                 sb.append(stockName).append(",");
             }
 

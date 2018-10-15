@@ -15,15 +15,15 @@ public class ScheduledService {
     @Autowired
     private StockService stockService;
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "0/5 * 9,11,12 ? * MON-FRI")
+    @Scheduled(cron = "0 0 8,9 ? * MON-FRI")
     public void scheduled(){
         log.info("=====>>>>>use cron");
-        /*try {
-            //stockService.taoguba();
+        try {
+            stockService.taoguba();
             //MailSendUtil.sendMail(content);
         } catch (IOException e) {
             System.out.println(e.getMessage());
-        }*/
+        }
     }
     /*@Scheduled(fixedRate = 5000)
     public void scheduled1() {
