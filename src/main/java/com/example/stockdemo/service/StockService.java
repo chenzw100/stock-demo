@@ -42,6 +42,7 @@ public class StockService {
             sb.append("昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:")
                     .append(stockInfo.getOpeningPrice()).append("收盘:").append(stockInfo.getClosingPrice()).append("<br>");
         }
+        MailSendUtil.sendMail(sb.toString());
         return sb.toString();
     }
     //9:26执行
@@ -69,6 +70,7 @@ public class StockService {
                     .append(stockInfo.getOpeningPrice()).append("今开:").append(stockObj[1]).append("<br>");
         }
         yesterday.clear();
+        MailSendUtil.sendMail(sb.toString());
         return sb.toString();
     }
     //9:00执行
