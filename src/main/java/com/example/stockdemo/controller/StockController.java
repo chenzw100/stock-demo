@@ -1,5 +1,6 @@
 package com.example.stockdemo.controller;
 
+import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.StockService;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class StockController {
 
     @Autowired
     private StockService stockService;
+    @Autowired
+    private MarketService marketService;
 
     @RequestMapping("/taoguba")
     public String taoguba() throws IOException {
@@ -27,7 +30,8 @@ public class StockController {
         Calendar c=Calendar.getInstance();
         c.setTime(date);
         int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
-        sb.append(DateFormatUtils.format(date, "yy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>").append(stockService.chioceResut());
+        sb.append(DateFormatUtils.format(date, "yy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>").append(stockService.chioceResut()).append("<br>")
+        .append(marketService.temperature());
 
         return sb.toString();
     }

@@ -66,7 +66,7 @@ public class StockService {
             append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:")
                     .append(stockInfo.getOpeningPrice()).append(",开幅:").append(stockInfo.getOpenRate()).append(",收盘:").append(stockInfo.getClosingPrice()).append(",收幅:").append(stockInfo.getCloseRate()).append("<br>");
         }
-        MailSendUtil.sendMail(sb.toString());
+        MailSendUtil.sendMail(sb.append(MarketService.temperatureRecord).toString());
         return sb.toString();
     }
     //9:26执行
@@ -107,7 +107,7 @@ public class StockService {
     public String choice() throws IOException {
         today.clear();
         StringBuilder sb = new StringBuilder();
-        sb.append("现在对应9点，09H:");
+        sb.append("现在对应9点，09H:<br>");
         Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
         Elements elements = doc.getElementsByClass("tbleft");
         for(int i=0;i<20;i++){
@@ -149,12 +149,7 @@ public class StockService {
         DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
         String limit_up=decimalFormat.format(harden)+"0";
         String now =stockObj[3];
-        //System.out.println(limit_up+":"+now);
-        /*if(limit_up.equals(now)){
-            System.out.println("good");
-        }*/
 
-        //System.out.println(str);
         log.info(code+stockName+"::limit_up:"+limit_up+":now:"+now);
         Boolean isHarden = limit_up.equals(now);
         if(isHarden){
@@ -171,4 +166,5 @@ public class StockService {
         }
         return isHarden;
     }
+
 }

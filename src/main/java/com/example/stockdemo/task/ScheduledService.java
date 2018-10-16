@@ -1,5 +1,6 @@
 package com.example.stockdemo.task;
 
+import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.StockService;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -16,6 +17,8 @@ public class ScheduledService {
     Log log = LogFactory.getLog(ScheduledService.class);
     @Autowired
     private StockService stockService;
+    @Autowired
+    private MarketService marketService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
     @Scheduled(cron = "0 0 1 ? * MON-FRI")
@@ -36,7 +39,18 @@ public class ScheduledService {
     @Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe close"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        marketService.temperature();
         stockService.close();
+    }
+    @Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    public void temperature(){
+        log.info("==>>exe temperature"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        marketService.temperature();
+    }
+    @Scheduled(cron = "0 5 1 ? * MON-FRI")
+    public void clearTemperature(){
+        log.info("==>>exe clearTemperature"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        marketService.clearTemperature();
     }
 
     /**
