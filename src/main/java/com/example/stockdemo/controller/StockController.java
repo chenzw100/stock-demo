@@ -2,7 +2,10 @@ package com.example.stockdemo.controller;
 
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.StockService;
+import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +16,7 @@ import java.util.Date;
 
 @RestController
 public class StockController {
+    Log log = LogFactory.getLog(StockController.class);
 
     @Autowired
     private StockService stockService;
@@ -26,11 +30,11 @@ public class StockController {
     @RequestMapping("/hello")
     public String hello()  {
         StringBuilder sb = new StringBuilder();
-        Date date = new Date();
+        Date date = MyUtils.getCurrentDate();
         Calendar c=Calendar.getInstance();
         c.setTime(date);
         int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
-        sb.append(DateFormatUtils.format(date, "yy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>").append(stockService.chioceResut()).append("<br>")
+        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>").append(stockService.chioceResut()).append("<br>")
         .append(marketService.temperature());
 
         return sb.toString();

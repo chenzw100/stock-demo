@@ -1,11 +1,12 @@
 package com.example.stockdemo.mail;
 
+import com.example.stockdemo.utils.MyUtils;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.util.Date;
 import java.util.Properties;
 
 public class MailSendUtil {
@@ -72,7 +73,7 @@ public class MailSendUtil {
         // 创建邮件的接收者地址，并设置到邮件消息中
         message.setRecipient(Message.RecipientType.TO,new InternetAddress(info.getToAddress()));
         // 消息发送的时间
-        message.setSentDate(new Date());
+        message.setSentDate(MyUtils.getCurrentDate());
 
 
         return message ;

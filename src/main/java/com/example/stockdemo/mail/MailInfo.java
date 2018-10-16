@@ -1,9 +1,8 @@
 package com.example.stockdemo.mail;
 
 
+import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
-
-import java.util.Date;
 
 public class MailInfo {
     //邮箱服务器 如smtp.163.com
@@ -63,7 +62,7 @@ public class MailInfo {
     }
 
     public String getSubject() {
-        return  DateFormatUtils.format(new Date(), "yy-MM-dd HH:mm:ss");
+        return  DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd HH:mm:ss");
     }
 
     public void setSubject(String subject) {
