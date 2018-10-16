@@ -2,6 +2,7 @@ package com.example.stockdemo.task;
 
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.StockService;
+import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,7 +24,7 @@ public class ScheduledService {
     //0 0 9 ? * MON-FRI
     @Scheduled(cron = "0 0 1 ? * MON-FRI")
     public void choice(){
-        log.info("==>>exe choice"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         try {
             stockService.choice();
         } catch (IOException e) {
@@ -32,24 +33,24 @@ public class ScheduledService {
     }
     @Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
-        log.info("==>>exe open"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         stockService.open();
 
     }
     @Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
-        log.info("==>>exe close"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperature();
         stockService.close();
     }
     @Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void temperature(){
-        log.info("==>>exe temperature"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe temperature"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperature();
     }
     @Scheduled(cron = "0 5 1 ? * MON-FRI")
     public void clearTemperature(){
-        log.info("==>>exe clearTemperature"+ DateFormatUtils.format(new Date(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe clearTemperature"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.clearTemperature();
     }
 
