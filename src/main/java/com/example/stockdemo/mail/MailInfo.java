@@ -63,7 +63,7 @@ public class MailInfo {
     }
 
     public String getSubject() {
-        return  DateFormatUtils.format(new Date(), "yyMMdd");
+        return  DateFormatUtils.format(new Date(), "yy-MM-dd HH:mm:ss");
     }
 
     public void setSubject(String subject) {

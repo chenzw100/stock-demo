@@ -25,10 +25,33 @@ public class StockService {
     @Autowired
     private RestTemplate restTemplate;
     private final static float TEN_PERCENT=1.1f;
+    public String chioceResut(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("today：<br>");
+        for (String code:today.keySet()){
+            StockInfo stockInfo = today.get(code);
+            //https://www.taoguba.com.cn/quotes/sz002937/
+            sb.append(code).append(stockInfo.getName()).
+            append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:") .append(stockInfo.getOpeningPrice()).append("开幅:").append(stockInfo.getOpenRate())
+                    .append(" <a href='https://www.taoguba.com.cn/quotes/" + stockInfo.getCode() + "' target='_blank'>" + stockInfo.getName() + "</a><br>");
+        }
+        sb.append("yesterday:<br>");
+        for (String code:yesterday.keySet()){
+            StockInfo stockInfo = yesterday.get(code);
+            Object response =  restTemplate.getForObject(stockInfo.getSinaUrl(),String.class);
+            String str = response.toString();
+            String[] stockObj = str.split(",");
+            sb.append(code).append(stockInfo.getName()).
+            append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",昨开:")
+                    .append(stockInfo.getOpeningPrice()).append("今开:").append(stockObj[1])
+                    .append(" <a href='https://www.taoguba.com.cn/quotes/" + stockInfo.getCode() + "' target='_blank'>" + stockInfo.getName() + "</a><br>");
+        }
+        return sb.toString();
+    }
     //下午3:15点后执行
     public String close(){
         StringBuilder sb = new StringBuilder();
-        sb.append("收盘汇总：<br>");
+        sb.append("现在对应3:10,收盘汇总：<br>");
         for (String code:today.keySet()){
             StockInfo stockInfo = today.get(code);
             Object response =  restTemplate.getForObject(stockInfo.getSinaUrl(),String.class);
@@ -39,8 +62,9 @@ public class StockService {
             stockInfo.setOpeningPrice(stockObj[1]);
             stockInfo.setPrice(stockObj[3]);
             yesterday.put(code,stockInfo);
-            sb.append("昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:")
-                    .append(stockInfo.getOpeningPrice()).append("收盘:").append(stockInfo.getClosingPrice()).append("<br>");
+            sb.append(code).append(stockInfo.getName()).
+            append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:")
+                    .append(stockInfo.getOpeningPrice()).append(",开幅:").append(stockInfo.getOpenRate()).append(",收盘:").append(stockInfo.getClosingPrice()).append(",收幅:").append(stockInfo.getCloseRate()).append("<br>");
         }
         MailSendUtil.sendMail(sb.toString());
         return sb.toString();
@@ -48,7 +72,7 @@ public class StockService {
     //9:26执行
     public String open(){
         StringBuilder sb = new StringBuilder();
-        sb.append("开盘竞价：<br>");
+        sb.append("现在对应9:26,开盘竞价：<br>");
         for (String code:today.keySet()){
             StockInfo stockInfo = today.get(code);
             Object response =  restTemplate.getForObject(stockInfo.getSinaUrl(),String.class);
@@ -57,8 +81,9 @@ public class StockService {
             stockInfo.setClosingPrice(stockObj[3]);
             stockInfo.setOpeningPrice(stockObj[1]);
             stockInfo.setPrice(stockObj[3]);
-            sb.append("昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:")
-                    .append(stockInfo.getOpeningPrice()).append("<br>");
+            sb.append(code).append(stockInfo.getName()).
+            append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:")
+                    .append(stockInfo.getOpeningPrice()).append(",开幅:").append(stockInfo.getOpenRate()).append("<br>");
         }
         sb.append("上一天情况:<br>");
         for (String code:yesterday.keySet()){
@@ -66,8 +91,13 @@ public class StockService {
             Object response =  restTemplate.getForObject(stockInfo.getSinaUrl(),String.class);
             String str = response.toString();
             String[] stockObj = str.split(",");
-            sb.append("昨收:").append(stockInfo.getYesterdayPrice()).append(",昨开:")
-                    .append(stockInfo.getOpeningPrice()).append("今开:").append(stockObj[1]).append("<br>");
+            Float yesterday =Float.parseFloat(stockInfo.getYesterdayPrice());
+            Float opening =Float.parseFloat(stockObj[1]);
+            Float rate = (opening-yesterday)/yesterday*100;
+            DecimalFormat decimalFormat=new DecimalFormat(".00");
+            sb.append(code).append(stockInfo.getName()).
+            append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",昨开:")
+                    .append(stockInfo.getOpeningPrice()).append("今开:").append(stockObj[1]).append(",开幅:").append(decimalFormat.format(rate)).append("<br>");
         }
         yesterday.clear();
         MailSendUtil.sendMail(sb.toString());
@@ -77,7 +107,7 @@ public class StockService {
     public String choice() throws IOException {
         today.clear();
         StringBuilder sb = new StringBuilder();
-        sb.append("09H:");
+        sb.append("现在对应9点，09H:");
         Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
         Elements elements = doc.getElementsByClass("tbleft");
         for(int i=0;i<20;i++){
@@ -91,8 +121,8 @@ public class StockService {
             int length = url.length();
             String code = url.substring(length-9,length-1);
             if(sinajs(code,stockName)){
-                log.info(stockName+":"+code);
                 StockInfo stockInfo = today.get(code);
+                log.info("choice:【"+stockName+":"+code+"】昨收:"+stockInfo.getYesterdayPrice());
                 sb.append(stockName).append(",昨收:").append(stockInfo.getYesterdayPrice()).append("<br>");
             }
 
@@ -101,7 +131,9 @@ public class StockService {
         return sb.toString();
     }
     private Boolean sinajs(String code,String stockName){
+        //log.info(stockName+":"+code+",request.");
         if(today.containsKey(code)){
+            log.info(stockName+"is contains "+code);
             return true;
         }
         String url ="https://hq.sinajs.cn/list="+code;
@@ -123,12 +155,13 @@ public class StockService {
         }*/
 
         //System.out.println(str);
+        log.info(code+stockName+"::limit_up:"+limit_up+":now:"+now);
         Boolean isHarden = limit_up.equals(now);
         if(isHarden){
             StockInfo info = new StockInfo();
             info.setSinaUrl(url);
             info.setMarketCode(code);
-            info.setCode(code.substring(2,5));
+            info.setCode(code);
             info.setYesterdayPrice(stockObj[2]);
             info.setClosingPrice(stockObj[3]);
             info.setOpeningPrice(stockObj[1]);

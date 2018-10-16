@@ -1,5 +1,7 @@
 package com.example.stockdemo.domain;
 
+import java.text.DecimalFormat;
+
 public class StockInfo {
     private String code;
     private String marketCode;
@@ -9,6 +11,34 @@ public class StockInfo {
     private String openingPrice;
     private String closingPrice;
     private String sinaUrl;
+    private String openRate;
+    private String closeRate;
+
+    public String getCloseRate() {
+        Float yesterday =Float.parseFloat(getYesterdayPrice());
+        Float closing =Float.parseFloat(getClosingPrice());
+        Float rate = (closing-yesterday)/yesterday*100;
+        DecimalFormat decimalFormat=new DecimalFormat(".00");
+        closeRate=decimalFormat.format(rate);
+        return closeRate;
+    }
+
+    public void setCloseRate(String closeRate) {
+        this.closeRate = closeRate;
+    }
+
+    public String getOpenRate() {
+        Float yesterday =Float.parseFloat(getYesterdayPrice());
+        Float opening =Float.parseFloat(getOpeningPrice());
+        Float rate = (opening-yesterday)/yesterday*100;
+        DecimalFormat decimalFormat=new DecimalFormat(".00");
+        openRate=decimalFormat.format(rate);
+        return openRate;
+    }
+
+    public void setOpenRate(String openRate) {
+        this.openRate = openRate;
+    }
 
     public String getSinaUrl() {
         return sinaUrl;
