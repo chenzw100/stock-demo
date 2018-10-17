@@ -22,6 +22,7 @@ public class StockService {
     Log log = LogFactory.getLog(StockService.class);
     private static Map<String, StockInfo>  yesterday = new HashMap<String, StockInfo>();
     private static Map<String, StockInfo> today = new HashMap<String, StockInfo>();
+    private static Map<String, StockInfo> today24 = new HashMap<String, StockInfo>();
     @Autowired
     private RestTemplate restTemplate;
     private final static float TEN_PERCENT=1.1f;
@@ -35,6 +36,7 @@ public class StockService {
             append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:") .append(stockInfo.getOpeningPrice()).append("开幅:").append(stockInfo.getOpenRate())
                     .append(" <a href='https://www.taoguba.com.cn/quotes/" + stockInfo.getCode() + "' target='_blank'>" + stockInfo.getName() + "</a><br>");
         }
+
         sb.append("yesterday:<br>");
         for (String code:yesterday.keySet()){
             StockInfo stockInfo = yesterday.get(code);
@@ -44,6 +46,14 @@ public class StockService {
             sb.append(code).append(stockInfo.getName()).
             append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",昨开:")
                     .append(stockInfo.getOpeningPrice()).append("今开:").append(stockObj[1])
+                    .append(" <a href='https://www.taoguba.com.cn/quotes/" + stockInfo.getCode() + "' target='_blank'>" + stockInfo.getName() + "</a><br>");
+        }
+        sb.append("hotPop:<br>");
+        for (String code:today24.keySet()){
+            StockInfo stockInfo = today24.get(code);
+            //https://www.taoguba.com.cn/quotes/sz002937/
+            sb.append(code).append(stockInfo.getName()).
+                    append(" 前天收:").append(stockInfo.getYesterdayPrice()).append(",昨开盘:") .append(stockInfo.getOpeningPrice()).append("昨开幅:").append(stockInfo.getOpenRate())
                     .append(" <a href='https://www.taoguba.com.cn/quotes/" + stockInfo.getCode() + "' target='_blank'>" + stockInfo.getName() + "</a><br>");
         }
         return sb.toString();
@@ -110,6 +120,7 @@ public class StockService {
     //8:45执行，获取的是昨天的数据
     public String choice() throws IOException {
         today.clear();
+        today24.clear();
         StringBuilder sb = new StringBuilder();
         sb.append("09H:<br>");
         Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
@@ -146,6 +157,7 @@ public class StockService {
         //System.out.println(str);
         String[] stockObj = str.split(",");
         if(stockObj.length<3){
+            log.error(stockName + "=" + code + ":err=" + str);
             return false;
         }
         Float yesterday =Float.parseFloat(stockObj[2]);
@@ -156,18 +168,19 @@ public class StockService {
 
         log.info(code+stockName+"::limit_up:"+limit_up+":now:"+now);
         Boolean isHarden = limit_up.equals(now);
+        StockInfo info = new StockInfo();
+        info.setSinaUrl(url);
+        info.setMarketCode(code);
+        info.setCode(code);
+        info.setYesterdayPrice(stockObj[2]);
+        info.setClosingPrice(stockObj[3]);
+        info.setOpeningPrice(stockObj[1]);
+        info.setPrice(stockObj[3]);
+        info.setName(stockName);
         if(isHarden){
-            StockInfo info = new StockInfo();
-            info.setSinaUrl(url);
-            info.setMarketCode(code);
-            info.setCode(code);
-            info.setYesterdayPrice(stockObj[2]);
-            info.setClosingPrice(stockObj[3]);
-            info.setOpeningPrice(stockObj[1]);
-            info.setPrice(stockObj[3]);
-            info.setName(stockName);
             today.put(code,info);
         }
+        today24.put(code,info);
         return isHarden;
     }
     /**

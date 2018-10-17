@@ -1,10 +1,6 @@
 package com.example.stockdemo.mail;
 
 import com.example.stockdemo.utils.MyUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -12,13 +8,11 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
-@Component
-@ConfigurationProperties
-@PropertySource("classpath:mail.properties")
+
 public class MailSendUtil {
+    private final static String formName = "xxx@163.com";//你的邮箱
+    private final static String password = "****"; //授权码
     private final static String host = "smtp.163.com"; //163的服务器
-    private  static String formName ;//你的邮箱
-    private  static String password ; //授权码
     private final static String toAddress = formName;
     private final static String replayAddress = formName; //你的邮箱
 
@@ -98,7 +92,7 @@ public class MailSendUtil {
         }
     }
     public static void main(String[] args) {
-        String content = "英联";
+        String content = "test-content";
         MailInfo info = new MailInfo();
         info.setContent(content);
         try {
@@ -108,21 +102,5 @@ public class MailSendUtil {
             System.out.print("'的邮件发送失败！");
             e.printStackTrace();
         }
-    }
-
-    public static String getFormName() {
-        return formName;
-    }
-    @Value("${spring.mail.form}")
-    public static void setFormName(String formName) {
-        MailSendUtil.formName = formName;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-    @Value("${spring.mail.password}")
-    public static void setPassword(String password) {
-        MailSendUtil.password = password;
     }
 }

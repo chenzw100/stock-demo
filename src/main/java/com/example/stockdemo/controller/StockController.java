@@ -34,8 +34,8 @@ public class StockController {
         Calendar c=Calendar.getInstance();
         c.setTime(date);
         int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
-        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>").append(stockService.chioceResut()).append("<br>")
-        .append(marketService.temperature());
+        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>")
+        .append(marketService.temperature()).append("<br>").append(stockService.chioceResut());
 
         return sb.toString();
     }
