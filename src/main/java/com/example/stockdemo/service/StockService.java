@@ -51,7 +51,7 @@ public class StockService {
     //下午3:15点后执行
     public String close(){
         StringBuilder sb = new StringBuilder();
-        sb.append("现在对应3:10,收盘汇总：<br>");
+        sb.append("收盘汇总：<br>");
         for (String code:today.keySet()){
             StockInfo stockInfo = today.get(code);
             Object response =  restTemplate.getForObject(stockInfo.getSinaUrl(),String.class);
@@ -72,14 +72,16 @@ public class StockService {
     //9:26执行
     public String open(){
         StringBuilder sb = new StringBuilder();
-        sb.append("现在对应9:26,开盘竞价：<br>");
+        sb.append("开盘竞价：<br>");
         for (String code:today.keySet()){
             StockInfo stockInfo = today.get(code);
+            //选出来后，新的价格新的一天
             Object response =  restTemplate.getForObject(stockInfo.getSinaUrl(),String.class);
             String str = response.toString();
             String[] stockObj = str.split(",");
-            stockInfo.setClosingPrice(stockObj[3]);
             stockInfo.setOpeningPrice(stockObj[1]);
+            stockInfo.setYesterdayPrice(stockObj[2]);
+            stockInfo.setClosingPrice(stockObj[3]);
             stockInfo.setPrice(stockObj[3]);
             sb.append(code).append(stockInfo.getName()).
             append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",开盘:")
@@ -88,26 +90,28 @@ public class StockService {
         sb.append("上一天情况:<br>");
         for (String code:yesterday.keySet()){
             StockInfo stockInfo = yesterday.get(code);
+            String yesterdayOpenRate = stockInfo.getOpenRate();
             Object response =  restTemplate.getForObject(stockInfo.getSinaUrl(),String.class);
             String str = response.toString();
             String[] stockObj = str.split(",");
-            Float yesterday =Float.parseFloat(stockInfo.getYesterdayPrice());
+            stockInfo.setYesterdayPrice(stockObj[2]);
+            Float yesterdayOpening =Float.parseFloat(stockInfo.getOpeningPrice());
             Float opening =Float.parseFloat(stockObj[1]);
-            Float rate = (opening-yesterday)/yesterday*100;
+            Float rate = (opening-yesterdayOpening)/yesterdayOpening*100;
             DecimalFormat decimalFormat=new DecimalFormat(".00");
             sb.append(code).append(stockInfo.getName()).
             append(" 昨收:").append(stockInfo.getYesterdayPrice()).append(",昨开:")
-                    .append(stockInfo.getOpeningPrice()).append("今开:").append(stockObj[1]).append(",开幅:").append(decimalFormat.format(rate)).append("<br>");
+                    .append(stockInfo.getOpeningPrice()).append(",昨日开幅:").append(yesterdayOpenRate).append(",今开:").append(stockObj[1]).append(",赢幅:").append(decimalFormat.format(rate)).append("<br>");
         }
         yesterday.clear();
         MailSendUtil.sendMail(sb.toString());
         return sb.toString();
     }
-    //9:00执行
+    //8:45执行，获取的是昨天的数据
     public String choice() throws IOException {
         today.clear();
         StringBuilder sb = new StringBuilder();
-        sb.append("现在对应9点，09H:<br>");
+        sb.append("09H:<br>");
         Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
         Elements elements = doc.getElementsByClass("tbleft");
         for(int i=0;i<20;i++){
@@ -166,5 +170,10 @@ public class StockService {
         }
         return isHarden;
     }
+    /**
+     * 1：”27.55″，今日开盘价；
+     2：”27.25″，昨日收盘价；
+     3：”26.91″，当前价格；
+     */
 
 }

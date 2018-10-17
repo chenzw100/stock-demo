@@ -17,8 +17,8 @@ import java.util.Properties;
 @PropertySource("classpath:mail.properties")
 public class MailSendUtil {
     private final static String host = "smtp.163.com"; //163的服务器
-    private  static String formName = "xxx@163.com";//你的邮箱
-    private  static String password = "****"; //授权码
+    private  static String formName ;//你的邮箱
+    private  static String password ; //授权码
     private final static String toAddress = formName;
     private final static String replayAddress = formName; //你的邮箱
 

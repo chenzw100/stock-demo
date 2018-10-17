@@ -22,7 +22,7 @@ public class ScheduledService {
     private MarketService marketService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "0 0 1 ? * MON-FRI")
+    @Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         try {
