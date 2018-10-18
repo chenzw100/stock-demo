@@ -1,6 +1,7 @@
 package com.example.stockdemo.task;
 
 import com.example.stockdemo.service.MarketService;
+import com.example.stockdemo.service.MarketStockService;
 import com.example.stockdemo.service.StockService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -19,6 +20,8 @@ public class ScheduledService {
     private StockService stockService;
     @Autowired
     private MarketService marketService;
+    @Autowired
+    private MarketStockService tgbMarketStockService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
     @Scheduled(cron = "0 45 0 ? * MON-FRI")

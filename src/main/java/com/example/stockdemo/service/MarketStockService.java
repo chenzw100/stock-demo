@@ -5,13 +5,11 @@ import com.example.stockdemo.domain.SinaStock;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
 public abstract class MarketStockService {
     Log log = LogFactory.getLog(MarketStockService.class);
     private static Map<String, MyStock>  hotOpen = new HashMap();
