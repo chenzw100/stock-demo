@@ -1,7 +1,10 @@
 package com.example.stockdemo.controller;
 
+import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.service.MarketService;
+import com.example.stockdemo.service.SinaService;
 import com.example.stockdemo.service.StockService;
+import com.example.stockdemo.service.TgbService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -13,11 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class StockController {
     Log log = LogFactory.getLog(StockController.class);
-
+    private static Map<String, MyStock> hot24 = new HashMap();
+    @Autowired
+    private TgbService tgbService;
+    @Autowired
+    private SinaService sinaService;
     @Autowired
     private StockService stockService;
     @Autowired

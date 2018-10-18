@@ -2,7 +2,6 @@ package com.example.stockdemo.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.stockdemo.domain.StockInfo;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -13,8 +12,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class MarketService {
