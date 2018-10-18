@@ -1,6 +1,7 @@
 package com.example.stockdemo.controller;
 
 import com.example.stockdemo.domain.MyStock;
+import com.example.stockdemo.domain.SinaStock;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.SinaService;
 import com.example.stockdemo.service.StockService;
@@ -43,9 +44,21 @@ public class StockController {
         Calendar c=Calendar.getInstance();
         c.setTime(date);
         int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
-        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>")
-        .append(marketService.temperature()).append("<br>").append(stockService.chioceResut());
+        Map<String, MyStock> tgbHot24 =tgbService.getHop24Stock();
 
+        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>")
+        .append(marketService.temperature()).append("<br>");
+        sb.append("淘县实时热搜:<br>");
+        for (String code:tgbHot24.keySet()){
+            MyStock myStock = tgbHot24.get(code);
+            sb.append(myStock.getName()).append("<br>");
+        }
+        Map<String, MyStock> sinaHot24 =sinaService.getHop24Stock();
+        sb.append("微博实时热搜:<br>");
+        for (String code:sinaHot24.keySet()){
+            MyStock myStock = sinaHot24.get(code);
+            sb.append(myStock.getName()).append("<br>");
+        }
         return sb.toString();
     }
 }

@@ -26,7 +26,7 @@ public class MarketService {
     //下午9:45-15:45点后执行
     public String temperature()  {
         Date date = MyUtils.getCurrentDate();
-        String dateStr = DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss");
+        String dateStr = DateFormatUtils.format(date, "HH:mm:ss");
         String dateParam = DateFormatUtils.format(date, "yyyyMMdd");
         StringBuilder sb = new StringBuilder();
 
@@ -36,12 +36,12 @@ public class MarketService {
         JSONObject jsonYesterdayLast = arrayYesterday.getJSONObject(arrayYesterday.size()-1);
         Double dYesterday = jsonYesterdayLast.getDouble("value")*100;
         DecimalFormat decimalFormat=new DecimalFormat("0.00");
-        sb.append(dateStr+"==>> [昨日表现:").append(decimalFormat.format(dYesterday));
+        sb.append(dateStr+"==>> [昨现:").append(decimalFormat.format(dYesterday));
 
         String urlTemperature = temperature_url+dateParam;
         response =  restTemplate.getForObject(urlTemperature,String.class);
         String temperature = JSONObject.parseObject(response.toString()).getJSONObject("data").getString("temperature");
-        sb.append("] [现在温度:").append(temperature);
+        sb.append("] [温度:").append(temperature);
 
         String urlLimit = limit_url+dateParam;
         response =  restTemplate.getForObject(urlLimit,String.class);
@@ -58,11 +58,10 @@ public class MarketService {
         JSONArray vNormal = (JSONArray) arrayNormal.get(arrayNormal.size() - 1);
         Object downNormal = vNormal.toArray()[2];
         Object raiseNormal = vNormal.toArray()[1];
-        Object openNormal = vNormal.toArray()[6];
-        sb.append("] [涨:").append(raiseNormal).append(", 跌:").append(downNormal).append(", 炸版:").append(openNormal).append("]<br>");
+        sb.append("] [涨:").append(raiseNormal).append(", 跌:").append(downNormal).append("]<br>");
         String record=sb.toString();
         log.info("===>>record:"+record);
-        temperatureRecord =temperatureRecord +record;
+        temperatureRecord = record+temperatureRecord;
         return record;
     }
     public void clearTemperature()  {
