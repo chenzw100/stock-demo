@@ -2,10 +2,7 @@ package com.example.stockdemo.controller;
 
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.SinaStock;
-import com.example.stockdemo.service.MarketService;
-import com.example.stockdemo.service.SinaService;
-import com.example.stockdemo.service.StockService;
-import com.example.stockdemo.service.TgbService;
+import com.example.stockdemo.service.*;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -29,13 +26,21 @@ public class StockController {
     @Autowired
     private SinaService sinaService;
     @Autowired
-    private StockService stockService;
-    @Autowired
     private MarketService marketService;
+    @Autowired
+    private MarketStockService tgbMarketStockService;
 
-    @RequestMapping("/taoguba")
-    public String taoguba() throws IOException {
-        return stockService.choice();
+    @RequestMapping("/choice")
+    public String choice(){
+        return tgbMarketStockService.choiceYesterday();
+    }
+    @RequestMapping("/open")
+    public String open() {
+        return tgbMarketStockService.open();
+    }
+    @RequestMapping("/close")
+    public String close() {
+        return tgbMarketStockService.close();
     }
     @RequestMapping("/hello")
     public String hello()  {
@@ -53,12 +58,12 @@ public class StockController {
             MyStock myStock = tgbHot24.get(code);
             sb.append(myStock.getName()).append("<br>");
         }
-        Map<String, MyStock> sinaHot24 =sinaService.getHop24Stock();
+       /* Map<String, MyStock> sinaHot24 =sinaService.getHop24Stock();
         sb.append("微博实时热搜:<br>");
         for (String code:sinaHot24.keySet()){
             MyStock myStock = sinaHot24.get(code);
             sb.append(myStock.getName()).append("<br>");
-        }
+        }*/
         return sb.toString();
     }
 }

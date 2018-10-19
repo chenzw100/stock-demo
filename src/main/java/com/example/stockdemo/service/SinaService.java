@@ -40,6 +40,15 @@ public class SinaService {
         requestHeaders.add("Referer","https://m.weibo.cn/p/tabbar?containerid=230771_-_ZUHE_INDEX");
         List<String> cookieList = new ArrayList<String>();
         cookieList.add("MLOGIN=1");
+        cookieList.add("WEIBOCN_FROM=1110006030");
+        cookieList.add("_T_WM=");
+        cookieList.add("SUBP=");
+        cookieList.add("ALF=");
+        cookieList.add("SSOLoginState=");
+        cookieList.add("SUHB=");
+        cookieList.add("M_WEIBOCN_PARAMS=");
+        cookieList.add("SCF=");
+        cookieList.add("SUB=");
 
         requestHeaders.put(HttpHeaders.COOKIE,cookieList); //将cookie放入header
         HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);

@@ -147,26 +147,26 @@ public class MyStock {
         this.sinaUrl = sinaUrl;
     }
     public StringBuilder toChoice(StringBuilder sb){
-        sb.append(code).append(name).append("昨收:").append(yesterdayPrice).append("<br>");
+        sb.append(code).append(name).append(",昨收:").append(yesterdayPrice).append("<br>");
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){
-        sb.append(code).append(name).append("竞价:").append(getTodayOpenRate()).append("<br>");
+        sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toOpenTomorrow(StringBuilder sb){
-        sb.append(code).append(name).append("今天:").append(getTodayOpenRate())
-                .append("明天:").append(getTomorrowOpenRate()).append("<br>");
+        sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
+                .append(",明天:").append(getTomorrowOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toClose(StringBuilder sb){
         sb.append(code).append(name).append(",开盘:").append(getTodayOpenRate())
-                .append("收盘:").append(getTodayCloseRate()).append("<br>");
+                .append(",收盘:").append(getTodayCloseRate()).append("<br>");
         return sb;
     }
     public StringBuilder toCloseTomorrow(StringBuilder sb){
-        sb.append(code).append(name).append("今天:").append(getTodayOpenRate())
-                .append("明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
+        sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
+                .append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb;
     }
 }

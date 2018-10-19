@@ -2,7 +2,6 @@ package com.example.stockdemo.task;
 
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
-import com.example.stockdemo.service.StockService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -11,13 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+@Component
+public class MyScheduledService {
+    Log log = LogFactory.getLog(MyScheduledService.class);
 
-
-public class ScheduledService {
-    Log log = LogFactory.getLog(ScheduledService.class);
-    @Autowired
-    private StockService stockService;
     @Autowired
     private MarketService marketService;
     @Autowired
@@ -27,23 +23,20 @@ public class ScheduledService {
     @Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        try {
-            stockService.choice();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        tgbMarketStockService.choiceYesterday();
+
     }
     @Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
         log.info("==>>exe open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        stockService.open();
+        tgbMarketStockService.open();
 
     }
     @Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperature();
-        stockService.close();
+        tgbMarketStockService.close();
     }
     @Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void temperature(){

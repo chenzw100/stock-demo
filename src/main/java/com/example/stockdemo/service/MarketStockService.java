@@ -2,6 +2,7 @@ package com.example.stockdemo.service;
 
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.SinaStock;
+import com.example.stockdemo.mail.MailSendUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public abstract class MarketStockService {
     public String close(){
         StringBuilder sb = new StringBuilder();
         sb.append("收盘汇总：<br>");
+        sb.append("明天汇总：<br>");
         for (String code:tomorrow.keySet()){
             MyStock myStock = tomorrow.get(code);
             SinaStock sinaStock = getSinaStock(code);
@@ -31,7 +33,7 @@ public abstract class MarketStockService {
         }
 
         tomorrow.clear();
-
+        sb.append("今天汇总：<br>");
         for (String code:today.keySet()){
             MyStock myStock = today.get(code);
             SinaStock sinaStock = getSinaStock(code);
@@ -39,7 +41,9 @@ public abstract class MarketStockService {
             tomorrow.put(code,myStock);
             myStock.toClose(sb);
         }
+        sb.append(MarketService.temperatureRecord);
         log.info(sb.toString());
+        MailSendUtil.sendMail(sb.toString());
         return sb.toString();
     }
     //9:26执行
@@ -62,6 +66,7 @@ public abstract class MarketStockService {
             myStock.toOpenTomorrow(sb);
         }
         log.info(sb.toString());
+        MailSendUtil.sendMail(sb.toString());
         return sb.toString();
     }
     //8:45执行，获取的是昨天的数据
@@ -82,6 +87,7 @@ public abstract class MarketStockService {
             }
         }
         log.info(sb.toString());
+        MailSendUtil.sendMail(sb.toString());
         return sb.toString();
     }
 
