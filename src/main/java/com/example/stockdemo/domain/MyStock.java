@@ -1,5 +1,12 @@
 package com.example.stockdemo.domain;
 
+import com.example.stockdemo.utils.MyUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.text.DecimalFormat;
 
 /**
@@ -8,23 +15,59 @@ import java.text.DecimalFormat;
  * 今天竞价涨幅，相对于昨天收盘的涨幅 (todayOpenPrice-yesterdayPrice)/yesterdayPrice
  * 明天竞价涨幅，相对于今天开盘的涨幅 (tomorrowPrice-todayOpenPrice)/todayOpenPrice;此处就代表了盈利幅度
  */
+@Entity(name="mystock")
 public class MyStock {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(nullable = true)
+    private String dayFormat;
+    @Column(nullable = false)
     private String code;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = true)
     private String todayOpenPrice;
+    @Column(nullable = true)
     private String todayClosePrice;
+    @Column(nullable = true)
     private String tomorrowOpenPrice;
+    @Column(nullable = true)
     private String tomorrowClosePrice;
+    @Column(nullable = true)
     private String yesterdayPrice;
+    @Column(nullable = true)
     private String todayOpenRate;
+    @Column(nullable = true)
     private String todayCloseRate;
+    @Column(nullable = true)
     private String tomorrowOpenRate;
+    @Column(nullable = true)
     private String tomorrowCloseRate;
     private String sinaUrl;
+    public MyStock(){
+    }
     public MyStock(String code,String name){
         this.code =code;
         this.name = name;
         this.sinaUrl="https://hq.sinajs.cn/list="+code;
+        this.dayFormat = DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd");
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDayFormat() {
+        return dayFormat;
+    }
+
+    public void setDayFormat(String dayFormat) {
+        this.dayFormat = dayFormat;
     }
 
     public String getCode() {

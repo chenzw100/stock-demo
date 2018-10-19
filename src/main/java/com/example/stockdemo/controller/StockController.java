@@ -1,5 +1,8 @@
 package com.example.stockdemo.controller;
 
+import com.example.stockdemo.dao.AttributeRepository;
+import com.example.stockdemo.dao.MyStockRepository;
+import com.example.stockdemo.domain.Attribute;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.SinaStock;
 import com.example.stockdemo.service.*;
@@ -8,6 +11,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +33,8 @@ public class StockController {
     private MarketService marketService;
     @Autowired
     private MarketStockService tgbMarketStockService;
-
+    @Autowired
+    MyStockRepository myStockRepository;
     @RequestMapping("/choice")
     public String choice(){
         return tgbMarketStockService.choiceYesterday();
@@ -51,12 +56,13 @@ public class StockController {
         int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
         Map<String, MyStock> tgbHot24 =tgbService.getHop24Stock();
 
-        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>")
-        .append(marketService.temperature()).append("<br>");
+        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>");
+       // .append(marketService.temperature()).append("<br>");
         sb.append("淘县实时热搜:<br>");
         for (String code:tgbHot24.keySet()){
             MyStock myStock = tgbHot24.get(code);
             sb.append(myStock.getName()).append("<br>");
+            myStockRepository.save(myStock);
         }
        /* Map<String, MyStock> sinaHot24 =sinaService.getHop24Stock();
         sb.append("微博实时热搜:<br>");
@@ -65,5 +71,28 @@ public class StockController {
             sb.append(myStock.getName()).append("<br>");
         }*/
         return sb.toString();
+    }
+    @Autowired
+    AttributeRepository attributeRepository;
+    @RequestMapping("/add")
+    public void add(){
+        Attribute attribute = new Attribute();
+        attribute.setName("wolai");
+        attribute.setInputtype(1);
+        attribute.setAlias("wolai");
+        attribute.setType(2);
+        attribute.setCtime(new Date());
+        attributeRepository.save(attribute);
+        System.out.printf("success");
+    }
+    @RequestMapping("/id/{id}")
+    String id(@PathVariable("id")Long id) {
+        Attribute attribute = attributeRepository.getOne(id);
+        return "id:"+attribute.getName();
+    }
+    @RequestMapping("/code/{code}")
+    String name(@PathVariable("code")String code) {
+        MyStock myStock = myStockRepository.findByCode(code);
+        return "name:"+myStock.getName();
     }
 }
