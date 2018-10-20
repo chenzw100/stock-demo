@@ -1,5 +1,7 @@
 package com.example.stockdemo.utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
@@ -12,5 +14,63 @@ public class MyUtils {
         date.setTime(date.getTime()+eight_hour);
         return date;
 
+    }
+    public static int getCentBySinaPriceStr(String sinaPriceStr){
+        return new BigDecimal(Double.parseDouble(sinaPriceStr)).setScale(2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).intValue();
+        /*Double faultRate = Double.parseDouble(sinaPriceStr);
+        BigDecimal a = BigDecimal.valueOf(faultRate);
+        BigDecimal b =a.setScale(2, RoundingMode.HALF_UP);//保留两位小数；
+        System.out.println("结果是"+b);
+        //下面将结果转化成百分比
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMaximumFractionDigits(2);
+        System.out.println(percent.format(b.doubleValue()));
+        */
+
+    }
+    public static BigDecimal getYuanByCent(int cent){
+        return new BigDecimal(cent).setScale(2, RoundingMode.HALF_UP);
+        /*Double faultRate = Double.parseDouble(sinaPriceStr);
+        BigDecimal a = BigDecimal.valueOf(faultRate);
+        BigDecimal b =a.setScale(2, RoundingMode.HALF_UP);//保留两位小数；
+        System.out.println("结果是"+b);
+        //下面将结果转化成百分比
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMaximumFractionDigits(2);
+        System.out.println(percent.format(b.doubleValue()));
+        */
+
+    }
+    // numerator/denominator
+    public static BigDecimal getRate(int numerator,int denominator){
+        return new BigDecimal(numerator).divide(new BigDecimal(denominator)).setScale(2, RoundingMode.HALF_UP);
+        /*Double faultRate = Double.parseDouble(sinaPriceStr);
+        BigDecimal a = BigDecimal.valueOf(faultRate);
+        BigDecimal b =a.setScale(2, RoundingMode.HALF_UP);//保留两位小数；
+        System.out.println("结果是"+b);
+        //下面将结果转化成百分比
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMaximumFractionDigits(2);
+        System.out.println(percent.format(b.doubleValue()));
+        */
+
+    }
+    public static BigDecimal getIncreaseRate(int increase,int base){
+
+        return new BigDecimal(increase-base).divide(new BigDecimal(base)).setScale(2, RoundingMode.HALF_UP);
+        /*Double faultRate = Double.parseDouble(sinaPriceStr);
+        BigDecimal a = BigDecimal.valueOf(faultRate);
+        BigDecimal b =a.setScale(2, RoundingMode.HALF_UP);//保留两位小数；
+        System.out.println("结果是"+b);
+        //下面将结果转化成百分比
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMaximumFractionDigits(2);
+        System.out.println(percent.format(b.doubleValue()));
+        */
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(MyUtils.getIncreaseRate(11,10));
     }
 }

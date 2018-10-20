@@ -4,6 +4,7 @@ import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.SinaStock;
 import com.example.stockdemo.mail.MailSendUtil;
+import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public abstract class MarketStockService {
         for (String code:tomorrow.keySet()){
             MyStock myStock = tomorrow.get(code);
             SinaStock sinaStock = getSinaStock(code);
-            myStock.setTomorrowClosePrice(sinaStock.getCurrentPrice());
+            myStock.setTomorrowClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
             myStock.toCloseTomorrow(sb);
             myStockRepository.save(myStock);
         }
@@ -41,7 +42,7 @@ public abstract class MarketStockService {
         for (String code:today.keySet()){
             MyStock myStock = today.get(code);
             SinaStock sinaStock = getSinaStock(code);
-            myStock.setTodayClosePrice(sinaStock.getCurrentPrice());
+            myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
             myStock = myStockRepository.save(myStock);
             tomorrow.put(code,myStock);
             myStock.toClose(sb);
@@ -59,7 +60,7 @@ public abstract class MarketStockService {
             MyStock myStock = today.get(code);
             //选出来后，新的价格新的一天
             SinaStock sinaStock = getSinaStock(code);
-            myStock.setTodayOpenPrice(sinaStock.getOpeningPrice());
+            myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(sinaStock.getOpeningPrice()));
             myStock.toOpen(sb);
             myStock= myStockRepository.save(myStock);
             today.put(code,myStock);
@@ -68,7 +69,7 @@ public abstract class MarketStockService {
         for (String code:tomorrow.keySet()){
             MyStock myStock = tomorrow.get(code);
             SinaStock sinaStock = getSinaStock(code);
-            myStock.setTomorrowOpenPrice(sinaStock.getOpeningPrice());
+            myStock.setTomorrowOpenPrice(MyUtils.getCentBySinaPriceStr(sinaStock.getOpeningPrice()));
             myStock.toOpenTomorrow(sb);
             myStock = myStockRepository.save(myStock);
             tomorrow.put(code,myStock);
@@ -88,7 +89,7 @@ public abstract class MarketStockService {
             SinaStock sinaStock = getSinaStock(code);
             if (sinaStock != null){
                 if(sinaStock.getIsHarden()){
-                    myStock.setYesterdayPrice(sinaStock.getCurrentPrice());
+                    myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
                     myStock.toChoice(sb);
                     myStock= myStockRepository.save(myStock);
                     today.put(code,myStock);

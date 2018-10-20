@@ -3,10 +3,7 @@ package com.example.stockdemo.domain;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.text.DecimalFormat;
 
 /**
@@ -20,30 +17,33 @@ public class MyStock {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String dayFormat;
     @Column(nullable = false)
     private String code;
     @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
+    private int yesterdayClosePrice;
+
     @Column(nullable = true)
-    private String todayOpenPrice;
+    private int todayOpenPrice;
     @Column(nullable = true)
-    private String todayClosePrice;
+    private int todayClosePrice;
     @Column(nullable = true)
-    private String tomorrowOpenPrice;
+    private int tomorrowOpenPrice;
     @Column(nullable = true)
-    private String tomorrowClosePrice;
-    @Column(nullable = true)
-    private String yesterdayPrice;
-    @Column(nullable = true)
+    private int tomorrowClosePrice;
+
+    @Transient
     private String todayOpenRate;
-    @Column(nullable = true)
+    @Transient
     private String todayCloseRate;
-    @Column(nullable = true)
+    @Transient
     private String tomorrowOpenRate;
-    @Column(nullable = true)
+    @Transient
     private String tomorrowCloseRate;
+    @Transient
     private String sinaUrl;
     public MyStock(){
     }
@@ -86,37 +86,49 @@ public class MyStock {
         this.name = name;
     }
 
-    public String getTodayOpenPrice() {
+    public int getYesterdayClosePrice() {
+        return yesterdayClosePrice;
+    }
+
+    public void setYesterdayClosePrice(int yesterdayClosePrice) {
+        this.yesterdayClosePrice = yesterdayClosePrice;
+    }
+
+    public int getTodayOpenPrice() {
         return todayOpenPrice;
     }
 
-    public void setTodayOpenPrice(String todayOpenPrice) {
+    public void setTodayOpenPrice(int todayOpenPrice) {
         this.todayOpenPrice = todayOpenPrice;
     }
 
-    public String getTomorrowOpenPrice() {
+    public int getTodayClosePrice() {
+        return todayClosePrice;
+    }
+
+    public void setTodayClosePrice(int todayClosePrice) {
+        this.todayClosePrice = todayClosePrice;
+    }
+
+    public int getTomorrowOpenPrice() {
         return tomorrowOpenPrice;
     }
 
-    public void setTomorrowOpenPrice(String tomorrowOpenPrice) {
+    public void setTomorrowOpenPrice(int tomorrowOpenPrice) {
         this.tomorrowOpenPrice = tomorrowOpenPrice;
     }
 
-    public String getYesterdayPrice() {
-        return yesterdayPrice;
+    public int getTomorrowClosePrice() {
+        return tomorrowClosePrice;
     }
 
-    public void setYesterdayPrice(String yesterdayPrice) {
-        this.yesterdayPrice = yesterdayPrice;
+    public void setTomorrowClosePrice(int tomorrowClosePrice) {
+        this.tomorrowClosePrice = tomorrowClosePrice;
     }
 
     public String getTodayOpenRate() {
         //(todayPrice-yesterdayPrice)/yesterdayPrice
-        Float yesterday =Float.parseFloat(getYesterdayPrice());
-        Float todayPrice =Float.parseFloat(getTodayOpenPrice());
-        Float rate = (todayPrice-yesterday)/yesterday*100;
-        DecimalFormat decimalFormat=new DecimalFormat("0.00");
-        todayOpenRate=decimalFormat.format(rate);
+        MyUtils.getIncreaseRate(getTodayOpenPrice(),getYesterdayClosePrice());
         return todayOpenRate;
     }
 
@@ -126,11 +138,7 @@ public class MyStock {
 
     public String getTodayCloseRate() {
         //(todayClosePrice-todayPrice)/todayPrice
-        Float todayClosePrice =Float.parseFloat(getTodayClosePrice());
-        Float todayOpenPrice =Float.parseFloat(getTodayOpenPrice());
-        Float rate = (todayClosePrice-todayOpenPrice)/todayOpenPrice*100;
-        DecimalFormat decimalFormat=new DecimalFormat("0.00");
-        todayCloseRate=decimalFormat.format(rate);
+        MyUtils.getIncreaseRate(getTodayClosePrice(),getTodayOpenPrice());
         return todayCloseRate;
     }
 
@@ -138,21 +146,11 @@ public class MyStock {
         this.todayCloseRate = todayCloseRate;
     }
 
-    public String getTodayClosePrice() {
-        return todayClosePrice;
-    }
 
-    public void setTodayClosePrice(String todayClosePrice) {
-        this.todayClosePrice = todayClosePrice;
-    }
 
     public String getTomorrowOpenRate() {
         //(tomorrowPrice-todayPrice)/todayPrice
-        Float tomorrowPrice =Float.parseFloat(getTomorrowOpenPrice());
-        Float todayPrice =Float.parseFloat(getTodayOpenPrice());
-        Float rate = (tomorrowPrice-todayPrice)/todayPrice*100;
-        DecimalFormat decimalFormat=new DecimalFormat("0.00");
-        tomorrowOpenRate=decimalFormat.format(rate);
+        MyUtils.getIncreaseRate(getTomorrowOpenPrice(),getTodayOpenPrice());
         return tomorrowOpenRate;
     }
 
@@ -160,21 +158,11 @@ public class MyStock {
         this.tomorrowOpenRate = tomorrowOpenRate;
     }
 
-    public String getTomorrowClosePrice() {
-        return tomorrowClosePrice;
-    }
 
-    public void setTomorrowClosePrice(String tomorrowClosePrice) {
-        this.tomorrowClosePrice = tomorrowClosePrice;
-    }
 
     public String getTomorrowCloseRate() {
         //(tomorrowPrice-todayPrice)/todayPrice
-        Float tomorrowPrice =Float.parseFloat(getTomorrowClosePrice());
-        Float todayPrice =Float.parseFloat(getTodayOpenPrice());
-        Float rate = (tomorrowPrice-todayPrice)/todayPrice*100;
-        DecimalFormat decimalFormat=new DecimalFormat("0.00");
-        tomorrowCloseRate=decimalFormat.format(rate);
+        MyUtils.getIncreaseRate(getTomorrowClosePrice(),getTodayOpenPrice());
         return tomorrowCloseRate;
     }
 
@@ -190,7 +178,7 @@ public class MyStock {
         this.sinaUrl = sinaUrl;
     }
     public StringBuilder toChoice(StringBuilder sb){
-        sb.append(code).append(name).append(",昨收:").append(yesterdayPrice).append("<br>");
+        sb.append(code).append(name).append(",昨收:").append(getYesterdayClosePrice()).append("<br>");
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){
