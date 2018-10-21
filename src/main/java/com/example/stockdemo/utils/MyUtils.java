@@ -29,7 +29,7 @@ public class MyUtils {
 
     }
     public static BigDecimal getYuanByCent(int cent){
-        return new BigDecimal(cent).setScale(2, RoundingMode.HALF_UP);
+        return new BigDecimal(cent).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP);
         /*Double faultRate = Double.parseDouble(sinaPriceStr);
         BigDecimal a = BigDecimal.valueOf(faultRate);
         BigDecimal b =a.setScale(2, RoundingMode.HALF_UP);//保留两位小数；
@@ -57,7 +57,7 @@ public class MyUtils {
     }
     public static BigDecimal getIncreaseRate(int increase,int base){
 
-        return new BigDecimal(increase-base).divide(new BigDecimal(base)).setScale(2, RoundingMode.HALF_UP);
+        return new BigDecimal(increase-base).divide(new BigDecimal(base)).setScale(2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
         /*Double faultRate = Double.parseDouble(sinaPriceStr);
         BigDecimal a = BigDecimal.valueOf(faultRate);
         BigDecimal b =a.setScale(2, RoundingMode.HALF_UP);//保留两位小数；
@@ -71,6 +71,6 @@ public class MyUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(MyUtils.getIncreaseRate(11,10));
+        System.out.println(MyUtils.getCentBySinaPriceStr("12.300"));
     }
 }
