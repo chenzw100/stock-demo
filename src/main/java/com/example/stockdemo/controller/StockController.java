@@ -1,7 +1,10 @@
 package com.example.stockdemo.controller;
 
 import com.example.stockdemo.dao.MyStockRepository;
+import com.example.stockdemo.dao.TemperatureRepository;
 import com.example.stockdemo.domain.MyStock;
+import com.example.stockdemo.domain.Temperature;
+import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
 import com.example.stockdemo.service.TgbService;
 import com.example.stockdemo.utils.MyUtils;
@@ -20,9 +23,13 @@ public class StockController {
     @Autowired
     private TgbService tgbService;
     @Autowired
+    private MarketService marketService;
+    @Autowired
     private MarketStockService tgbMarketStockService;
     @Autowired
     MyStockRepository myStockRepository;
+    @Autowired
+    TemperatureRepository temperatureRepository;
     @RequestMapping("/choice")
     public String choice(){
         return tgbMarketStockService.choiceYesterday();
@@ -44,8 +51,8 @@ public class StockController {
         int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
         Map<String, MyStock> tgbHot24 =tgbService.getHop24Stock();
 
-        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>");
-       // .append(marketService.temperature()).append("<br>");
+        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>")
+                .append(marketService.temperature(3)).append("<br>");
         sb.append("淘县实时热搜:<br>");
         for (String code:tgbHot24.keySet()){
             MyStock myStock = tgbHot24.get(code);
@@ -69,6 +76,7 @@ public class StockController {
     @RequestMapping("/format/{format}")
     String format(@PathVariable("format")String format) {
         List<MyStock> myStocks = myStockRepository.findByDayFormat(format);
-        return format+":<br>"+myStocks;
+        List<Temperature> temperatures = temperatureRepository.findByDayFormat(format);
+        return format+":<br>"+myStocks+":<br>"+temperatures;
     }
 }

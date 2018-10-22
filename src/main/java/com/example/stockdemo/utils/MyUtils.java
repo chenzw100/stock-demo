@@ -25,8 +25,8 @@ public class MyUtils {
     public static int getCentBySinaPriceStr(String sinaPriceStr){
         return new BigDecimal(Double.parseDouble(sinaPriceStr)).setScale(2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).intValue();
     }
-    public static BigDecimal getYuanByCent(int cent){
-        return new BigDecimal(cent).setScale(2, RoundingMode.HALF_UP);
+    public static String getYuanByCent(int cent){
+        return new BigDecimal(cent).setScale(2, RoundingMode.HALF_UP).toString();
         /*Double faultRate = Double.parseDouble(sinaPriceStr);
         BigDecimal a = BigDecimal.valueOf(faultRate);
         BigDecimal b =a.setScale(2, RoundingMode.HALF_UP);//保留两位小数；
