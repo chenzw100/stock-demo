@@ -1,6 +1,6 @@
 package com.example.stockdemo.dao;
 
-import com.example.stockdemo.domain.MyStock;
+import com.example.stockdemo.domain.Temperature;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,11 +16,9 @@ import java.util.List;
  userRepository.count();
  userRepository.exists(1l);
  */
-public interface MyStockRepository extends JpaRepository<MyStock,Long> {
-    List<MyStock> findAll();
-    List<MyStock> findByCode(String code);
-    List<MyStock> findByCodeAndDayFormat(String code,String dayFormat);
-    List<MyStock> findByDayFormat(String dayFormat);
-    MyStock save(MyStock myStock);
+public interface TemperatureRepository extends JpaRepository<Temperature,Long> {
+    List<Temperature> findAll();
+    List<Temperature> findByDayFormat(String dayFormat);
+    Temperature save(Temperature temperature);
 
 }

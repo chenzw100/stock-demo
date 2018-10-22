@@ -5,12 +5,14 @@ import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.SinaStock;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.utils.MyUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class MarketStockService {
@@ -66,6 +68,14 @@ public abstract class MarketStockService {
             today.put(code,myStock);
         }
         sb.append("明天情况:<br>");
+        if(tomorrow.isEmpty()){
+            List<MyStock> myStocks = myStockRepository.findByDayFormat(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyy-MM-dd"));
+            if(myStocks!=null){
+                for(MyStock myStock :myStocks){
+                    tomorrow.put(myStock.getCode(),myStock);
+                }
+            }
+        }
         for (String code:tomorrow.keySet()){
             MyStock myStock = tomorrow.get(code);
             SinaStock sinaStock = getSinaStock(code);
@@ -89,6 +99,10 @@ public abstract class MarketStockService {
             SinaStock sinaStock = getSinaStock(code);
             if (sinaStock != null){
                 if(sinaStock.getIsHarden()){
+                    List<MyStock> myStocks= myStockRepository.findByCodeAndDayFormat(myStock.getCode(), myStock.getDayFormat());
+                    if(myStocks!=null &&myStocks.size()>1){
+                        myStock = myStocks.get(0);
+                    }
                     myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
                     myStock.toChoice(sb);
                     myStock= myStockRepository.save(myStock);

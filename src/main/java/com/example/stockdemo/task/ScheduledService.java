@@ -42,13 +42,13 @@ public class ScheduledService {
     @Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        marketService.temperature();
+        marketService.temperature(2);
         stockService.close();
     }
     @Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void temperature(){
         log.info("==>>exe temperature"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        marketService.temperature();
+        marketService.temperature(3);
     }
     @Scheduled(cron = "0 5 1 ? * MON-FRI")
     public void clearTemperature(){

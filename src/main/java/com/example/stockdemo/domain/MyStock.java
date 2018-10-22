@@ -5,6 +5,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 
 import javax.persistence.*;
 import java.text.DecimalFormat;
+import java.util.Date;
 
 /**
  * 股市看三日富可敌国，股市看两日稳定复利。
@@ -19,6 +20,8 @@ public class MyStock {
     private Long id;
     @Column(nullable = false)
     private String dayFormat;
+    @Column(nullable = false)
+    private Date created;
     @Column(nullable = false)
     private String code;
     @Column(nullable = false)
@@ -51,7 +54,8 @@ public class MyStock {
         this.code =code;
         this.name = name;
         this.sinaUrl="https://hq.sinajs.cn/list="+code;
-        this.dayFormat = DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd");
+        this.created = MyUtils.getCurrentDate();
+        this.dayFormat = DateFormatUtils.format(getCreated(), "yyyy-MM-dd");
     }
 
     public Long getId() {
@@ -68,6 +72,14 @@ public class MyStock {
 
     public void setDayFormat(String dayFormat) {
         this.dayFormat = dayFormat;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public String getCode() {
@@ -128,8 +140,7 @@ public class MyStock {
 
     public String getTodayOpenRate() {
         //(todayPrice-yesterdayPrice)/yesterdayPrice
-        MyUtils.getIncreaseRate(getTodayOpenPrice(),getYesterdayClosePrice());
-        return todayOpenRate;
+        return MyUtils.getIncreaseRate(getTodayOpenPrice(),getYesterdayClosePrice()).toString();
     }
 
     public void setTodayOpenRate(String todayOpenRate) {
@@ -138,8 +149,7 @@ public class MyStock {
 
     public String getTodayCloseRate() {
         //(todayClosePrice-todayPrice)/todayPrice
-        MyUtils.getIncreaseRate(getTodayClosePrice(),getTodayOpenPrice());
-        return todayCloseRate;
+        return MyUtils.getIncreaseRate(getTodayClosePrice(),getTodayOpenPrice()).toString();
     }
 
     public void setTodayCloseRate(String todayCloseRate) {
@@ -150,8 +160,7 @@ public class MyStock {
 
     public String getTomorrowOpenRate() {
         //(tomorrowPrice-todayPrice)/todayPrice
-        MyUtils.getIncreaseRate(getTomorrowOpenPrice(),getTodayOpenPrice());
-        return tomorrowOpenRate;
+        return MyUtils.getIncreaseRate(getTomorrowOpenPrice(),getTodayOpenPrice()).toString();
     }
 
     public void setTomorrowOpenRate(String tomorrowOpenRate) {
@@ -162,8 +171,7 @@ public class MyStock {
 
     public String getTomorrowCloseRate() {
         //(tomorrowPrice-todayPrice)/todayPrice
-        MyUtils.getIncreaseRate(getTomorrowClosePrice(),getTodayOpenPrice());
-        return tomorrowCloseRate;
+        return MyUtils.getIncreaseRate(getTomorrowClosePrice(),getTodayOpenPrice()).toString();
     }
 
     public void setTomorrowCloseRate(String tomorrowCloseRate) {
@@ -200,4 +208,10 @@ public class MyStock {
                 .append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb;
     }
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        return toCloseTomorrow(sb).toString();
+    }
+
+
 }
