@@ -1,11 +1,9 @@
 package com.example.stockdemo.controller;
 
-import com.example.stockdemo.dao.AttributeRepository;
 import com.example.stockdemo.dao.MyStockRepository;
-import com.example.stockdemo.domain.Attribute;
 import com.example.stockdemo.domain.MyStock;
-import com.example.stockdemo.domain.SinaStock;
-import com.example.stockdemo.service.*;
+import com.example.stockdemo.service.MarketStockService;
+import com.example.stockdemo.service.TgbService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -15,22 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class StockController {
-    Log log = LogFactory.getLog(StockController.class);
-    private static Map<String, MyStock> hot24 = new HashMap();
     @Autowired
     private TgbService tgbService;
-    @Autowired
-    private SinaService sinaService;
-    @Autowired
-    private MarketService marketService;
     @Autowired
     private MarketStockService tgbMarketStockService;
     @Autowired
@@ -72,27 +60,15 @@ public class StockController {
         }*/
         return sb.toString();
     }
-    @Autowired
-    AttributeRepository attributeRepository;
-    @RequestMapping("/add")
-    public void add(){
-        Attribute attribute = new Attribute();
-        attribute.setName("wolai");
-        attribute.setInputtype(1);
-        attribute.setAlias("wolai");
-        attribute.setType(2);
-        attribute.setCtime(new Date());
-        attributeRepository.save(attribute);
-        System.out.printf("success");
-    }
-    @RequestMapping("/id/{id}")
-    String id(@PathVariable("id")Long id) {
-        Attribute attribute = attributeRepository.getOne(id);
-        return "id:"+attribute.getName();
-    }
+
     @RequestMapping("/code/{code}")
-    String name(@PathVariable("code")String code) {
-        MyStock myStock = myStockRepository.findByCode(code);
-        return "name:"+myStock.getName();
+    String code(@PathVariable("code")String code) {
+        List<MyStock> myStocks = myStockRepository.findByCode(code);
+        return code+":<br>"+myStocks;
+    }
+    @RequestMapping("/format/{format}")
+    String format(@PathVariable("format")String format) {
+        List<MyStock> myStocks = myStockRepository.findByDayFormat(format);
+        return format+":<br>"+myStocks;
     }
 }

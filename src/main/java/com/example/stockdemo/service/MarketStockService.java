@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class MarketStockService {
@@ -89,6 +90,10 @@ public abstract class MarketStockService {
             SinaStock sinaStock = getSinaStock(code);
             if (sinaStock != null){
                 if(sinaStock.getIsHarden()){
+                    List<MyStock> myStocks= myStockRepository.findByCodeAndDayFormat(myStock.getCode(), myStock.getDayFormat());
+                    if(myStocks!=null &&myStocks.size()>1){
+                        myStock = myStocks.get(0);
+                    }
                     myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
                     myStock.toChoice(sb);
                     myStock= myStockRepository.save(myStock);

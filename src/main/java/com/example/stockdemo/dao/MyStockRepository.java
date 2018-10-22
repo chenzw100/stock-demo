@@ -1,6 +1,5 @@
 package com.example.stockdemo.dao;
 
-import com.example.stockdemo.domain.Attribute;
 import com.example.stockdemo.domain.MyStock;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -19,8 +18,9 @@ import java.util.List;
  */
 public interface MyStockRepository extends JpaRepository<MyStock,Long> {
     List<MyStock> findAll();
-    MyStock findByCode(String code);
-    MyStock findByCodeAndDayFormat(String code,String dayFormat);
+    List<MyStock> findByCode(String code);
+    List<MyStock> findByCodeAndDayFormat(String code,String dayFormat);
+    List<MyStock> findByDayFormat(String dayFormat);
     MyStock save(MyStock myStock);
 
 }
