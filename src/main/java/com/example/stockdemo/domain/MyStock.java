@@ -212,7 +212,7 @@ public class MyStock {
         StringBuilder sb = new StringBuilder();
         sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate());
-        return toCloseTomorrow(sb).toString();
+        return sb.toString();
     }
 
 
