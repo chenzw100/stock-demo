@@ -51,13 +51,13 @@ public class StockController {
         int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
         Map<String, MyStock> tgbHot24 =tgbService.getHop24Stock();
 
-        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>")
-                .append(marketService.temperature(3)).append("<br>");
+        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>");
+        List<Temperature> temperatures = temperatureRepository.findByDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+        sb.append(temperatures).append("<br>");
         sb.append("淘县实时热搜:<br>");
         for (String code:tgbHot24.keySet()){
             MyStock myStock = tgbHot24.get(code);
             sb.append(myStock.getName()).append("<br>");
-            myStockRepository.save(myStock);
         }
        /* Map<String, MyStock> sinaHot24 =sinaService.getHop24Stock();
         sb.append("微博实时热搜:<br>");
@@ -78,5 +78,10 @@ public class StockController {
         List<MyStock> myStocks = myStockRepository.findByDayFormat(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormat(format);
         return format+":<br>"+myStocks+":<br>"+temperatures;
+    }
+    @RequestMapping("/today/{today}")
+    String today(@PathVariable("today")String today) {
+        List<Temperature> temperatures = temperatureRepository.findByDayFormat(today);
+        return today+":<br>"+temperatures;
     }
 }

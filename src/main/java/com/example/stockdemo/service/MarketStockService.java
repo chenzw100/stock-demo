@@ -31,6 +31,16 @@ public abstract class MarketStockService {
         StringBuilder sb = new StringBuilder();
         sb.append("收盘汇总：<br>");
         sb.append("明天汇总：<br>");
+
+        if(tomorrow.isEmpty()){
+            List<MyStock> myStocks = myStockRepository.findByDayFormat(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyy-MM-dd"));
+            if(myStocks!=null){
+                for(MyStock myStock :myStocks){
+                    tomorrow.put(myStock.getCode(),myStock);
+                }
+            }
+        }
+
         for (String code:tomorrow.keySet()){
             MyStock myStock = tomorrow.get(code);
             SinaStock sinaStock = getSinaStock(code);
@@ -40,6 +50,15 @@ public abstract class MarketStockService {
         }
 
         tomorrow.clear();
+
+        if(today.isEmpty()){
+            List<MyStock> myStocks = myStockRepository.findByDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+            if(myStocks!=null){
+                for(MyStock myStock :myStocks){
+                    today.put(myStock.getCode(),myStock);
+                }
+            }
+        }
         sb.append("今天汇总：<br>");
         for (String code:today.keySet()){
             MyStock myStock = today.get(code);
