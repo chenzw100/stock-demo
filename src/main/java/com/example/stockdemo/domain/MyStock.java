@@ -211,7 +211,7 @@ public class MyStock {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate())
-        .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate());
+        .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb.toString();
     }
 

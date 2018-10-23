@@ -4,26 +4,25 @@ import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.Temperature;
-import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
 import com.example.stockdemo.service.TgbService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class StockController {
     @Autowired
     private TgbService tgbService;
-    @Autowired
-    private MarketService marketService;
+
     @Autowired
     private MarketStockService tgbMarketStockService;
     @Autowired
@@ -75,13 +74,16 @@ public class StockController {
     }
     @RequestMapping("/format/{format}")
     String format(@PathVariable("format")String format) {
+        return formatData(format);
+    }
+    @RequestMapping("m")
+    String m() {
+        String today = DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd");
+        return formatData(today);
+    }
+    String formatData(String format) {
         List<MyStock> myStocks = myStockRepository.findByDayFormat(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormat(format);
         return format+":<br>"+myStocks+":<br>"+temperatures;
-    }
-    @RequestMapping("/today/{today}")
-    String today(@PathVariable("today")String today) {
-        List<Temperature> temperatures = temperatureRepository.findByDayFormat(today);
-        return today+":<br>"+temperatures;
     }
 }
