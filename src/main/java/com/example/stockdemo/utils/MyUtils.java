@@ -23,7 +23,7 @@ public class MyUtils {
 
     }
     public static int getCentBySinaPriceStr(String sinaPriceStr){
-        return new BigDecimal(Double.parseDouble(sinaPriceStr)).setScale(2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).intValue();
+        return new BigDecimal(Double.parseDouble(sinaPriceStr)).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).intValue();
     }
     public static String getYuanByCent(int cent){
         return new BigDecimal(cent).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP).toString();
@@ -43,12 +43,12 @@ public class MyUtils {
         if(base==0){
             return new BigDecimal(0);
         }
-        return new BigDecimal(increase-base).divide(new BigDecimal(base), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+        return new BigDecimal(increase-base).multiply(new BigDecimal(100)).divide(new BigDecimal(base), 2, RoundingMode.HALF_UP);
 
 
     }
 
     public static void main(String[] args) {
-        System.out.println(MyUtils.getIncreaseRate(1100,1009));
+        System.out.println(MyUtils.getIncreaseRate(302,309));
     }
 }
