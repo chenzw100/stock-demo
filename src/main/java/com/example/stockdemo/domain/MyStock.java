@@ -37,6 +37,8 @@ public class MyStock {
     private int tomorrowOpenPrice;
     @Column(nullable = true)
     private int tomorrowClosePrice;
+    @Column(nullable = true)
+    private int openBidRate;
 
     @Transient
     private String todayOpenRate;
@@ -56,6 +58,15 @@ public class MyStock {
         this.sinaUrl="https://hq.sinajs.cn/list="+code;
         this.created = MyUtils.getCurrentDate();
         this.dayFormat = DateFormatUtils.format(getCreated(), "yyyy-MM-dd");
+    }
+
+    public int getOpenBidRate() {
+        openBidRate =MyUtils.getIncreaseRateCent(getTodayOpenPrice(),getYesterdayClosePrice()).intValue();
+        return openBidRate;
+    }
+
+    public void setOpenBidRate(int openBidRate) {
+        this.openBidRate = openBidRate;
     }
 
     public Long getId() {

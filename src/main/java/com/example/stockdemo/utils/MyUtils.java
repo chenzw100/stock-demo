@@ -43,10 +43,16 @@ public class MyUtils {
         }
         return new BigDecimal(increase-base).multiply(new BigDecimal(100)).divide(new BigDecimal(base), 2, RoundingMode.HALF_UP);
 
-
+    }
+    public static BigDecimal getIncreaseRateCent(int increase,int base){
+        if(base==0){
+            return new BigDecimal(0);
+        }
+        return new BigDecimal(increase-base).multiply(new BigDecimal(10000)).divide(new BigDecimal(base), 0, RoundingMode.HALF_UP);
     }
 
     public static void main(String[] args) {
-        System.out.println(MyUtils.getIncreaseRate(302,309));
+        System.out.println(MyUtils.getIncreaseRate(302,309).multiply(new BigDecimal(100)).setScale(0, RoundingMode.HALF_UP));
+        System.out.println(MyUtils.getIncreaseRateCent(302, 309).intValue());
     }
 }
