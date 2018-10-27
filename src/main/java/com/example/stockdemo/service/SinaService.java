@@ -3,6 +3,7 @@ package com.example.stockdemo.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.domain.MyStock;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +84,15 @@ public class SinaService {
             }
         }
         return hotOpen;
+    }
+    private Map<String, String> getCookieParam() {
+        String time = System.currentTimeMillis() + "";
+        String passporturl = "https://passport.weibo.cn/sso/login";
+
+
+        Map<String, String> map = new HashMap();
+
+        return map;
     }
 
 }
