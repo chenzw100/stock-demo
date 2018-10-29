@@ -64,9 +64,9 @@ public abstract class MarketStockService {
             MyStock myStock = today.get(code);
             SinaStock sinaStock = getSinaStock(code);
             myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
+            myStock.toClose(sb);
             myStock = myStockRepository.save(myStock);
             tomorrow.put(code,myStock);
-            myStock.toClose(sb);
         }
         sb.append(MarketService.temperatureRecord);
         log.info(sb.toString());

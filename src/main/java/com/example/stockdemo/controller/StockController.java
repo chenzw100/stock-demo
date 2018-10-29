@@ -82,7 +82,7 @@ public class StockController {
         return formatData(today);
     }
     String formatData(String format) {
-        List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRate(format);
+        List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormat(format);
         return format+":<br>"+myStocks+":<br>"+temperatures;
     }

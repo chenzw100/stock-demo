@@ -60,14 +60,7 @@ public class MyStock {
         this.dayFormat = DateFormatUtils.format(getCreated(), "yyyy-MM-dd");
     }
 
-    public int getOpenBidRate() {
-        openBidRate =MyUtils.getIncreaseRateCent(getTodayOpenPrice(),getYesterdayClosePrice()).intValue();
-        return openBidRate;
-    }
 
-    public void setOpenBidRate(int openBidRate) {
-        this.openBidRate = openBidRate;
-    }
 
     public Long getId() {
         return id;
@@ -148,10 +141,18 @@ public class MyStock {
     public void setTomorrowClosePrice(int tomorrowClosePrice) {
         this.tomorrowClosePrice = tomorrowClosePrice;
     }
+    public int getOpenBidRate() {
+        openBidRate =MyUtils.getIncreaseRateCent(getTodayOpenPrice(),getYesterdayClosePrice()).intValue();
+        return openBidRate;
+    }
 
+    public void setOpenBidRate(int openBidRate) {
+        this.openBidRate = openBidRate;
+    }
     public String getTodayOpenRate() {
         //(todayPrice-yesterdayPrice)/yesterdayPrice
-        return MyUtils.getIncreaseRate(getTodayOpenPrice(),getYesterdayClosePrice()).toString();
+        todayOpenRate =MyUtils.getYuanByCent(getOpenBidRate());
+        return todayOpenRate;
     }
 
     public void setTodayOpenRate(String todayOpenRate) {

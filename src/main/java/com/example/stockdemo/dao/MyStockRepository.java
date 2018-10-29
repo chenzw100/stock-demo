@@ -21,6 +21,7 @@ public interface MyStockRepository extends JpaRepository<MyStock,Long> {
     List<MyStock> findByCode(String code);
     List<MyStock> findByCodeAndDayFormat(String code,String dayFormat);
     List<MyStock> findByDayFormatOrderByOpenBidRate(String dayFormat);
+    List<MyStock> findByDayFormatOrderByOpenBidRateDesc(String dayFormat);
     MyStock save(MyStock myStock);
 
 }
