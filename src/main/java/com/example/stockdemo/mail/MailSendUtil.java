@@ -84,8 +84,8 @@ public class MailSendUtil {
         info.setToAddress(toAddress);
         info.setContent(content);
         try {
-            MailSendUtil.sendTextMail(info);
-            //MailSendUtil.sendHtmlMail(info);
+            //MailSendUtil.sendTextMail(info);
+            MailSendUtil.sendHtmlMail(info);
         } catch (Exception e) {
             System.out.print("'的邮件发送失败！");
             e.printStackTrace();
