@@ -41,6 +41,7 @@ public class TgbService {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return getHopStock(size);
         }
 
         return hotOpen;
