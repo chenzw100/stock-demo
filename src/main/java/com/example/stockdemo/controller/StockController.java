@@ -86,4 +86,9 @@ public class StockController {
         List<Temperature> temperatures = temperatureRepository.findByDayFormat(format);
         return format+":<br>"+myStocks+":<br>"+temperatures;
     }
+    @RequestMapping("z")
+    String z() {
+        tgbMarketStockService.closeLimitUp();
+        return "success";
+    }
 }

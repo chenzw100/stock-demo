@@ -39,6 +39,8 @@ public class MyStock {
     private int tomorrowClosePrice;
     @Column(nullable = true)
     private int openBidRate;
+    @Column(nullable = true)
+    private String continuous;
 
     @Transient
     private String todayOpenRate;
@@ -50,6 +52,15 @@ public class MyStock {
     private String tomorrowCloseRate;
     @Transient
     private String sinaUrl;
+
+    public String getContinuous() {
+        return continuous;
+    }
+
+    public void setContinuous(String continuous) {
+        this.continuous = continuous;
+    }
+
     public MyStock(){
     }
     public MyStock(String code,String name){
@@ -202,27 +213,27 @@ public class MyStock {
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){
-        sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate()).append("<br>");
+        sb.append(code).append(name).append("连板:").append(continuous).append(",竞价:").append(getTodayOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toOpenTomorrow(StringBuilder sb){
-        sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
+        sb.append(code).append(name).append("连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toClose(StringBuilder sb){
-        sb.append(code).append(name).append(",开盘:").append(getTodayOpenRate())
+        sb.append(code).append(name).append("连板:").append(continuous).append(",开盘:").append(getTodayOpenRate())
                 .append(",收盘:").append(getTodayCloseRate()).append("<br>");
         return sb;
     }
     public StringBuilder toCloseTomorrow(StringBuilder sb){
-        sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
+        sb.append(code).append(name).append("连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb;
     }
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate())
+        sb.append(code).append(name).append("连板:").append(continuous).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb.toString();
     }

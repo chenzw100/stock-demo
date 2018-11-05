@@ -1,8 +1,11 @@
 package com.example.stockdemo.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.SinaStock;
+import com.example.stockdemo.domain.StockInfo;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -20,11 +23,22 @@ public abstract class MarketStockService {
     private static Map<String, MyStock>  hotOpen = new HashMap();
     private static Map<String, MyStock>  tomorrow = new HashMap();
     private static Map<String, MyStock> today = new HashMap();
+    private static Map<String, String> yesterdayLimitUp = new HashMap();
     @Autowired
     RestTemplate restTemplate;
     @Autowired
     MyStockRepository myStockRepository;
     public abstract Map getHopStock();
+    public void closeLimitUp(){
+        String urlCloseLimitUp = "https://wows-api.wallstreetcn.com/v2/sheet/board_stock?filter=true";
+        Object response =  restTemplate.getForObject(urlCloseLimitUp, String.class);
+        JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
+        for(int i=0;i<closeLimitUp.size();i++){
+            JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
+            log.info(jsonArray.toArray()[1]+":"+jsonArray.toArray()[12]);
+            yesterdayLimitUp.put(jsonArray.toArray()[1].toString(),jsonArray.toArray()[12].toString());
+        }
+    }
 
     //下午3:15点后执行
     public String close(){
@@ -71,6 +85,7 @@ public abstract class MarketStockService {
         sb.append(MarketService.temperatureRecord);
         log.info(sb.toString());
         MailSendUtil.sendMail(sb.toString());
+        closeLimitUp();
         return sb.toString();
     }
     //9:26执行
@@ -105,6 +120,7 @@ public abstract class MarketStockService {
         }
         log.info(sb.toString());
         MailSendUtil.sendMail(sb.toString());
+        yesterdayLimitUp.clear();
         return sb.toString();
     }
     //8:45执行，获取的是昨天的数据
@@ -124,6 +140,8 @@ public abstract class MarketStockService {
                     }
                     myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
                     myStock.toChoice(sb);
+                    String continuous = yesterdayLimitUp.get(myStock.getName());
+                    myStock.setContinuous(continuous);
                     myStock= myStockRepository.save(myStock);
                     today.put(code,myStock);
                 }
