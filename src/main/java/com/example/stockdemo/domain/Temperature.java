@@ -17,7 +17,7 @@ public class Temperature {
     @Id
     @GeneratedValue
    private long id;
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition="varchar(10)")
     private String dayFormat;
     @Column(nullable = false)
     private Date created;

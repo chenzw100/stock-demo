@@ -18,13 +18,13 @@ public class MyStock {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyy-mm-dd'")
     private String dayFormat;
     @Column(nullable = false)
     private Date created;
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition="varchar(8)")
     private String code;
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition="varchar(8)")
     private String name;
     @Column(nullable = false)
     private int yesterdayClosePrice;
@@ -39,7 +39,7 @@ public class MyStock {
     private int tomorrowClosePrice;
     @Column(nullable = true)
     private int openBidRate;
-    @Column(nullable = true)
+    @Column(nullable = true,columnDefinition="varchar(10) COMMENT '连板'")
     private String continuous;
 
     @Transient

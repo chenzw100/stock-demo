@@ -35,7 +35,7 @@ public abstract class MarketStockService {
         JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
         for(int i=0;i<closeLimitUp.size();i++){
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
-            log.info(jsonArray.toArray()[1]+":"+jsonArray.toArray()[12]);
+            log.info(jsonArray.toArray()[0]+":"+jsonArray.toArray()[1]+":"+jsonArray.toArray()[12]);
             yesterdayLimitUp.put(jsonArray.toArray()[1].toString(),jsonArray.toArray()[12].toString());
         }
     }
