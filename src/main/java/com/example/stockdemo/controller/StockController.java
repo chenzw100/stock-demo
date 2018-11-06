@@ -91,4 +91,9 @@ public class StockController {
         tgbMarketStockService.closeLimitUp();
         return "success";
     }
+    @RequestMapping("c")
+    String c() {
+        Map map = tgbMarketStockService.getHopStock();
+        return "实时:<br>"+map;
+    }
 }

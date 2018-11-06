@@ -13,6 +13,15 @@ public class TaogubaMarketStockService extends MarketStockService {
     @Autowired
     private TgbService tgbService;
     public  Map getHopStock(){
-        return tgbService.getHopAllStock();
+        return tgbService.getCurrentTime();
+    }
+    public  void currentTime(){
+        tgbService.currentTimeStock();
+    }
+    public  void dayTime(){
+        tgbService.dayTimeStock();
+    }
+    public  void clearTime(){
+        tgbService.clearTime();
     }
 }

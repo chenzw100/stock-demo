@@ -42,6 +42,9 @@ public class MyStock {
     @Column(nullable = true,columnDefinition="varchar(10) COMMENT '连板'")
     private String continuous;
 
+    @Column(nullable = true,columnDefinition="COMMENT '1实时;2一天;3两者'")
+    private Integer stockType;
+
     @Transient
     private String todayOpenRate;
     @Transient
@@ -52,6 +55,14 @@ public class MyStock {
     private String tomorrowCloseRate;
     @Transient
     private String sinaUrl;
+
+    public Integer getStockType() {
+        return stockType;
+    }
+
+    public void setStockType(Integer stockType) {
+        this.stockType = stockType;
+    }
 
     public String getContinuous() {
         return continuous;
@@ -94,6 +105,7 @@ public class MyStock {
     }
 
     public void setCreated(Date created) {
+        this.dayFormat=DateFormatUtils.format(created, "yyyy-MM-dd");
         this.created = created;
     }
 

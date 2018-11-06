@@ -60,6 +60,27 @@ public class MyScheduledService {
         marketService.clearTemperature();
     }
 
+    @Scheduled(cron = "0 40 18,21,23,6,8 ? * MON-FRI")
+    //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    public void currentTime(){
+        log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        tgbMarketStockService.currentTime();
+    }
+    @Scheduled(cron = "0 49 8 ? * MON-FRI")
+    //@Scheduled(cron = "0 5 1 ? * MON-FRI")
+    public void dayTime(){
+        log.info("==>>exe dayTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        tgbMarketStockService.dayTime();
+    }
+
+    @Scheduled(cron = "0 5 15 ? * MON-FRI")
+    //@Scheduled(cron = "0 5 1 ? * MON-FRI")
+    public void clearTime(){
+        log.info("==>>exe clearTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        tgbMarketStockService.clearTime();
+    }
+
+
     /**
      * 一个cron表达式有至少6个（也可能7个）有空格分隔的时间元素。按顺序依次为：
      *

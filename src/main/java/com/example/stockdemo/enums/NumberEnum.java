@@ -37,4 +37,38 @@ public class NumberEnum {
             return "";
         }
     }
+    public enum StockType{
+        CURRENT(1,"实时"),
+        DAY(2,"一天"),
+        COMMON(3,"两者"),
+        ;
+
+        private StockType(int code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+        private int code;
+        private String desc;
+        public int getCode() {
+            return code;
+        }
+        public void setCode(int code) {
+            this.code = code;
+        }
+        public String getDesc() {
+            return desc;
+        }
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public static String getStockType(int code){
+            for(StockType d : StockType.values()){
+                if(d.getCode()==code){
+                    return d.getDesc();
+                }
+            }
+            return "";
+        }
+    }
 }

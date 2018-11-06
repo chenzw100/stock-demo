@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +132,7 @@ public abstract class MarketStockService {
         hotOpen=getHopStock();
         for (String code:hotOpen.keySet()){
             MyStock myStock= hotOpen.get(code);
+            myStock.setCreated(new Date());
             SinaStock sinaStock = getSinaStock(code);
             if (sinaStock != null){
                 if(sinaStock.getIsHarden()){
@@ -172,4 +174,13 @@ public abstract class MarketStockService {
      3：”26.91″，当前价格；
      */
 
+    public  void currentTime(){
+
+    }
+    public  void dayTime(){
+
+    }
+    public  void clearTime(){
+
+    }
 }
