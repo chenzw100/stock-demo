@@ -94,6 +94,6 @@ public class StockController {
     @RequestMapping("c")
     String c() {
         Map map = tgbMarketStockService.getHopStock();
-        return "实时:<br>"+map;
+        return "<span color='red'>实时</span>:<br>"+map;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.stockdemo.domain;
 
+import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  * 今天竞价涨幅，相对于昨天收盘的涨幅 (todayOpenPrice-yesterdayPrice)/yesterdayPrice
  * 明天竞价涨幅，相对于今天开盘的涨幅 (tomorrowPrice-todayOpenPrice)/todayOpenPrice;此处就代表了盈利幅度
  */
-@Entity(name="mystock")
+@Entity(name="stock")
 public class MyStock {
     @Id
     @GeneratedValue
@@ -220,32 +221,64 @@ public class MyStock {
     public void setSinaUrl(String sinaUrl) {
         this.sinaUrl = sinaUrl;
     }
+    static String strHead = "<span color='red'>";
+    static String strTail = "</span>";
     public StringBuilder toChoice(StringBuilder sb){
-        sb.append(code).append(name).append("热门:").append(stockType).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
+        if(stockType== NumberEnum.StockType.COMMON.getCode()){
+            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
+        }else {
+            sb.append("热门:").append(stockType).append(",");;
+        }
+        sb.append(code).append(name).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){
+        if(stockType== NumberEnum.StockType.COMMON.getCode()){
+            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
+        }else {
+            sb.append("热门:").append(stockType).append(",");;
+        }
         sb.append(code).append(name).append(",连板:").append(continuous).append(",竞价:").append(getTodayOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toOpenTomorrow(StringBuilder sb){
-        sb.append(code).append(name).append("热门:").append(stockType).append(",连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
+        if(stockType== NumberEnum.StockType.COMMON.getCode()){
+            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
+        }else {
+            sb.append("热门:").append(stockType).append(",");;
+        }
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toClose(StringBuilder sb){
-        sb.append(code).append(name).append("热门:").append(stockType).append(",连板:").append(continuous).append(",开盘:").append(getTodayOpenRate())
+        if(stockType== NumberEnum.StockType.COMMON.getCode()){
+            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
+        }else {
+            sb.append("热门:").append(stockType).append(",");;
+        }
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",开盘:").append(getTodayOpenRate())
                 .append(",收盘:").append(getTodayCloseRate()).append("<br>");
         return sb;
     }
     public StringBuilder toCloseTomorrow(StringBuilder sb){
-        sb.append(code).append(name).append("热门:").append(stockType).append(",连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
+        if(stockType== NumberEnum.StockType.COMMON.getCode()){
+            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
+        }else {
+            sb.append("热门:").append(stockType).append(",");;
+        }
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb;
     }
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append("热门:").append(stockType).append(",连板:").append(continuous).append(",竞价:").append(getTodayOpenRate())
+        if(stockType== NumberEnum.StockType.COMMON.getCode()){
+            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
+        }else {
+            sb.append("热门:").append(stockType).append(",");;
+        }
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb.toString();
     }

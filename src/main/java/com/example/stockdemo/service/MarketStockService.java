@@ -130,8 +130,11 @@ public abstract class MarketStockService {
         StringBuilder sb = new StringBuilder();
         sb.append("选股:<br>");
         hotOpen=getHopStock();
+        int i=0;
         for (String code:hotOpen.keySet()){
             MyStock myStock= hotOpen.get(code);
+            i++;
+            log.info(i+":"+code+":"+myStock.getName());
             myStock.setCreated(new Date());
             SinaStock sinaStock = getSinaStock(code);
             if (sinaStock != null){

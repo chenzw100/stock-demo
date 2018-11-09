@@ -59,6 +59,7 @@ public class TgbService {
                 String code = url.substring(length-9,length-1);
                 MyStock myStock = new MyStock(code,stockName);
                 myStock.setStockType(NumberEnum.StockType.CURRENT.getCode());
+                log.info(i+":"+code+":"+stockName);
                 currentTime.put(code,myStock);
             }
         } catch (IOException e) {
@@ -77,6 +78,7 @@ public class TgbService {
                 String code = url.substring(length-9,length-1);
                 MyStock myStock = new MyStock(code,stockName);
                 myStock.setStockType(NumberEnum.StockType.DAY.getCode());
+                log.info(i+":"+code+":"+stockName);
                 if(currentTime.containsKey(code)){
                     myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
                 }

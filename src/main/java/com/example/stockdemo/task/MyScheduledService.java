@@ -20,7 +20,7 @@ public class MyScheduledService {
     private MarketStockService tgbMarketStockService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "0 49 8 ? * MON-FRI")
+    @Scheduled(cron = "40 48 8 ? * MON-FRI")
     //@Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -66,7 +66,7 @@ public class MyScheduledService {
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.currentTime();
     }
-    @Scheduled(cron = "0 49 8 ? * MON-FRI")
+    @Scheduled(cron = "0 46 8 ? * MON-FRI")
     //@Scheduled(cron = "0 5 1 ? * MON-FRI")
     public void dayTime(){
         log.info("==>>exe dayTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
