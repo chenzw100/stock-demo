@@ -229,7 +229,7 @@ public class MyStock {
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){
