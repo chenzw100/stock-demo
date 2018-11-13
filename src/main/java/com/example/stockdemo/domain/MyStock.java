@@ -209,7 +209,7 @@ public class MyStock {
         this.sinaUrl = sinaUrl;
     }
     public StringBuilder toChoice(StringBuilder sb){
-        sb.append(code).append(name).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
+        sb.append(code).append(name).append("连板:").append(continuous).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){

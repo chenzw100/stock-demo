@@ -139,9 +139,9 @@ public abstract class MarketStockService {
                         myStock = myStocks.get(0);
                     }
                     myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
-                    myStock.toChoice(sb);
                     String continuous = yesterdayLimitUp.get(myStock.getName());
                     myStock.setContinuous(continuous);
+                    myStock.toChoice(sb);
                     myStock= myStockRepository.save(myStock);
                     today.put(code,myStock);
                 }
