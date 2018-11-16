@@ -42,6 +42,8 @@ public class MyStock {
     private int openBidRate;
     @Column(nullable = true,columnDefinition="varchar(10) COMMENT '连板'")
     private String continuous;
+    @Column(nullable = true)
+    private int openCount;
 
     @Column(nullable = true,columnDefinition="COMMENT '1实时;2一天;3两者'")
     private Integer stockType;
@@ -83,7 +85,13 @@ public class MyStock {
         this.dayFormat = DateFormatUtils.format(getCreated(), "yyyy-MM-dd");
     }
 
+    public int getOpenCount() {
+        return openCount;
+    }
 
+    public void setOpenCount(int openCount) {
+        this.openCount = openCount;
+    }
 
     public Long getId() {
         return id;
@@ -247,7 +255,7 @@ public class MyStock {
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append("<br>");
         return sb;
     }
@@ -257,7 +265,7 @@ public class MyStock {
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",开盘:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",开盘:").append(getTodayOpenRate())
                 .append(",收盘:").append(getTodayCloseRate()).append("<br>");
         return sb;
     }
@@ -267,7 +275,7 @@ public class MyStock {
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",今天:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb;
     }
@@ -278,7 +286,7 @@ public class MyStock {
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",竞价:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb.toString();
     }

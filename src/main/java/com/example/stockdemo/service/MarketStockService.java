@@ -6,6 +6,7 @@ import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.SinaStock;
 import com.example.stockdemo.domain.StockInfo;
+import com.example.stockdemo.domain.XGBStock;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -24,7 +25,7 @@ public abstract class MarketStockService {
     private static Map<String, MyStock>  hotOpen = new HashMap();
     private static Map<String, MyStock>  tomorrow = new HashMap();
     private static Map<String, MyStock> today = new HashMap();
-    private static Map<String, String> yesterdayLimitUp = new HashMap();
+    private static Map<String, XGBStock> yesterdayLimitUp = new HashMap();
     @Autowired
     RestTemplate restTemplate;
     @Autowired
@@ -36,8 +37,14 @@ public abstract class MarketStockService {
         JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
         for(int i=0;i<closeLimitUp.size();i++){
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
-            log.info(jsonArray.toArray()[0]+":"+jsonArray.toArray()[1]+":"+jsonArray.toArray()[12]);
-            yesterdayLimitUp.put(jsonArray.toArray()[1].toString(),jsonArray.toArray()[12].toString());
+            XGBStock xgbStock = new XGBStock();
+            xgbStock.setName(jsonArray.toArray()[1].toString());
+            String code = jsonArray.toArray()[0].toString().substring(0,6);
+            xgbStock.setCode(code);
+            log.info(code+":"+jsonArray.toArray()[0] + ":" + jsonArray.toArray()[11] + ":" + jsonArray.toArray()[12]);
+            xgbStock.setOpenCount(Integer.parseInt(jsonArray.toArray()[11].toString()));
+            xgbStock.setContinueBoardCount(Integer.parseInt(jsonArray.toArray()[12].toString()));
+            yesterdayLimitUp.put(code,xgbStock);
         }
     }
 
@@ -144,8 +151,9 @@ public abstract class MarketStockService {
                         myStock = myStocks.get(0);
                     }
                     myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
-                    String continuous = yesterdayLimitUp.get(myStock.getName());
-                    myStock.setContinuous(continuous);
+                    XGBStock xgbStock = yesterdayLimitUp.get(myStock.getCode().substring(2,8));
+                    myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
+                    myStock.setOpenCount(xgbStock.getOpenCount());
                     myStock= myStockRepository.save(myStock);
                     myStock.toChoice(sb);
                     today.put(code,myStock);
