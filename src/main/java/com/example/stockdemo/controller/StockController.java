@@ -94,6 +94,10 @@ public class StockController {
     @RequestMapping("c")
     String c() {
         Map map = tgbMarketStockService.getHopStock();
+        if(map== null || map.size()==0){
+            tgbService.currentTimeStock();
+            map= tgbService.getCurrentTime();
+        }
         return "<span color='red'>实时</span>:<br>"+map;
     }
 }
