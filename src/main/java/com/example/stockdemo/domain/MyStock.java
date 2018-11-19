@@ -43,7 +43,7 @@ public class MyStock {
     @Column(nullable = true,columnDefinition="varchar(10) COMMENT '连板'")
     private String continuous;
     @Column(nullable = true)
-    private int openCount;
+    private Integer openCount;
 
     @Column(nullable = true,columnDefinition="COMMENT '1实时;2一天;3两者'")
     private Integer stockType;
@@ -85,11 +85,11 @@ public class MyStock {
         this.dayFormat = DateFormatUtils.format(getCreated(), "yyyy-MM-dd");
     }
 
-    public int getOpenCount() {
+    public Integer getOpenCount() {
         return openCount;
     }
 
-    public void setOpenCount(int openCount) {
+    public void setOpenCount(Integer openCount) {
         this.openCount = openCount;
     }
 
