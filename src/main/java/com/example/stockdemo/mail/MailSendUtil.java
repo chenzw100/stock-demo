@@ -45,7 +45,6 @@ public class MailSendUtil {
         Message message = getMessage(info);
         //消息发送的内容
         message.setText(info.getContent());
-
         Transport.send(message);
     }
 
