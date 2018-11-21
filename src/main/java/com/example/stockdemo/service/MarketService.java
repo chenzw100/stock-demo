@@ -62,14 +62,14 @@ public class MarketService {
             if(i==3){
                 break;
             }
-            desc=desc+xgbStock.getCode()+":"+xgbStock.getName()+":"+xgbStock.getDownRate()+"<br>";
+            desc=desc+xgbStock.getCode()+":"+xgbStock.getName()+":"+MyUtils.getYuanByCent(xgbStock.getDownRate())+"<br>";
             i++;
         }
         strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
         strongStocksDown.setDesc(desc);
         strongStocksDown.setDownCount(ds.size());
         strongStocksDownRepository.save(strongStocksDown);
-        return "";
+        return strongStocksDown.toString();
     }
     //下午9:45-15:45点后执行
     public String temperature(int type)  {

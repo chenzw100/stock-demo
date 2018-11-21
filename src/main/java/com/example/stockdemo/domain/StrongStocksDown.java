@@ -51,4 +51,9 @@ public class StrongStocksDown {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getDayFormat()).append(",跌数:").append(downCount).append(",前三:").append(desc);
+        return sb.toString();
+    }
 }
