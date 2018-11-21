@@ -37,7 +37,6 @@ public class MailSendUtil {
     }
 
     public static void sendTextMail(MailInfo info) throws Exception {
-
         info.setHost(host);
         info.setFormName(formName);
         info.setFormPassword(password);   //网易邮箱的授权码~不一定是密码
