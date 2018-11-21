@@ -1,10 +1,19 @@
 package com.example.stockdemo.domain;
 
-public class XGBStock {
+public class XGBStock implements Comparable<XGBStock>{
     private String code;
     private String name;
     private Integer openCount;
     private Integer continueBoardCount;
+    private int downRate;
+
+    public int getDownRate() {
+        return downRate;
+    }
+
+    public void setDownRate(int downRate) {
+        this.downRate = downRate;
+    }
 
     public Integer getContinueBoardCount() {
         return continueBoardCount;
@@ -37,4 +46,9 @@ public class XGBStock {
     public void setName(String name) {
         this.name = name;
     }
+
+     public int compareTo(XGBStock o) {
+          // TODO Auto-generated method stub
+          return 0-(this.downRate-o.downRate);
+     }
 }

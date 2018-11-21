@@ -2,6 +2,7 @@ package com.example.stockdemo;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.stockdemo.utils.MyUtils;
 
 import java.text.DecimalFormat;
 
@@ -23,6 +24,6 @@ public class TestMain {
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
             System.out.println(jsonArray.toArray()[0].toString().substring(0,6)+":"+jsonArray.toArray()[12]);
     }*/
-        System.out.println("sh123456".substring(2,8));
+        System.out.println(MyUtils.getCentBySinaPriceStr("-9.947643979057595")<-995);
     }
 }

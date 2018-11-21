@@ -2,8 +2,11 @@ package com.example.stockdemo.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
+import com.example.stockdemo.domain.StrongStocksDown;
 import com.example.stockdemo.domain.Temperature;
+import com.example.stockdemo.domain.XGBStock;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -14,7 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.util.*;
 
 @Component
 public class MarketService {
@@ -24,10 +27,50 @@ public class MarketService {
     private static String limit_url = "https://wows-api.wallstreetcn.com/statis_data/min_quote_change/limit?date=";
     private static String normal_url = "https://wows-api.wallstreetcn.com/statis_data/min_quote_change/normal?date=";
     private static String kline_url = "https://wows-api.wallstreetcn.com/sheet/min_kline?kline_type=a-stock-behavior-kline&date=";
+    private static String multi_stock_url="https://wows-api.wallstreetcn.com/v2/sheet/multi_stock";
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private TemperatureRepository temperatureRepository;
+    @Autowired
+    private StrongStocksDownRepository strongStocksDownRepository;
+    //3.10执行
+    public String multiStock(){
+        Object response =  restTemplate.getForObject(multi_stock_url, String.class);
+        JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
+        Set<XGBStock> ds=new TreeSet<XGBStock>();
+        StrongStocksDown strongStocksDown = new StrongStocksDown();
+
+        for(int i=0;i<closeLimitUp.size();i++){
+            JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
+            XGBStock xgbStock = new XGBStock();
+            xgbStock.setName(jsonArray.toArray()[1].toString());
+            String code = jsonArray.toArray()[0].toString().substring(0,6);
+            xgbStock.setCode(code);
+            String down = jsonArray.toArray()[4].toString();
+            int downRate=MyUtils.getCentBySinaPriceStr(down);
+            xgbStock.setDownRate(downRate);
+            if(downRate<-990){
+                ds.add(xgbStock);
+            }
+            log.info(code + ":" + jsonArray.toArray()[11] + ":" + jsonArray.toArray()[12]);
+
+        }
+        int i=0;
+        String desc="";
+        for(XGBStock xgbStock:ds){
+            if(i==3){
+                break;
+            }
+            desc=desc+xgbStock.getCode()+":"+xgbStock.getName()+":"+xgbStock.getDownRate()+"<br>";
+            i++;
+        }
+        strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+        strongStocksDown.setDesc(desc);
+        strongStocksDown.setDownCount(ds.size());
+        strongStocksDownRepository.save(strongStocksDown);
+        return "";
+    }
     //下午9:45-15:45点后执行
     public String temperature(int type)  {
         Temperature temperature = new Temperature(type);

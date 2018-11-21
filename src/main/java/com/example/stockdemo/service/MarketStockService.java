@@ -41,7 +41,7 @@ public abstract class MarketStockService {
             xgbStock.setName(jsonArray.toArray()[1].toString());
             String code = jsonArray.toArray()[0].toString().substring(0,6);
             xgbStock.setCode(code);
-            log.info(code+":"+jsonArray.toArray()[0] + ":" + jsonArray.toArray()[11] + ":" + jsonArray.toArray()[12]);
+            log.info(code+ ":" + jsonArray.toArray()[11] + ":" + jsonArray.toArray()[12]);
             xgbStock.setOpenCount(Integer.parseInt(jsonArray.toArray()[11].toString()));
             xgbStock.setContinueBoardCount(Integer.parseInt(jsonArray.toArray()[12].toString()));
             yesterdayLimitUp.put(code,xgbStock);
