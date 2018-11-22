@@ -7,6 +7,9 @@ public class XGBStock {
     private Integer continueBoardCount;
 
     public Integer getContinueBoardCount() {
+        if(continueBoardCount == null){
+            continueBoardCount=-1;
+        }
         return continueBoardCount;
     }
 
