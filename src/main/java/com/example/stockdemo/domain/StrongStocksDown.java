@@ -15,10 +15,20 @@ public class StrongStocksDown {
     private Long id;
     @Column(nullable = false)
     private Integer downCount;
+    @Column(nullable = false)
+    private Integer type;//1:强势；2：炸板
     @Column(nullable = false,columnDefinition="varchar(50) COMMENT '前3'")
     private String desc;
     @Column(nullable = false,columnDefinition="varchar(10)")
     private String dayFormat;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public String getDayFormat() {
         return dayFormat;

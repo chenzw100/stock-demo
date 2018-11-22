@@ -28,12 +28,51 @@ public class MarketService {
     private static String normal_url = "https://wows-api.wallstreetcn.com/statis_data/min_quote_change/normal?date=";
     private static String kline_url = "https://wows-api.wallstreetcn.com/sheet/min_kline?kline_type=a-stock-behavior-kline&date=";
     private static String multi_stock_url="https://wows-api.wallstreetcn.com/v2/sheet/multi_stock";
+    private static String boom_stock_url ="https://wows-api.wallstreetcn.com/v2/sheet/boom_stock";
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private TemperatureRepository temperatureRepository;
     @Autowired
     private StrongStocksDownRepository strongStocksDownRepository;
+    //3.10执行
+    public String boomStock(){
+        Object response =  restTemplate.getForObject(boom_stock_url, String.class);
+        JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
+        Set<XGBStock> ds=new TreeSet<XGBStock>();
+        StrongStocksDown strongStocksDown = new StrongStocksDown();
+
+        for(int i=0;i<closeLimitUp.size();i++){
+            JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
+            XGBStock xgbStock = new XGBStock();
+            xgbStock.setName(jsonArray.toArray()[1].toString());
+            String code = jsonArray.toArray()[0].toString().substring(0,6);
+            xgbStock.setCode(code);
+            String down = jsonArray.toArray()[4].toString();
+            int downRate=MyUtils.getCentBySinaPriceStr(down);
+            xgbStock.setDownRate(downRate);
+            if(downRate<10){
+                ds.add(xgbStock);
+            }
+            log.info(code + ":" + jsonArray.toArray()[11] + ":" + jsonArray.toArray()[12]);
+
+        }
+        int i=0;
+        String desc="";
+        for(XGBStock xgbStock:ds){
+            if(i==3){
+                break;
+            }
+            desc=desc+xgbStock.getCode()+":"+xgbStock.getName()+":"+MyUtils.getYuanByCent(xgbStock.getDownRate())+"<br>";
+            i++;
+        }
+        strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+        strongStocksDown.setDesc(desc);
+        strongStocksDown.setDownCount(ds.size());
+        strongStocksDown.setType(NumberEnum.StrongOpenType.OPEN.getCode());
+        strongStocksDownRepository.save(strongStocksDown);
+        return strongStocksDown.toString();
+    }
     //3.10执行
     public String multiStock(){
         Object response =  restTemplate.getForObject(multi_stock_url, String.class);
@@ -68,6 +107,7 @@ public class MarketService {
         strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
         strongStocksDown.setDesc(desc);
         strongStocksDown.setDownCount(ds.size());
+        strongStocksDown.setType(NumberEnum.StrongOpenType.STRONG.getCode());
         strongStocksDownRepository.save(strongStocksDown);
         return strongStocksDown.toString();
     }

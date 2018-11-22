@@ -71,4 +71,37 @@ public class NumberEnum {
             return "";
         }
     }
+    public enum StrongOpenType{
+        STRONG(1,"强势"),
+        OPEN(2,"开板"),
+        ;
+
+        private StrongOpenType(int code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+        private int code;
+        private String desc;
+        public int getCode() {
+            return code;
+        }
+        public void setCode(int code) {
+            this.code = code;
+        }
+        public String getDesc() {
+            return desc;
+        }
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public static String getStrongOpenType(int code){
+            for(StrongOpenType d : StrongOpenType.values()){
+                if(d.getCode()==code){
+                    return d.getDesc();
+                }
+            }
+            return "";
+        }
+    }
 }
