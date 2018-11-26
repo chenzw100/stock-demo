@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
+import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.StrongStocksDown;
 import com.example.stockdemo.domain.Temperature;
 import com.example.stockdemo.domain.XGBStock;
@@ -51,10 +52,10 @@ public class MarketService {
             String down = jsonArray.toArray()[4].toString();
             int downRate=MyUtils.getCentBySinaPriceStr(down);
             xgbStock.setDownRate(downRate);
-            if(downRate<10){
+            if(downRate<90){
                 ds.add(xgbStock);
             }
-            log.info(code + ":" + jsonArray.toArray()[11] + ":" + jsonArray.toArray()[12]);
+            log.info("open:"+code +",downRate:"+downRate);
 
         }
         int i=0;
@@ -67,7 +68,7 @@ public class MarketService {
             i++;
         }
         strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
-        strongStocksDown.setDesc(desc);
+        strongStocksDown.setStockDesc(desc);
         strongStocksDown.setDownCount(ds.size());
         strongStocksDown.setType(NumberEnum.StrongOpenType.OPEN.getCode());
         strongStocksDownRepository.save(strongStocksDown);
@@ -92,7 +93,7 @@ public class MarketService {
             if(downRate<-990){
                 ds.add(xgbStock);
             }
-            log.info(code + ":" + jsonArray.toArray()[11] + ":" + jsonArray.toArray()[12]);
+            log.info("strong:"+code + ",downRate:"+downRate);
 
         }
         int i=0;
@@ -105,7 +106,7 @@ public class MarketService {
             i++;
         }
         strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
-        strongStocksDown.setDesc(desc);
+        strongStocksDown.setStockDesc(desc);
         strongStocksDown.setDownCount(ds.size());
         strongStocksDown.setType(NumberEnum.StrongOpenType.STRONG.getCode());
         strongStocksDownRepository.save(strongStocksDown);

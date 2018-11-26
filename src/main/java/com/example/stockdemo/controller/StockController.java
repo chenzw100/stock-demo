@@ -1,9 +1,12 @@
 package com.example.stockdemo.controller;
 
 import com.example.stockdemo.dao.MyStockRepository;
+import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
 import com.example.stockdemo.domain.MyStock;
+import com.example.stockdemo.domain.StrongStocksDown;
 import com.example.stockdemo.domain.Temperature;
+import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
 import com.example.stockdemo.service.TgbService;
 import com.example.stockdemo.utils.MyUtils;
@@ -26,7 +29,11 @@ public class StockController {
     @Autowired
     private MarketStockService tgbMarketStockService;
     @Autowired
+    private MarketService marketService;
+    @Autowired
     MyStockRepository myStockRepository;
+    @Autowired
+    StrongStocksDownRepository strongStocksDownRepository;
     @Autowired
     TemperatureRepository temperatureRepository;
     @RequestMapping("/choice")
@@ -84,7 +91,8 @@ public class StockController {
     String formatData(String format) {
         List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
-        return format+":<br>"+myStocks+":<br>"+temperatures;
+        List<StrongStocksDown> strongStocksDowns =strongStocksDownRepository.findByDayFormat(format);
+        return format+":<br>"+myStocks+":<br>"+temperatures+":<br>"+strongStocksDowns;
     }
     @RequestMapping("z")
     String z() {
@@ -99,5 +107,11 @@ public class StockController {
             map= tgbService.getCurrentTime();
         }
         return "<span color='red'>实时</span>:<br>"+map;
+    }
+    @RequestMapping("down")
+    String down() {
+        marketService.boomStock();
+        marketService.multiStock();
+        return "success";
     }
 }
