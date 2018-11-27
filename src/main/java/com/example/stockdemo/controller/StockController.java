@@ -1,8 +1,10 @@
 package com.example.stockdemo.controller;
 
+import com.example.stockdemo.dao.DownStockRepository;
 import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
+import com.example.stockdemo.domain.DownStock;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.StrongStocksDown;
 import com.example.stockdemo.domain.Temperature;
@@ -36,6 +38,8 @@ public class StockController {
     StrongStocksDownRepository strongStocksDownRepository;
     @Autowired
     TemperatureRepository temperatureRepository;
+    @Autowired
+    DownStockRepository downStockRepository;
     @RequestMapping("/choice")
     public String choice(){
         return tgbMarketStockService.choiceYesterday();
@@ -91,8 +95,9 @@ public class StockController {
     String formatData(String format) {
         List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         List<StrongStocksDown> strongStocksDowns =strongStocksDownRepository.findByDayFormat(format);
-        return format+":<br>"+myStocks+":<br>"+temperatures+":<br>"+strongStocksDowns;
+        return format+":<br>"+myStocks+":<br>"+temperatures+":<br>"+downStocks+":<br>"+strongStocksDowns;
     }
     @RequestMapping("z")
     String z() {

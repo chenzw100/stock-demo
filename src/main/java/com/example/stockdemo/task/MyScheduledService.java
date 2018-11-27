@@ -25,13 +25,21 @@ public class MyScheduledService {
     public void choice(){
         log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.choiceYesterday();
-
+    }
+    //0 0 9 ? * MON-FRI
+    @Scheduled(cron = "40 20 8 ? * MON-FRI")
+    //@Scheduled(cron = "0 45 0 ? * MON-FRI")
+    public void choiceDown(){
+        log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        tgbMarketStockService.boomStock();
+        tgbMarketStockService.multiStock();
     }
     @Scheduled(cron = "30 26 9 ? * MON-FRI")
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
         log.info("==>>exe open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.open();
+        tgbMarketStockService.openDown();
 
     }
     @Scheduled(cron = "0 10 15 ? * MON-FRI")
@@ -40,6 +48,7 @@ public class MyScheduledService {
         log.info("==>>exe t close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperatureClose();
         tgbMarketStockService.close();
+        tgbMarketStockService.closeDown();
     }
     @Scheduled(cron = "0 15 15 ? * MON-FRI")
     //@Scheduled(cron = "0 10 7 ? * MON-FRI")

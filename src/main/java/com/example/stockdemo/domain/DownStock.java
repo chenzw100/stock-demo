@@ -5,7 +5,6 @@ import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 
 import javax.persistence.*;
-import java.text.DecimalFormat;
 import java.util.Date;
 
 /**
@@ -14,8 +13,8 @@ import java.util.Date;
  * 今天竞价涨幅，相对于昨天收盘的涨幅 (todayOpenPrice-yesterdayPrice)/yesterdayPrice
  * 明天竞价涨幅，相对于今天开盘的涨幅 (tomorrowPrice-todayOpenPrice)/todayOpenPrice;此处就代表了盈利幅度
  */
-@Entity(name="stock")
-public class MyStock implements Comparable<MyStock>{
+@Entity(name="down_stock")
+public class DownStock implements Comparable<DownStock>{
     @Id
     @GeneratedValue
     private Long id;
@@ -40,12 +39,9 @@ public class MyStock implements Comparable<MyStock>{
     private int tomorrowClosePrice;
     @Column(nullable = true)
     private int openBidRate;
-    @Column(nullable = true,columnDefinition="varchar(10) COMMENT '连板'")
-    private String continuous;
-    @Column(nullable = true)
-    private Integer openCount;
 
-    @Column(nullable = true,columnDefinition="COMMENT '1实时;2一天;3两者'")
+
+    @Column(nullable = true,columnDefinition="COMMENT '11强势;12炸板'")
     private Integer stockType;
 
     @Transient
@@ -56,8 +52,7 @@ public class MyStock implements Comparable<MyStock>{
     private String tomorrowOpenRate;
     @Transient
     private String tomorrowCloseRate;
-    @Transient
-    private String sinaUrl;
+
 
     public Integer getStockType() {
         if(stockType == null){
@@ -70,29 +65,17 @@ public class MyStock implements Comparable<MyStock>{
         this.stockType = stockType;
     }
 
-    public String getContinuous() {
-        return continuous;
-    }
 
-    public void setContinuous(String continuous) {
-        this.continuous = continuous;
-    }
 
-    public MyStock(){
+    public DownStock(){
     }
-    public MyStock(String code,String name){
+    public DownStock(String code, String name){
         this.code =code;
         this.name = name;
-        this.sinaUrl="https://hq.sinajs.cn/list="+code;
+        this.created = MyUtils.getCurrentDate();
+        this.dayFormat = MyUtils.getDayFormat();
     }
 
-    public Integer getOpenCount() {
-        return openCount;
-    }
-
-    public void setOpenCount(Integer openCount) {
-        this.openCount = openCount;
-    }
 
     public Long getId() {
         return id;
@@ -115,7 +98,7 @@ public class MyStock implements Comparable<MyStock>{
     }
 
     public void setCreated(Date created) {
-        this.dayFormat=MyUtils.getDayFormat(created);
+        this.dayFormat=DateFormatUtils.format(created, "yyyy-MM-dd");
         this.created = created;
     }
 
@@ -223,13 +206,7 @@ public class MyStock implements Comparable<MyStock>{
         this.tomorrowCloseRate = tomorrowCloseRate;
     }
 
-    public String getSinaUrl() {
-        return sinaUrl;
-    }
 
-    public void setSinaUrl(String sinaUrl) {
-        this.sinaUrl = sinaUrl;
-    }
     static String strHead = "<span color='red'>";
     static String strTail = "</span>";
     public StringBuilder toChoice(StringBuilder sb){
@@ -238,7 +215,7 @@ public class MyStock implements Comparable<MyStock>{
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
+        sb.append(code).append(name).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){
@@ -247,7 +224,7 @@ public class MyStock implements Comparable<MyStock>{
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",竞价:").append(getTodayOpenRate()).append("<br>");
+        sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toOpenTomorrow(StringBuilder sb){
@@ -256,7 +233,7 @@ public class MyStock implements Comparable<MyStock>{
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",今天:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append("<br>");
         return sb;
     }
@@ -266,7 +243,7 @@ public class MyStock implements Comparable<MyStock>{
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",开盘:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",开盘:").append(getTodayOpenRate())
                 .append(",收盘:").append(getTodayCloseRate()).append("<br>");
         return sb;
     }
@@ -276,7 +253,7 @@ public class MyStock implements Comparable<MyStock>{
         }else {
             sb.append("热门:").append(stockType).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",今天:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb;
     }
@@ -287,14 +264,14 @@ public class MyStock implements Comparable<MyStock>{
         }else {
             sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",竞价:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb.toString();
     }
 
 
     @Override
-    public int compareTo(MyStock o) {
+    public int compareTo(DownStock o) {
         return o.openBidRate-this.openBidRate;
     }
 }

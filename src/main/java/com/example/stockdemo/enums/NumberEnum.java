@@ -41,6 +41,8 @@ public class NumberEnum {
         CURRENT(1,"实时"),
         DAY(2,"一天"),
         COMMON(3,"两者"),
+        STRONG(11,"强势"),
+        OPEN(12,"炸板"),
         ;
 
         private StockType(int code, String desc) {

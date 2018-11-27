@@ -28,7 +28,7 @@ public class TestMain {
             System.out.println(jsonArray.toArray()[0].toString().substring(0,6)+":"+jsonArray.toArray()[12]);
     }*/
        // System.out.println(MyUtils.getCentBySinaPriceStr("-9.947643979057595")<-995);
-        Set<XGBStock> ds=new TreeSet<XGBStock>();
+        /*Set<XGBStock> ds=new TreeSet<XGBStock>();
         XGBStock xgbStock = new XGBStock();
         xgbStock.setName("1111");
         String code = "1111";
@@ -76,6 +76,12 @@ public class TestMain {
         }
         for(XGBStock stock:ds){
             System.out.println(stock.getCode()+":"+stock.getName()+":"+MyUtils.getYuanByCent(stock.getDownRate()));
+        }*/
+        String codeStr = "5566.SS";
+        if(codeStr.contains("Z")){
+            System.out.printf("111");
+        }else {
+            System.out.printf("222");
         }
     }
 }

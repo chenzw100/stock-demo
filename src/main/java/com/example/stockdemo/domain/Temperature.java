@@ -42,7 +42,7 @@ public class Temperature {
     public Temperature(int type){
         this.type = type;
         this.created = MyUtils.getCurrentDate();
-        this.dayFormat= DateFormatUtils.format(getCreated(), "yyyy-MM-dd");
+        this.dayFormat= MyUtils.getDayFormat();
     }
 
     public long getId() {

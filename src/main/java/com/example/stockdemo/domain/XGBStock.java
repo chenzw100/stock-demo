@@ -1,11 +1,22 @@
 package com.example.stockdemo.domain;
 
+import com.example.stockdemo.utils.MyUtils;
+
 public class XGBStock implements Comparable<XGBStock>{
     private String code;
     private String name;
     private Integer openCount;
     private Integer continueBoardCount;
     private int downRate;
+    private String price;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 
     public int getDownRate() {
         return downRate;
@@ -54,4 +65,9 @@ public class XGBStock implements Comparable<XGBStock>{
           // TODO Auto-generated method stub
           return this.downRate-o.downRate;
      }
+    public DownStock coverDownStock(){
+        DownStock downStock = new DownStock(getCode(),getName());
+        downStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(getPrice()));
+        return downStock;
+    }
 }

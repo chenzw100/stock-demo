@@ -27,6 +27,9 @@ public class MyUtils {
     public static String getDayFormat(){
         return DateFormatUtils.format(getCurrentDate(), "yyyy-MM-dd");
     }
+    public static String getDayFormat(Date date){
+        return DateFormatUtils.format(date, "yyyy-MM-dd");
+    }
     public static int getCentBySinaPriceStr(String sinaPriceStr){
         return new BigDecimal(Double.parseDouble(sinaPriceStr)).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).intValue();
     }

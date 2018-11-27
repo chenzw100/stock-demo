@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 
 /**
  * 收盘，开盘，当前
+ * SS--sh
+ * SZ--sz
  */
 public class SinaStock {
     private final static float TEN_PERCENT=1.1f;
