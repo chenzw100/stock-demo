@@ -1,5 +1,7 @@
 package com.example.stockdemo.utils;
 
+import org.apache.commons.lang.time.DateFormatUtils;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -21,6 +23,9 @@ public class MyUtils {
         date.setTime(date.getTime()-hour24);
         return date;
 
+    }
+    public static String getDayFormat(){
+        return DateFormatUtils.format(getCurrentDate(), "yyyy-MM-dd");
     }
     public static int getCentBySinaPriceStr(String sinaPriceStr){
         return new BigDecimal(Double.parseDouble(sinaPriceStr)).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).intValue();

@@ -41,6 +41,13 @@ public class MyScheduledService {
         marketService.temperatureClose();
         tgbMarketStockService.close();
     }
+    @Scheduled(cron = "0 15 15 ? * MON-FRI")
+    //@Scheduled(cron = "0 10 7 ? * MON-FRI")
+    public void close2(){
+        log.info("==>>exe t close2"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        marketService.boomStock();
+        marketService.multiStock();
+    }
     @Scheduled(cron = "0 35 9 ? * MON-FRI")
     //@Scheduled(cron = "0 35 1 ? * MON-FRI")
     public void topen(){

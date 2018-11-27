@@ -60,6 +60,9 @@ public class MyStock {
     private String sinaUrl;
 
     public Integer getStockType() {
+        if(stockType == null){
+            stockType=0;
+        }
         return stockType;
     }
 
@@ -282,9 +285,9 @@ public class MyStock {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         if(stockType== NumberEnum.StockType.COMMON.getCode()){
-            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
+            sb.append(strHead).append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(strTail).append(",");
         }else {
-            sb.append("热门:").append(stockType).append(",");;
+            sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",");;
         }
         sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");

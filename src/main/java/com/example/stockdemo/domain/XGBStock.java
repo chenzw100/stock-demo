@@ -52,6 +52,6 @@ public class XGBStock implements Comparable<XGBStock>{
 
      public int compareTo(XGBStock o) {
           // TODO Auto-generated method stub
-          return 0-(this.downRate-o.downRate);
+          return this.downRate-o.downRate;
      }
 }

@@ -1,5 +1,7 @@
 package com.example.stockdemo.domain;
 
+import com.example.stockdemo.enums.NumberEnum;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +25,8 @@ public class StrongStocksDown {
     private String dayFormat;
 
     public Integer getType() {
+        if(type==null)
+            type=0;
         return type;
     }
 
@@ -64,7 +68,7 @@ public class StrongStocksDown {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(getDayFormat()).append("=>type:").append(type).append(",跌数:").append(downCount).append(",前三:").append(stockDesc);
+        sb.append(getDayFormat()).append("=>type:").append(NumberEnum.StrongOpenType.getStrongOpenType(getType())).append(",跌数:").append(downCount).append(",前三:").append(stockDesc).append("<br>");
         return sb.toString();
     }
 }

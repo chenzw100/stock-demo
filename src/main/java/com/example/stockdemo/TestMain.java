@@ -2,9 +2,12 @@ package com.example.stockdemo;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.stockdemo.domain.XGBStock;
 import com.example.stockdemo.utils.MyUtils;
 
 import java.text.DecimalFormat;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by laikui on 2018/10/16.
@@ -24,6 +27,55 @@ public class TestMain {
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
             System.out.println(jsonArray.toArray()[0].toString().substring(0,6)+":"+jsonArray.toArray()[12]);
     }*/
-        System.out.println(MyUtils.getCentBySinaPriceStr("-9.947643979057595")<-995);
+       // System.out.println(MyUtils.getCentBySinaPriceStr("-9.947643979057595")<-995);
+        Set<XGBStock> ds=new TreeSet<XGBStock>();
+        XGBStock xgbStock = new XGBStock();
+        xgbStock.setName("1111");
+        String code = "1111";
+        xgbStock.setCode(code);
+        String down = "0.89";
+        int downRate=MyUtils.getCentBySinaPriceStr(down);
+        xgbStock.setDownRate(downRate);
+        if(downRate<90){
+            ds.add(xgbStock);
+        }
+
+        XGBStock xgbStock1 = new XGBStock();
+        xgbStock1.setName("1112");
+        xgbStock1.setCode("1112");
+        downRate=MyUtils.getCentBySinaPriceStr("10.01");
+        xgbStock1.setDownRate(downRate);
+        if(downRate<90){
+            ds.add(xgbStock1);
+        }
+
+        XGBStock xgbStock2 = new XGBStock();
+        xgbStock2.setName("1113");
+        xgbStock2.setCode("1113");
+        downRate=MyUtils.getCentBySinaPriceStr("-1.95");
+        xgbStock2.setDownRate(downRate);
+        if(downRate<90){
+            ds.add(xgbStock2);
+        }
+
+        XGBStock xgbStock3 = new XGBStock();
+        xgbStock3.setName("1114");
+        xgbStock3.setCode("1114");
+        downRate=MyUtils.getCentBySinaPriceStr("-6.95");
+        xgbStock3.setDownRate(downRate);
+        if(downRate<90){
+            ds.add(xgbStock3);
+        }
+        XGBStock xgbStock4 = new XGBStock();
+        xgbStock4.setName("1115");
+        xgbStock4.setCode("1115");
+        downRate=MyUtils.getCentBySinaPriceStr("0.2");
+        xgbStock4.setDownRate(downRate);
+        if(downRate<90){
+            ds.add(xgbStock4);
+        }
+        for(XGBStock stock:ds){
+            System.out.println(stock.getCode()+":"+stock.getName()+":"+MyUtils.getYuanByCent(stock.getDownRate()));
+        }
     }
 }
