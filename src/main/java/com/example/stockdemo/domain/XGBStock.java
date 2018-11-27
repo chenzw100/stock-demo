@@ -6,7 +6,6 @@ public class XGBStock implements Comparable<XGBStock>{
     private Integer openCount;
     private Integer continueBoardCount;
     private int downRate;
-
     public int getDownRate() {
         return downRate;
     }
