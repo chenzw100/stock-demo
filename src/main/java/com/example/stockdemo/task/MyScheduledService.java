@@ -27,12 +27,11 @@ public class MyScheduledService {
         tgbMarketStockService.choiceYesterday();
     }
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "40 20 8 ? * MON-FRI")
+    @Scheduled(cron = "40 30 7 ? * MON-FRI")
     //@Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choiceDown(){
         log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        tgbMarketStockService.boomStock();
-        tgbMarketStockService.multiStock();
+        tgbMarketStockService.downChoice();
     }
     @Scheduled(cron = "30 26 9 ? * MON-FRI")
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")

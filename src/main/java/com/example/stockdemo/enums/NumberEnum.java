@@ -43,6 +43,7 @@ public class NumberEnum {
         COMMON(3,"两者"),
         STRONG(11,"强势"),
         OPEN(12,"炸板"),
+        DOWN(13,"低吸"),
         ;
 
         private StockType(int code, String desc) {

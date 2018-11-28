@@ -32,13 +32,17 @@ public abstract class MarketStockService {
     @Autowired
     DownStockRepository downStockRepository;
     public abstract Map getHopStock();
+    public String downChoice(){
+        multiStock();
+        boomStock();
+        return "";
+    }
 
     //3.10执行
     public String boomStock(){
         Object response =  restTemplate.getForObject(boom_stock_url, String.class);
         JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
         Set<XGBStock> ds=new TreeSet<XGBStock>();
-        StrongStocksDown strongStocksDown = new StrongStocksDown();
 
         for(int i=0;i<closeLimitUp.size();i++){
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
@@ -65,17 +69,23 @@ public abstract class MarketStockService {
         for(XGBStock xgbStock:ds){
             DownStock downStock = xgbStock.coverDownStock();
             downStock.setStockType(NumberEnum.StockType.OPEN.getCode());
+            if(xgbStock.getDownRate()<-910){
+               List<DownStock> downStocks = downStockRepository.findByCodeAndDayFormat(downStock.getCode(), downStock.getDayFormat());
+                if(downStocks!=null&& downStocks.size()>0){
+                    downStock = downStocks.get(0);
+                    downStock.setStockType(NumberEnum.StockType.DOWN.getCode());
+                }
+            }
             downStockRepository.save(downStock);
         }
 
-        return strongStocksDown.toString();
+        return "";
     }
     //3.10执行
     public String multiStock(){
         Object response =  restTemplate.getForObject(multi_stock_url, String.class);
         JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
         Set<XGBStock> ds=new TreeSet<XGBStock>();
-        StrongStocksDown strongStocksDown = new StrongStocksDown();
 
         for(int i=0;i<closeLimitUp.size();i++){
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
@@ -105,7 +115,7 @@ public abstract class MarketStockService {
             downStockRepository.save(downStock);
         }
 
-        return strongStocksDown.toString();
+        return "";
     }
     public void closeLimitUp(){
         String urlCloseLimitUp = "https://wows-api.wallstreetcn.com/v2/sheet/board_stock?filter=true";
