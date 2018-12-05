@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class MyUtils {
     public static final long hour24 = 24*60*60*1000;
-    public static final long eight_hour = 0*60*60*1000;
+    public static final long eight_hour = 8*60*60*1000;
     public static Date getCurrentDate(){
         Date date = new Date();
         date.setTime(date.getTime()+eight_hour);

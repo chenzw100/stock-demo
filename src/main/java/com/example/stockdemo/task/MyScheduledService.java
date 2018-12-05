@@ -20,68 +20,68 @@ public class MyScheduledService {
     private MarketStockService tgbMarketStockService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "40 48 8 ? * MON-FRI")
-    //@Scheduled(cron = "0 45 0 ? * MON-FRI")
+    //@Scheduled(cron = "40 48 8 ? * MON-FRI")
+    @Scheduled(cron = "40 48 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.choiceYesterday();
 
     }
-    @Scheduled(cron = "30 26 9 ? * MON-FRI")
-    //@Scheduled(cron = "0 26 1 ? * MON-FRI")
+    //@Scheduled(cron = "30 26 9 ? * MON-FRI")
+    @Scheduled(cron = "30 26 1 ? * MON-FRI")
     public void open(){
         log.info("==>>exe open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.open();
 
     }
-    @Scheduled(cron = "0 10 15 ? * MON-FRI")
-    //@Scheduled(cron = "0 10 7 ? * MON-FRI")
+    //@Scheduled(cron = "0 10 15 ? * MON-FRI")
+    @Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe t close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperatureClose();
         tgbMarketStockService.close();
     }
-    @Scheduled(cron = "0 15 15 ? * MON-FRI")
-    //@Scheduled(cron = "0 10 7 ? * MON-FRI")
+    //@Scheduled(cron = "0 15 15 ? * MON-FRI")
+    @Scheduled(cron = "0 15 7 ? * MON-FRI")
     public void close2(){
         log.info("==>>exe t close2"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.boomStock();
         marketService.multiStock();
     }
-    @Scheduled(cron = "0 35 9 ? * MON-FRI")
-    //@Scheduled(cron = "0 35 1 ? * MON-FRI")
+    //@Scheduled(cron = "0 35 9 ? * MON-FRI")
+    @Scheduled(cron = "0 35 1 ? * MON-FRI")
     public void topen(){
         log.info("==>>exe t open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperatureOpen();
     }
-    @Scheduled(cron = "0 45 9,10,13,14 ? * MON-FRI")
-    //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    //@Scheduled(cron = "0 45 9,10,13,14 ? * MON-FRI")
+    @Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void temperature(){
         log.info("==>>exe temperature"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperatureNormal();
     }
-    @Scheduled(cron = "0 5 9 ? * MON-FRI")
-    //@Scheduled(cron = "0 5 1 ? * MON-FRI")
+    //@Scheduled(cron = "0 5 9 ? * MON-FRI")
+    @Scheduled(cron = "0 5 1 ? * MON-FRI")
     public void clearTemperature(){
         log.info("==>>exe clearTemperature"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.clearTemperature();
     }
 
-    @Scheduled(cron = "0 40 18,21,23,6,8 ? * MON-FRI")
-    //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    //@Scheduled(cron = "0 40 18,21,23,6,8 ? * MON-FRI")
+    @Scheduled(cron = "0 40 10,13,15,22,0 ? * MON-FRI")
     public void currentTime(){
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.currentTime();
     }
-    @Scheduled(cron = "0 46 8 ? * MON-FRI")
-    //@Scheduled(cron = "0 5 1 ? * MON-FRI")
+    //@Scheduled(cron = "0 46 8 ? * MON-FRI")
+    @Scheduled(cron = "0 46 0 ? * MON-FRI")
     public void dayTime(){
         log.info("==>>exe dayTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.dayTime();
     }
 
-    @Scheduled(cron = "0 5 15 ? * MON-FRI")
-    //@Scheduled(cron = "0 5 1 ? * MON-FRI")
+    //@Scheduled(cron = "0 5 15 ? * MON-FRI")
+    @Scheduled(cron = "0 5 7 ? * MON-FRI")
     public void clearTime(){
         log.info("==>>exe clearTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.clearTime();
