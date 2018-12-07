@@ -1,6 +1,8 @@
 package com.example.stockdemo.mail;
 
 import com.example.stockdemo.utils.MyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -8,14 +10,16 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
-
+@EnableConfigurationProperties(MailInfo.class)
 public class MailSendUtil {
+    //https://www.cnblogs.com/V1haoge/p/7183408.html
     private final static String formName = "XXX1@163.com";//你的邮箱
     private final static String password = "******"; //授权码
     private final static String host = "smtp.163.com"; //163的服务器
     private final static String toAddress = formName;
     private final static String replayAddress = formName; //你的邮箱
-
+    @Autowired
+    private MailInfo mailInfo;
 
     public static void sendHtmlMail(MailInfo info)throws Exception{
         info.setHost(host);
