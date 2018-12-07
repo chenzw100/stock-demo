@@ -12,6 +12,8 @@ import java.util.Date;
  * 昨天，今天，明天
  * 今天竞价涨幅，相对于昨天收盘的涨幅 (todayOpenPrice-yesterdayPrice)/yesterdayPrice
  * 明天竞价涨幅，相对于今天开盘的涨幅 (tomorrowPrice-todayOpenPrice)/todayOpenPrice;此处就代表了盈利幅度
+ *
+ * columnDefinition="decimal(10,2) comment '提现金额'"
  */
 @Entity(name="down_stock")
 public class DownStock implements Comparable<DownStock>{
@@ -41,7 +43,7 @@ public class DownStock implements Comparable<DownStock>{
     private int openBidRate;
 
 
-    @Column(nullable = true,columnDefinition="COMMENT '11强势;12炸板'")
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT NULL COMMENT '11强势;12炸板'")
     private Integer stockType;
 
     @Transient

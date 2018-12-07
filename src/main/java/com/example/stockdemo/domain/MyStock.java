@@ -45,7 +45,7 @@ public class MyStock implements Comparable<MyStock>{
     @Column(nullable = true)
     private Integer openCount;
 
-    @Column(nullable = true,columnDefinition="COMMENT '1实时;2一天;3两者'")
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT NULL COMMENT '1实时;2一天;3两者'")
     private Integer stockType;
 
     @Transient
