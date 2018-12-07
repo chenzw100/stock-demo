@@ -70,4 +70,10 @@ public class XGBStock implements Comparable<XGBStock>{
         downStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(getPrice()));
         return downStock;
     }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(code).append(name).append(",open").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(getPrice()).append(",rate:").append(getDownRate());
+        return sb.toString();
+    }
 }
