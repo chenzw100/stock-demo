@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.domain.MyStock;
+import com.example.stockdemo.domain.SinaStock;
 import com.example.stockdemo.domain.XGBStock;
 import com.example.stockdemo.enums.NumberEnum;
+import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.utils.MyUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
@@ -20,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,14 +48,24 @@ import java.util.Map;
 @Component
 public class StockService {
     Log log = LogFactory.getLog(StockService.class);
-    private static String multi_stock_url="https://wows-api.wallstreetcn.com/v2/sheet/multi_stock";
-    private static String boom_stock_url ="https://wows-api.wallstreetcn.com/v2/sheet/boom_stock";
     private static Map<String, XGBStock> yesterdayLimitUp = new HashMap();
-    static Map<String, MyStock>  dayTime = new HashMap();
+    private static Map<String, MyStock>  tomorrow = new HashMap();
+    private static Map<String, MyStock> today = new HashMap();
     @Autowired
     RestTemplate restTemplate;
     @Autowired
     MyStockRepository myStockRepository;
+    private String currentPrice(String code) {
+        String url ="http://qt.gtimg.cn/q=s_"+code;
+        Object response =  restTemplate.getForObject(url,String.class);
+        String str = response.toString();
+        String[] stockObj = str.split("~");
+        if(stockObj.length<3){
+            log.error(code + ":err=" + str);
+            return null;
+        }
+        return stockObj[3];
+    }
 
     public void closeLimitUp(){
         String urlCloseLimitUp = "https://wows-api.wallstreetcn.com/v2/sheet/board_stock?filter=true";
@@ -74,7 +88,7 @@ public class StockService {
         }
     }
 
-    public void dayTimeStock(){
+    public void choiceLimitUp(){
         try {
             Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
             Elements elements = doc.getElementsByClass("tbleft");
@@ -92,25 +106,86 @@ public class StockService {
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOpenCount(xgbStock.getOpenCount());
-                    if(dayTime.containsKey(code)){
+                    if(today.containsKey(code)){
                         myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
                     }
-                    dayTime.put(code,myStock);
+                    today.put(code,myStock);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void todayChoice(){
+    public void choice(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("选股:<br>");
         int i=0;
-        for (String code:dayTime.keySet()){
-            MyStock myStock= dayTime.get(code);
+        for (String code:today.keySet()){
+            MyStock myStock= today.get(code);
             i++;
             log.info(i + ":" + code + ":" + myStock.getName());
             myStock.setCreated(new Date());
-            myStock= myStockRepository.save(myStock);
+            myStockRepository.save(myStock);
+            myStock.toChoice(sb);
         }
+        log.info(sb.toString());
+        MailSendUtil.sendMail(sb.toString());
+    }
+
+    public void open(){
+        for (String code:today.keySet()){
+            MyStock myStock = today.get(code);
+            //选出来后，新的价格新的一天
+            String currentPrice = currentPrice(code);
+            myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+            myStock= myStockRepository.save(myStock);
+            today.put(code,myStock);
+        }
+        if(tomorrow.isEmpty()){
+            List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyyMMdd"));
+            if(myStocks!=null){
+                for(MyStock myStock :myStocks){
+                    tomorrow.put(myStock.getCode(),myStock);
+                }
+            }
+        }
+        for (String code:tomorrow.keySet()){
+            MyStock myStock = tomorrow.get(code);
+            String currentPrice = currentPrice(code);
+            myStock.setTomorrowOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+            myStock = myStockRepository.save(myStock);
+            tomorrow.put(code,myStock);
+        }
+    }
+    public void close(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("收盘汇总：<br>");
+        sb.append("明天汇总：<br>");
+
+        List<MyStock> myStocksTomorrow = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyy-MM-dd"));
+        if(myStocksTomorrow!=null){
+            for(MyStock myStock :myStocksTomorrow){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTomorrowClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                myStock.toCloseTomorrow(sb);
+                myStockRepository.save(myStock);
+            }
+        }
+        tomorrow=today;
+
+        sb.append("今天汇总：<br>");
+        List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+        if(myStocks!=null){
+            for(MyStock myStock :myStocks){
+                today.put(myStock.getCode(),myStock);
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                myStock.toClose(sb);
+                myStockRepository.save(myStock);
+            }
+        }
+        today.clear();
+        MailSendUtil.sendMail(sb.toString());
     }
 
 
