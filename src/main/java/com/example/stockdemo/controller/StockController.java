@@ -8,6 +8,7 @@ import com.example.stockdemo.domain.DownStock;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.StrongStocksDown;
 import com.example.stockdemo.domain.Temperature;
+import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
 import com.example.stockdemo.service.TgbService;
@@ -117,6 +118,11 @@ public class StockController {
     String down() {
         marketService.boomStock();
         marketService.multiStock();
+        return "success";
+    }
+    @RequestMapping("t")
+    String t() {
+        MailSendUtil.sendMail("test");
         return "success";
     }
 }

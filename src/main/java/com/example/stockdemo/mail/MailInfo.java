@@ -3,16 +3,13 @@ package com.example.stockdemo.mail;
 
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 /**
  * donghao1.name=动画
  */
-@Configuration
-@PropertySource("classpath:donghao.properties")
-@ConfigurationProperties(prefix="donghao1")
+//@Configuration
+//@PropertySource("classpath:donghao.properties")
+//@ConfigurationProperties(prefix="donghao1")
 public class MailInfo {
     //邮箱服务器 如smtp.163.com
     private String host ;

@@ -1,8 +1,8 @@
 package com.example.stockdemo.mail;
 
 import com.example.stockdemo.utils.MyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -10,23 +10,21 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
-@EnableConfigurationProperties(MailInfo.class)
+@Configuration
 public class MailSendUtil {
     //https://www.cnblogs.com/V1haoge/p/7183408.html
-    private final static String formName = "XXX1@163.com";//你的邮箱
-    private final static String password = "******"; //授权码
+    private  static String formName = "";//你的邮箱
+    private  static String password = ""; //授权码
     private final static String host = "smtp.163.com"; //163的服务器
-    private final static String toAddress = formName;
-    private final static String replayAddress = formName; //你的邮箱
-    @Autowired
-    private MailInfo mailInfo;
+    private  static String toAddress = formName;
+    private  static String replayAddress = formName; //你的邮箱
 
     public static void sendHtmlMail(MailInfo info)throws Exception{
         info.setHost(host);
         info.setFormName(formName);
         info.setFormPassword(password);   //网易邮箱的授权码~不一定是密码
         info.setReplayAddress(replayAddress);
-
+        info.setToAddress(toAddress);
         Message message = getMessage(info);
         // MiniMultipart类是一个容器类，包含MimeBodyPart类型的对象
         Multipart mainPart = new MimeMultipart();
@@ -46,6 +44,7 @@ public class MailSendUtil {
         info.setFormName(formName);
         info.setFormPassword(password);   //网易邮箱的授权码~不一定是密码
         info.setReplayAddress(replayAddress);
+        info.setToAddress(toAddress);
         Message message = getMessage(info);
         //消息发送的内容
         message.setText(info.getContent());
@@ -84,7 +83,6 @@ public class MailSendUtil {
 
     public static void sendMail(String content){
         MailInfo info = new MailInfo();
-        info.setToAddress(toAddress);
         info.setContent(content);
         try {
             //MailSendUtil.sendTextMail(info);
@@ -105,5 +103,40 @@ public class MailSendUtil {
             System.out.print("'的邮件发送失败！");
             e.printStackTrace();
         }
+    }
+
+
+    @Value("${mail.formName}")
+    public static void setFormName(String formName) {
+        MailSendUtil.formName = formName;
+    }
+
+    @Value("${mail.password}")
+    public static void setPassword(String password) {
+        MailSendUtil.password = password;
+    }
+
+    public static String getFormName() {
+        return formName;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static String getToAddress() {
+        return toAddress;
+    }
+    @Value("${mail.formName}")
+    public  void setToAddress(String toAddress) {
+        MailSendUtil.toAddress = toAddress;
+    }
+
+    public static String getReplayAddress() {
+        return replayAddress;
+    }
+    @Value("${mail.formName}")
+    public  void setReplayAddress(String replayAddress) {
+        MailSendUtil.replayAddress = replayAddress;
     }
 }
