@@ -1,7 +1,9 @@
 package com.example.stockdemo.task;
 
+import com.example.stockdemo.service.DownService;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
+import com.example.stockdemo.service.UpService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -10,35 +12,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-//@Component
-public class MyScheduledService {
-    Log log = LogFactory.getLog(MyScheduledService.class);
+@Component
+public class ScheduledService {
+    Log log = LogFactory.getLog(ScheduledService.class);
 
     @Autowired
     private MarketService marketService;
     @Autowired
-    private MarketStockService tgbMarketStockService;
+    private DownService downService;
+    @Autowired
+    private UpService upService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "40 48 8 ? * MON-FRI")
+    @Scheduled(cron = "40 40 8 ? * MON-FRI")
     //@Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        tgbMarketStockService.choiceYesterday();
+        upService.choice();
+        downService.choice();;
     }
-    //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "40 30 7 ? * MON-FRI")
-    //@Scheduled(cron = "0 45 0 ? * MON-FRI")
-    public void choiceDown(){
-        log.info("==>>exe choice"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        tgbMarketStockService.downChoice();
-    }
+
     @Scheduled(cron = "30 26 9 ? * MON-FRI")
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
         log.info("==>>exe open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        tgbMarketStockService.open();
-        tgbMarketStockService.openDown();
+        upService.open();
+        downService.open();;
 
     }
     @Scheduled(cron = "0 10 15 ? * MON-FRI")
@@ -46,16 +45,10 @@ public class MyScheduledService {
     public void close(){
         log.info("==>>exe t close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         marketService.temperatureClose();
-        tgbMarketStockService.close();
-        tgbMarketStockService.closeDown();
+        upService.close();
+        downService.close();;
     }
-    @Scheduled(cron = "0 15 15 ? * MON-FRI")
-    //@Scheduled(cron = "0 10 7 ? * MON-FRI")
-    public void close2(){
-        log.info("==>>exe t close2"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        marketService.boomStock();
-        marketService.multiStock();
-    }
+
     @Scheduled(cron = "0 35 9 ? * MON-FRI")
     //@Scheduled(cron = "0 35 1 ? * MON-FRI")
     public void topen(){
@@ -75,25 +68,13 @@ public class MyScheduledService {
         marketService.clearTemperature();
     }
 
-    @Scheduled(cron = "0 40 18,21,23,6,8 ? * MON-FRI")
+    @Scheduled(cron = "30 0 18,21,23,6,8 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
-    public void currentTime(){
-        log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        tgbMarketStockService.currentTime();
-    }
-    @Scheduled(cron = "0 46 8 ? * MON-FRI")
-    //@Scheduled(cron = "0 5 1 ? * MON-FRI")
-    public void dayTime(){
-        log.info("==>>exe dayTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        tgbMarketStockService.dayTime();
+    public void choiceLimitUp(){
+        log.info("==>>exe choiceLimitUp"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        upService.choiceLimitUp();
     }
 
-    @Scheduled(cron = "0 5 15 ? * MON-FRI")
-    //@Scheduled(cron = "0 5 1 ? * MON-FRI")
-    public void clearTime(){
-        log.info("==>>exe clearTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        tgbMarketStockService.clearTime();
-    }
 
 
     /**

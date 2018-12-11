@@ -67,7 +67,7 @@ public class MarketService {
             desc=desc+xgbStock.getCode()+":"+xgbStock.getName()+":"+MyUtils.getYuanByCent(xgbStock.getDownRate())+"<br>";
             i++;
         }
-        strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+        strongStocksDown.setDayFormat(MyUtils.getDayFormat());
         strongStocksDown.setStockDesc(desc);
         strongStocksDown.setDownCount(ds.size());
         strongStocksDown.setType(NumberEnum.StrongOpenType.OPEN.getCode());
@@ -90,7 +90,7 @@ public class MarketService {
             String down = jsonArray.toArray()[4].toString();
             int downRate=MyUtils.getCentBySinaPriceStr(down);
             xgbStock.setDownRate(downRate);
-            if(downRate<-990){
+            if(downRate<-900){
                 ds.add(xgbStock);
             }
             log.info("strong:"+code + ",downRate:"+downRate);
@@ -105,7 +105,7 @@ public class MarketService {
             desc=desc+xgbStock.getCode()+":"+xgbStock.getName()+":"+MyUtils.getYuanByCent(xgbStock.getDownRate())+"<br>";
             i++;
         }
-        strongStocksDown.setDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+        strongStocksDown.setDayFormat(MyUtils.getDayFormat());
         strongStocksDown.setStockDesc(desc);
         strongStocksDown.setDownCount(ds.size());
         strongStocksDown.setType(NumberEnum.StrongOpenType.STRONG.getCode());
@@ -117,7 +117,7 @@ public class MarketService {
         Temperature temperature = new Temperature(type);
         Date date = MyUtils.getCurrentDate();
         String dateStr = DateFormatUtils.format(date, "HH:mm:ss");
-        String dateParam = DateFormatUtils.format(date, "yyyyMMdd");
+        String dateParam = MyUtils.getDayFormat();
         StringBuilder sb = new StringBuilder();
 
         String urlYesterday = kline_url+dateParam;

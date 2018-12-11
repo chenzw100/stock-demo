@@ -22,13 +22,17 @@ public class MyUtils {
         Date date = new Date();
         date.setTime(date.getTime()-hour24);
         return date;
-
+    }
+    public static Date getTomorrowDate(){
+        Date date = new Date();
+        date.setTime(date.getTime()+hour24);
+        return date;
     }
     public static String getDayFormat(){
-        return DateFormatUtils.format(getCurrentDate(), "yyyy-MM-dd");
+        return DateFormatUtils.format(getCurrentDate(), "yyyyMMdd");
     }
     public static String getDayFormat(Date date){
-        return DateFormatUtils.format(date, "yyyy-MM-dd");
+        return DateFormatUtils.format(date, "yyyyMMdd");
     }
     public static int getCentBySinaPriceStr(String sinaPriceStr){
         return new BigDecimal(Double.parseDouble(sinaPriceStr)).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP).intValue();

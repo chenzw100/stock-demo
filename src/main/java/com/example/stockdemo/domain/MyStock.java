@@ -14,12 +14,12 @@ import java.util.Date;
  * 今天竞价涨幅，相对于昨天收盘的涨幅 (todayOpenPrice-yesterdayPrice)/yesterdayPrice
  * 明天竞价涨幅，相对于今天开盘的涨幅 (tomorrowPrice-todayOpenPrice)/todayOpenPrice;此处就代表了盈利幅度
  */
-@Entity(name="stock")
+@Entity(name="up_stock")
 public class MyStock implements Comparable<MyStock>{
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyy-mm-dd'")
+    @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyymmdd'")
     private String dayFormat;
     @Column(nullable = false)
     private Date created;

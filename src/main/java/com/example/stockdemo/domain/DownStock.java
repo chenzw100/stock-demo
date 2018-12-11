@@ -20,7 +20,7 @@ public class DownStock implements Comparable<DownStock>{
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyy-mm-dd'")
+    @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyymmdd'")
     private String dayFormat;
     @Column(nullable = false)
     private Date created;
