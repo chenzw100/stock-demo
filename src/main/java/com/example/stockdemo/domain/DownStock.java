@@ -74,8 +74,7 @@ public class DownStock implements Comparable<DownStock>{
     public DownStock(String code, String name){
         this.code =code;
         this.name = name;
-        this.created = MyUtils.getCurrentDate();
-        this.dayFormat = MyUtils.getDayFormat();
+
     }
 
 

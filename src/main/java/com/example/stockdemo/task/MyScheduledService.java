@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 //@Component
 public class MyScheduledService {
-    Log log = LogFactory.getLog(MyScheduledService.class);
+    /*Log log = LogFactory.getLog(MyScheduledService.class);
 
     @Autowired
     private MarketService marketService;
@@ -93,7 +93,7 @@ public class MyScheduledService {
     public void clearTime(){
         log.info("==>>exe clearTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbMarketStockService.clearTime();
-    }
+    }*/
 
 
     /**

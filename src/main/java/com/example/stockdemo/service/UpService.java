@@ -87,7 +87,7 @@ public class UpService {
         }
     }
 
-    public void choiceLimitUp(){
+    public void taoguba(){
         try {
             Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
             Elements elements = doc.getElementsByClass("tbleft");
@@ -116,14 +116,13 @@ public class UpService {
         }
     }
     public void choice(){
-        choiceLimitUp();
         StringBuilder sb = new StringBuilder();
         sb.append("选股:<br>");
         int i=0;
         for (String code:today.keySet()){
             MyStock myStock= today.get(code);
             i++;
-            log.info(i + ":" + code + ":" + myStock.getName());
+            log.info(i + "选股:" + code + ":" + myStock.getName());
             myStock.setCreated(new Date());
             myStockRepository.save(myStock);
             myStock.toChoice(sb);
@@ -185,6 +184,7 @@ public class UpService {
             }
         }
         today.clear();
+        yesterdayLimitUp.clear();
         closeLimitUp();
         MailSendUtil.sendMail(sb.toString());
     }

@@ -41,18 +41,7 @@ public class StockController {
     TemperatureRepository temperatureRepository;
     @Autowired
     DownStockRepository downStockRepository;
-    @RequestMapping("/choice")
-    public String choice(){
-        return tgbMarketStockService.choiceYesterday();
-    }
-    @RequestMapping("/open")
-    public String open() {
-        return tgbMarketStockService.open();
-    }
-    @RequestMapping("/close")
-    public String close() {
-        return tgbMarketStockService.close();
-    }
+
     @RequestMapping("/hello")
     public String hello()  {
         StringBuilder sb = new StringBuilder();
@@ -70,20 +59,10 @@ public class StockController {
             MyStock myStock = tgbHot24.get(code);
             sb.append(myStock.getName()).append("<br>");
         }
-       /* Map<String, MyStock> sinaHot24 =sinaService.getHop24Stock();
-        sb.append("微博实时热搜:<br>");
-        for (String code:sinaHot24.keySet()){
-            MyStock myStock = sinaHot24.get(code);
-            sb.append(myStock.getName()).append("<br>");
-        }*/
+
         return sb.toString();
     }
 
-    @RequestMapping("/code/{code}")
-    String code(@PathVariable("code")String code) {
-        List<MyStock> myStocks = myStockRepository.findByCode(code);
-        return code+":<br>"+myStocks;
-    }
     @RequestMapping("/format/{format}")
     String format(@PathVariable("format")String format) {
         return formatData(format);
@@ -97,8 +76,8 @@ public class StockController {
         List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
-        List<StrongStocksDown> strongStocksDowns =strongStocksDownRepository.findByDayFormat(format);
-        return format+":<br>"+myStocks+":<br>"+temperatures+":<br>"+downStocks+":<br>"+strongStocksDowns;
+        //List<StrongStocksDown> strongStocksDowns =strongStocksDownRepository.findByDayFormat(format);
+        return format+":<br>"+myStocks+":<br>"+temperatures+":<br>"+downStocks;
     }
     @RequestMapping("z")
     String z() {
@@ -122,7 +101,6 @@ public class StockController {
     }
     @RequestMapping("t")
     String t() {
-        MailSendUtil.sendMail("test");
-        return "success";
+        return "test-success";
     }
 }
