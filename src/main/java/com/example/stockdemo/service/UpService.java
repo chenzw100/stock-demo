@@ -82,7 +82,7 @@ public class UpService {
             String down = jsonArray.toArray()[4].toString();
             int downRate= MyUtils.getCentBySinaPriceStr(down);
             xgbStock.setDownRate(downRate);
-            log.info(xgbStock.toString());
+            log.info("当日涨停："+xgbStock.toString());
             yesterdayLimitUp.put(code,xgbStock);
         }
     }
@@ -98,7 +98,7 @@ public class UpService {
                 int length = url.length();
                 String code = url.substring(length-9,length-1);
                 XGBStock xgbStock = yesterdayLimitUp.get(code.substring(2, 8));
-                log.info(i+":"+code+":"+stockName);
+                log.info(i+"，taoguba:"+code+":"+stockName);
                 if(xgbStock!=null){
                     MyStock myStock = new MyStock(code,stockName);
                     myStock.setStockType(NumberEnum.StockType.DAY.getCode());

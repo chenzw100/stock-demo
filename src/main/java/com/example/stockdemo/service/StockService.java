@@ -45,7 +45,7 @@ import java.util.Map;
  //热门涨停
  //计算竞价金额
  */
-@Component
+//@Component
 public class StockService {
     Log log = LogFactory.getLog(StockService.class);
     private static Map<String, XGBStock> yesterdayLimitUp = new HashMap();
