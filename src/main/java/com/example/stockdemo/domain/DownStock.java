@@ -41,6 +41,8 @@ public class DownStock implements Comparable<DownStock>{
     private int tomorrowClosePrice;
     @Column(nullable = true)
     private int openBidRate;
+    @Column(nullable = true)
+    private Integer downRate;
 
 
     @Column(nullable = true,columnDefinition="int(11) DEFAULT NULL COMMENT '11强势;12炸板'")
@@ -55,6 +57,16 @@ public class DownStock implements Comparable<DownStock>{
     @Transient
     private String tomorrowCloseRate;
 
+    public Integer getDownRate() {
+        if(downRate==null){
+            downRate=0;
+        }
+        return downRate;
+    }
+
+    public void setDownRate(Integer downRate) {
+        this.downRate = downRate;
+    }
 
     public Integer getStockType() {
         if(stockType == null){
@@ -208,64 +220,43 @@ public class DownStock implements Comparable<DownStock>{
     }
 
 
-    static String strHead = "<span color='red'>";
-    static String strTail = "</span>";
+
     public StringBuilder toChoice(StringBuilder sb){
-        if(stockType== NumberEnum.StockType.COMMON.getCode()){
-            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
-        }else {
+
             sb.append("热门:").append(stockType).append(",");;
-        }
         sb.append(code).append(name).append(",昨收:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append("<br>");
         return sb;
     }
     public StringBuilder toOpen(StringBuilder sb){
-        if(stockType== NumberEnum.StockType.COMMON.getCode()){
-            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
-        }else {
+
             sb.append("热门:").append(stockType).append(",");;
-        }
         sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toOpenTomorrow(StringBuilder sb){
-        if(stockType== NumberEnum.StockType.COMMON.getCode()){
-            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
-        }else {
+
             sb.append("热门:").append(stockType).append(",");;
-        }
         sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append("<br>");
         return sb;
     }
     public StringBuilder toClose(StringBuilder sb){
-        if(stockType== NumberEnum.StockType.COMMON.getCode()){
-            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
-        }else {
+
             sb.append("热门:").append(stockType).append(",");;
-        }
         sb.append(code).append(name).append(",开盘:").append(getTodayOpenRate())
                 .append(",收盘:").append(getTodayCloseRate()).append("<br>");
         return sb;
     }
     public StringBuilder toCloseTomorrow(StringBuilder sb){
-        if(stockType== NumberEnum.StockType.COMMON.getCode()){
-            sb.append(strHead).append("热门:").append(stockType).append(strTail).append(",");
-        }else {
             sb.append("热门:").append(stockType).append(",");;
-        }
         sb.append(code).append(name).append(",今天:").append(getTodayOpenRate())
                 .append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb;
     }
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        if(stockType== NumberEnum.StockType.COMMON.getCode()){
-            sb.append(strHead).append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(strTail).append(",");
-        }else {
-            sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",");;
-        }
-        sb.append(code).append(name).append(",竞价:").append(getTodayOpenRate())
+            sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",跌幅:").append(MyUtils.getYuanByCent(getDownRate())).append(",").
+        append(code).append(name).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb.toString();
     }

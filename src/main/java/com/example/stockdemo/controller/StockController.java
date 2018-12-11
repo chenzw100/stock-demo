@@ -12,6 +12,7 @@ import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
 import com.example.stockdemo.service.TgbService;
+import com.example.stockdemo.service.UpService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class StockController {
     private TgbService tgbService;
 
     @Autowired
-    private MarketStockService tgbMarketStockService;
+    private UpService upService;
     @Autowired
     private MarketService marketService;
     @Autowired
@@ -81,18 +82,10 @@ public class StockController {
     }
     @RequestMapping("z")
     String z() {
-        tgbMarketStockService.closeLimitUp();
+        upService.closeLimitUp();
         return "success";
     }
-    @RequestMapping("c")
-    String c() {
-        Map map = tgbMarketStockService.getHopStock();
-        if(map== null || map.size()==0){
-            tgbService.currentTimeStock();
-            map= tgbService.getCurrentTime();
-        }
-        return "<span color='red'>实时</span>:<br>"+map;
-    }
+
     @RequestMapping("down")
     String down() {
         marketService.boomStock();
@@ -101,6 +94,7 @@ public class StockController {
     }
     @RequestMapping("t")
     String t() {
+        MailSendUtil.sendMail("test");
         return "test-success";
     }
 }

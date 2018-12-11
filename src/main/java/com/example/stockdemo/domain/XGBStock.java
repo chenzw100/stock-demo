@@ -68,6 +68,7 @@ public class XGBStock implements Comparable<XGBStock>{
     public DownStock coverDownStock(){
         DownStock downStock = new DownStock(getCode(),getName());
         downStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(getPrice()));
+        downStock.setDownRate(downRate);
         return downStock;
     }
 

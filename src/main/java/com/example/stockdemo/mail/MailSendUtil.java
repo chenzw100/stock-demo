@@ -107,12 +107,12 @@ public class MailSendUtil {
 
 
     @Value("${mail.formName}")
-    public static void setFormName(String formName) {
+    public  void setFormName(String formName) {
         MailSendUtil.formName = formName;
     }
 
     @Value("${mail.password}")
-    public static void setPassword(String password) {
+    public  void setPassword(String password) {
         MailSendUtil.password = password;
     }
 
