@@ -101,13 +101,37 @@ public class UpService {
                 log.info(i+"，taoguba:"+code+":"+stockName);
                 if(xgbStock!=null){
                     MyStock myStock = new MyStock(code,stockName);
-                    myStock.setStockType(NumberEnum.StockType.DAY.getCode());
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOpenCount(xgbStock.getOpenCount());
                     if(today.containsKey(code)){
                         myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
                     }
+                    today.put(code,myStock);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void taogubaCurrent(){
+        try {
+            Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
+            Elements elements = doc.getElementsByClass("tbleft");
+            for(int i=0;i<10;i++){
+                Element element = elements.get(i);
+                String stockName = element.text();
+                String url = element.getElementsByAttribute("href").attr("href");
+                int length = url.length();
+                String code = url.substring(length-9,length-1);
+                XGBStock xgbStock = yesterdayLimitUp.get(code.substring(2, 8));
+                log.info(i + "，taogubaCurrent:" + code + ":" + stockName);
+                if(xgbStock!=null){
+                    MyStock myStock = new MyStock(code,stockName);
+                    myStock.setStockType(NumberEnum.StockType.DAY.getCode());
+                    myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
+                    myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
+                    myStock.setOpenCount(xgbStock.getOpenCount());
                     today.put(code,myStock);
                 }
             }

@@ -1,9 +1,6 @@
 package com.example.stockdemo.task;
 
-import com.example.stockdemo.service.DownService;
-import com.example.stockdemo.service.MarketService;
-import com.example.stockdemo.service.MarketStockService;
-import com.example.stockdemo.service.UpService;
+import com.example.stockdemo.service.*;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -17,6 +14,9 @@ public class ScheduledService {
     Log log = LogFactory.getLog(ScheduledService.class);
 
     @Autowired
+    TgbService tgbService;
+
+    @Autowired
     private MarketService marketService;
     @Autowired
     private DownService downService;
@@ -24,7 +24,7 @@ public class ScheduledService {
     private UpService upService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "40 40 8 ? * MON-FRI")
+    @Scheduled(cron = "40 45 8 ? * MON-FRI")
     //@Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -39,7 +39,7 @@ public class ScheduledService {
         downService.open();;
 
     }
-    @Scheduled(cron = "0 20 15 ? * MON-FRI")
+    @Scheduled(cron = "0 10 15 ? * MON-FRI")
     //@Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe t close==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -67,11 +67,24 @@ public class ScheduledService {
         marketService.clearTemperature();
     }
 
-    @Scheduled(cron = "30 0 18,21,23,6,8 ? * SUN-SAT")
+    @Scheduled(cron = "30 40 8 ? * SUN-SAT")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void taoguba(){
         log.info("==>>exe choiceLimitUp==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taoguba();
+    }
+    @Scheduled(cron = "0 30 6,7,8 ? * MON-FRI")
+    //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    public void currentTime(){
+        log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        upService.taogubaCurrent();
+    }
+    @Scheduled(cron = "0 30 22,23,0,1,8 ? * MON-FRI")
+    //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    public void testTime(){
+        log.info("==>>exe test==start"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        tgbService.dayTimeStock();
+        log.info("==>>exe test==end"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
     }
 
 
