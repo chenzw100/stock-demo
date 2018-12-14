@@ -48,7 +48,6 @@ import java.util.Map;
 public class UpService {
     Log log = LogFactory.getLog(UpService.class);
     private static Map<String, XGBStock> yesterdayLimitUp = new HashMap();
-    private static Map<String, MyStock>  tomorrow = new HashMap();
     private static Map<String, MyStock> today = new HashMap();
     @Autowired
     RestTemplate restTemplate;
@@ -104,6 +103,7 @@ public class UpService {
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOpenCount(xgbStock.getOpenCount());
+                    myStock.setStockType(NumberEnum.StockType.DAY.getCode());
                     if(today.containsKey(code)){
                         myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
                     }
@@ -128,7 +128,7 @@ public class UpService {
                 log.info(i + "，taogubaCurrent:" + code + ":" + stockName);
                 if(xgbStock!=null){
                     MyStock myStock = new MyStock(code,stockName);
-                    myStock.setStockType(NumberEnum.StockType.DAY.getCode());
+                    myStock.setStockType(NumberEnum.StockType.CURRENT.getCode());
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOpenCount(xgbStock.getOpenCount());
@@ -151,7 +151,7 @@ public class UpService {
             myStockRepository.save(myStock);
             myStock.toChoice(sb);
         }
-        log.info(sb.toString());
+        //log.info(sb.toString());
         MailSendUtil.sendMail(sb.toString());
     }
 
@@ -161,30 +161,23 @@ public class UpService {
             //选出来后，新的价格新的一天
             String currentPrice = currentPrice(code);
             myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
-            myStock= myStockRepository.save(myStock);
-            today.put(code,myStock);
+            myStockRepository.save(myStock);
         }
-        if(tomorrow.isEmpty()){
-            List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
-            if(myStocks!=null){
-                for(MyStock myStock :myStocks){
-                    tomorrow.put(myStock.getCode(),myStock);
-                }
+
+        List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        if(myStocks!=null){
+            for(MyStock myStock :myStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTomorrowOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                myStockRepository.save(myStock);
             }
         }
-        for (String code:tomorrow.keySet()){
-            MyStock myStock = tomorrow.get(code);
-            String currentPrice = currentPrice(code);
-            myStock.setTomorrowOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
-            myStock = myStockRepository.save(myStock);
-            tomorrow.put(code,myStock);
-        }
+
     }
     public void close(){
         StringBuilder sb = new StringBuilder();
         sb.append("收盘汇总：<br>");
         sb.append("明天汇总：<br>");
-
         List<MyStock> myStocksTomorrow = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         if(myStocksTomorrow!=null){
             for(MyStock myStock :myStocksTomorrow){
@@ -194,13 +187,10 @@ public class UpService {
                 myStockRepository.save(myStock);
             }
         }
-        tomorrow=today;
-
         sb.append("今天汇总：<br>");
         List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat());
         if(myStocks!=null){
             for(MyStock myStock :myStocks){
-                today.put(myStock.getCode(),myStock);
                 String currentPrice = currentPrice(myStock.getCode());
                 myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
                 myStock.toClose(sb);

@@ -79,12 +79,12 @@ public class ScheduledService {
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taogubaCurrent();
     }
-    @Scheduled(cron = "0 30 22,23,0,1,8 ? * MON-FRI")
+    @Scheduled(cron = "0 30 1,2,3,4,5 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void testTime(){
-        log.info("==>>exe test==start"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe test==start>>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbService.dayTimeStock();
-        log.info("==>>exe test==end"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe test==end>>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
     }
 
 
