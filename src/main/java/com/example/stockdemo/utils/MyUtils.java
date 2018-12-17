@@ -21,11 +21,29 @@ public class MyUtils {
     public static Date getYesterdayDate(){
         Date date = new Date();
         date.setTime(date.getTime()-hour24);
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(date);
+        try {
+            while (chineseWorkDay.isHoliday()){
+                System.out.printf("昨天是休息日:"+getDayFormat(date));
+                date.setTime(date.getTime()-hour24);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return date;
     }
     public static Date getTomorrowDate(){
         Date date = new Date();
         date.setTime(date.getTime()+hour24);
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(date);
+        try {
+            while (chineseWorkDay.isHoliday()){
+                System.out.printf("明天是休息日:"+getDayFormat(date));
+                date.setTime(date.getTime()+hour24);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return date;
     }
     public static String getDayFormat(){

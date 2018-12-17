@@ -22,7 +22,7 @@ public class ChineseWorkDay {
             "2019-10-02", "2019-10-03", "2019-10-04", "2019-10-07"));
     // 由于放假需要额外工作的周末
     private List<String> extraWorkdays = new ArrayList<String>(Arrays.asList(
-            "2019-01-01"));
+            "2018-01-01"));
 
     /**
      * 判断是否是法定假日
