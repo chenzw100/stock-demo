@@ -1,6 +1,9 @@
 package com.example.stockdemo.task;
 
-import com.example.stockdemo.service.*;
+import com.example.stockdemo.service.DownService;
+import com.example.stockdemo.service.MarketService;
+import com.example.stockdemo.service.TgbService;
+import com.example.stockdemo.service.UpService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -79,7 +82,7 @@ public class ScheduledService {
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taogubaCurrent();
     }
-    @Scheduled(cron = "0 30 1,2,3,4,5 ? * MON-FRI")
+    @Scheduled(cron = "0 5,55 2,3 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void testTime(){
         log.info("==>>exe test==start>>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
