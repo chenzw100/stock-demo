@@ -149,6 +149,7 @@ public class MyStock implements Comparable<MyStock>{
 
     public void setTodayOpenPrice(int todayOpenPrice) {
         this.todayOpenPrice = todayOpenPrice;
+        getOpenBidRate();
     }
 
     public int getTodayClosePrice() {

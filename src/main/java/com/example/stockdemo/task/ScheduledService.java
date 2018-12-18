@@ -27,7 +27,7 @@ public class ScheduledService {
     private UpService upService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "40 45 8 ? * MON-FRI")
+    @Scheduled(cron = "40 46 8 ? * MON-FRI")
     //@Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -70,13 +70,13 @@ public class ScheduledService {
         marketService.clearTemperature();
     }
 
-    @Scheduled(cron = "30 40 8 ? * SUN-SAT")
+    @Scheduled(cron = "30 41 8 ? * SUN-SAT")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void taoguba(){
         log.info("==>>exe choiceLimitUp==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taoguba();
     }
-    @Scheduled(cron = "0 30 6,7,8 ? * MON-FRI")
+    @Scheduled(cron = "0 18,38 6,7,8 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void currentTime(){
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
