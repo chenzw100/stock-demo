@@ -104,9 +104,6 @@ public class UpService {
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOpenCount(xgbStock.getOpenCount());
                     myStock.setStockType(NumberEnum.StockType.DAY.getCode());
-                    if(today.containsKey(code)){
-                        myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
-                    }
                     today.put(code,myStock);
                 }
             }
@@ -132,6 +129,9 @@ public class UpService {
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOpenCount(xgbStock.getOpenCount());
+                    if(today.containsKey(code)){
+                        myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
+                    }
                     today.put(code,myStock);
                 }
             }
