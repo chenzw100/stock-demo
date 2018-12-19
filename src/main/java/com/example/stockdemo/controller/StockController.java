@@ -4,10 +4,8 @@ import com.example.stockdemo.dao.DownStockRepository;
 import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
-import com.example.stockdemo.domain.DownStock;
-import com.example.stockdemo.domain.MyStock;
-import com.example.stockdemo.domain.StrongStocksDown;
-import com.example.stockdemo.domain.Temperature;
+import com.example.stockdemo.domain.*;
+import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.MarketStockService;
@@ -19,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -42,26 +41,41 @@ public class StockController {
     TemperatureRepository temperatureRepository;
     @Autowired
     DownStockRepository downStockRepository;
+    @Autowired
+    RestTemplate restTemplate;
 
-    @RequestMapping("/hello")
-    public String hello()  {
-        StringBuilder sb = new StringBuilder();
-        Date date = MyUtils.getCurrentDate();
-        Calendar c=Calendar.getInstance();
-        c.setTime(date);
-        int weekday=c.get(Calendar.DAY_OF_WEEK)-1;
-        Map<String, MyStock> tgbHot24 =tgbService.getHop24Stock();
-
-        sb.append(DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss")).append(" 星期").append(weekday).append("<br>");
-        List<Temperature> temperatures = temperatureRepository.findByDayFormat(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
-        sb.append(temperatures).append("<br>");
-        sb.append("淘县实时热搜:<br>");
-        for (String code:tgbHot24.keySet()){
-            MyStock myStock = tgbHot24.get(code);
-            sb.append(myStock.getName()).append("<br>");
+    @RequestMapping("/bid/{code}")
+    public String bid(@PathVariable("code")String code)  {
+        if(code.indexOf("6")==0){
+            code = "sh"+code;
+        }else {
+            code = "sz"+code;
         }
+        SinaStock sinaStock = getSinaStock(code);
+        MyStock myStock = new MyStock(code,sinaStock.getName());
+        myStock.setCreated(MyUtils.getCurrentDate());
+        myStock.setStockType(NumberEnum.StockType.BID.getCode());
+        myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getYesterdayClosingPrice()));
+        myStock.setContinuous("");
+        myStock.setOpenCount(0);
+        myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(sinaStock.getOpeningPrice()));
+        myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
+        myStockRepository.save(myStock);
 
-        return sb.toString();
+        return "success";
+    }
+    private SinaStock getSinaStock(String code) {
+        String url ="https://hq.sinajs.cn/list="+code;
+        Object response =  restTemplate.getForObject(url,String.class);
+        String str = response.toString();
+        String[] stockObj = str.split(",");
+        if(stockObj.length<3){
+            //log.error(code + ":err=" + str);
+            return null;
+        }
+        int length = stockObj[0].length();
+        String strName = stockObj[0].substring(stockObj[0].indexOf("=")+2,length);
+        return new SinaStock(code,strName,stockObj[1],stockObj[2],stockObj[3]);
     }
 
     @RequestMapping("/format/{format}")
@@ -96,5 +110,21 @@ public class StockController {
     String t() {
         MailSendUtil.sendMail("test");
         return "test-success";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(11);
+        String code = "600555";
+        String code1 = "600655";
+        String code2 = "000655";
+        if(code.indexOf("6")==0){
+            System.out.println(code);
+        }
+        if(code1.indexOf("6")==0){
+            System.out.println(code1);
+        }
+        if(code2.indexOf("6")==0){
+            System.out.println(code2);
+        }
     }
 }

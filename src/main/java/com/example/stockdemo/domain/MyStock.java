@@ -44,6 +44,8 @@ public class MyStock implements Comparable<MyStock>{
     private String continuous;
     @Column(nullable = true)
     private Integer openCount;
+    @Column(nullable = true)
+    private Integer oneFlag;
 
     @Column(nullable = true,columnDefinition="int(11) DEFAULT NULL COMMENT '1实时;2一天;3两者'")
     private Integer stockType;
@@ -58,6 +60,14 @@ public class MyStock implements Comparable<MyStock>{
     private String tomorrowCloseRate;
     @Transient
     private String sinaUrl;
+
+    public Integer getOneFlag() {
+        return oneFlag;
+    }
+
+    public void setOneFlag(Integer oneFlag) {
+        this.oneFlag = oneFlag;
+    }
 
     public Integer getStockType() {
         if(stockType == null){
@@ -288,7 +298,7 @@ public class MyStock implements Comparable<MyStock>{
         }else {
             sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",");;
         }
-        sb.append(code).append(name).append(",连板:").append(continuous).append(",开板:").append(openCount).append(",竞价:").append(getTodayOpenRate())
+        sb.append(code).append(name).append(",连板:").append(continuous).append(",一字").append(oneFlag).append(",开板:").append(openCount).append(",竞价:").append(getTodayOpenRate())
         .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
         return sb.toString();
     }

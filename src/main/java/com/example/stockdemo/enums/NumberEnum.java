@@ -41,6 +41,7 @@ public class NumberEnum {
         CURRENT(1,"实时"),
         DAY(2,"一天"),
         COMMON(3,"两者"),
+        BID(4,"竞价"),
         STRONG(11,"强势"),
         OPEN(12,"炸板"),
         DOWN(13,"低吸"),

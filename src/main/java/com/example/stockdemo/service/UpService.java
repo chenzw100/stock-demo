@@ -66,6 +66,7 @@ public class UpService {
     }
 
     public void closeLimitUp(){
+        yesterdayLimitUp.clear();
         String urlCloseLimitUp = "https://wows-api.wallstreetcn.com/v2/sheet/board_stock?filter=true";
         Object response =  restTemplate.getForObject(urlCloseLimitUp, String.class);
         JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
@@ -102,7 +103,7 @@ public class UpService {
                     MyStock myStock = new MyStock(code,stockName);
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
-                    myStock.setOpenCount(xgbStock.getOpenCount());
+                    myStock.setOneFlag(xgbStock.getOpenCount());
                     myStock.setStockType(NumberEnum.StockType.DAY.getCode());
                     today.put(code,myStock);
                 }
@@ -128,7 +129,7 @@ public class UpService {
                     myStock.setStockType(NumberEnum.StockType.CURRENT.getCode());
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
-                    myStock.setOpenCount(xgbStock.getOpenCount());
+                    myStock.setOneFlag(xgbStock.getOpenCount());
                     if(today.containsKey(code)){
                         myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
                     }
@@ -175,6 +176,8 @@ public class UpService {
 
     }
     public void close(){
+        today.clear();
+        closeLimitUp();
         StringBuilder sb = new StringBuilder();
         sb.append("收盘汇总：<br>");
         sb.append("明天汇总：<br>");
@@ -193,13 +196,13 @@ public class UpService {
             for(MyStock myStock :myStocks){
                 String currentPrice = currentPrice(myStock.getCode());
                 myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                String code = myStock.getCode();
+                XGBStock xgbStock = yesterdayLimitUp.get(code.substring(2, 8));
+                myStock.setOpenCount(xgbStock.getOpenCount());
                 myStock.toClose(sb);
                 myStockRepository.save(myStock);
             }
         }
-        today.clear();
-        yesterdayLimitUp.clear();
-        closeLimitUp();
         MailSendUtil.sendMail(sb.toString());
     }
 

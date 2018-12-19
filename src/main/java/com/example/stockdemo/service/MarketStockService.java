@@ -303,7 +303,7 @@ public abstract class MarketStockService {
             return null;
         }
         int length = stockObj[0].length();
-        String strName = stockObj[0].substring(stockObj[0].indexOf("=")+1,length);
+        String strName = stockObj[0].substring(stockObj[0].indexOf("=")+2,length);
         return new SinaStock(code,strName,stockObj[1],stockObj[2],stockObj[3]);
     }
     /**
