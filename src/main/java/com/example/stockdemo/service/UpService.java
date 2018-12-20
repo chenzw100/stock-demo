@@ -131,7 +131,10 @@ public class UpService {
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOneFlag(xgbStock.getOpenCount());
                     if(today.containsKey(code)){
-                        myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
+                        MyStock todayStock= today.get(code);
+                        if(todayStock.getStockType().intValue() !=NumberEnum.StockType.CURRENT.getCode()){
+                            myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
+                        }
                     }
                     today.put(code,myStock);
                 }

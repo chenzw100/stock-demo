@@ -46,6 +46,8 @@ public class MyStock implements Comparable<MyStock>{
     private Integer openCount;
     @Column(nullable = true)
     private Integer oneFlag;
+    @Column(nullable = true)
+    private Integer hotSort;
 
     @Column(nullable = true,columnDefinition="int(11) DEFAULT NULL COMMENT '1实时;2一天;3两者'")
     private Integer stockType;
@@ -60,6 +62,14 @@ public class MyStock implements Comparable<MyStock>{
     private String tomorrowCloseRate;
     @Transient
     private String sinaUrl;
+
+    public Integer getHotSort() {
+        return hotSort;
+    }
+
+    public void setHotSort(Integer hotSort) {
+        this.hotSort = hotSort;
+    }
 
     public Integer getOneFlag() {
         return oneFlag;

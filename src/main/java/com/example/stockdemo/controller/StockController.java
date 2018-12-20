@@ -27,9 +27,6 @@ import java.util.Map;
 @RestController
 public class StockController {
     @Autowired
-    private TgbService tgbService;
-
-    @Autowired
     private UpService upService;
     @Autowired
     private MarketService marketService;
