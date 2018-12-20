@@ -91,11 +91,12 @@ public class StockController {
         return formatData(today);
     }
     String formatData(String format) {
-        List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
+        List<MyStock> openBidRate = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
+        List<MyStock> stockType = myStockRepository.findByDayFormatOrderByStockType(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         //List<StrongStocksDown> strongStocksDowns =strongStocksDownRepository.findByDayFormat(format);
-        return format+":<br>"+myStocks+":<br>"+temperatures+":<br>"+downStocks;
+        return format+":<br>"+openBidRate+":<br>"+temperatures+":<br>"+downStocks+":<br>"+stockType;
     }
     @RequestMapping("z")
     String z() {

@@ -38,9 +38,9 @@ public class NumberEnum {
         }
     }
     public enum StockType{
-        CURRENT(1,"实时"),
+        COMMON(1,"两者"),
         DAY(2,"一天"),
-        COMMON(3,"两者"),
+        CURRENT(3,"实时"),
         BID(4,"竞价"),
         STRONG(11,"强势"),
         OPEN(12,"炸板"),
