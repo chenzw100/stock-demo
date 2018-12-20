@@ -204,7 +204,11 @@ public class UpService {
                 myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
                 String code = myStock.getCode();
                 XGBStock xgbStock = yesterdayLimitUp.get(code.substring(2, 8));
-                myStock.setOpenCount(xgbStock.getOpenCount());
+                if(xgbStock!=null){
+                    myStock.setOpenCount(xgbStock.getOpenCount());
+                }else {
+                    myStock.setOpenCount(-1);
+                }
                 myStock.toClose(sb);
                 myStockRepository.save(myStock);
             }
