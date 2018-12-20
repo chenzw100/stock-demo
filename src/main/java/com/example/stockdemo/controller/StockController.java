@@ -4,12 +4,13 @@ import com.example.stockdemo.dao.DownStockRepository;
 import com.example.stockdemo.dao.MyStockRepository;
 import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
-import com.example.stockdemo.domain.*;
+import com.example.stockdemo.domain.DownStock;
+import com.example.stockdemo.domain.MyStock;
+import com.example.stockdemo.domain.SinaStock;
+import com.example.stockdemo.domain.Temperature;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
-import com.example.stockdemo.service.MarketStockService;
-import com.example.stockdemo.service.TgbService;
 import com.example.stockdemo.service.UpService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -19,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class StockController {
