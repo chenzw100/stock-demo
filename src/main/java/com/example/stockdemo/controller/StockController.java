@@ -46,6 +46,9 @@ public class StockController {
 
     @RequestMapping("/bid/{code}")
     public String bid(@PathVariable("code")String code)  {
+        if("1".equals(code)){
+            return "success";
+        }
         if(code.indexOf("6")==0){
             code = "sh"+code;
         }else {
@@ -62,7 +65,7 @@ public class StockController {
         myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
         myStockRepository.save(myStock);
 
-        return "success";
+        return myStock.toString();
     }
     private SinaStock getSinaStock(String code) {
         String url ="https://hq.sinajs.cn/list="+code;

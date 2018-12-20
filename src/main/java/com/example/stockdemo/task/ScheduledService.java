@@ -4,6 +4,7 @@ import com.example.stockdemo.service.DownService;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.TgbService;
 import com.example.stockdemo.service.UpService;
+import com.example.stockdemo.utils.ChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
@@ -31,37 +32,75 @@ public class ScheduledService {
     //@Scheduled(cron = "0 45 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        upService.choice();
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                upService.choice();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Scheduled(cron = "30 26 9 ? * MON-FRI")
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
         log.info("==>>exe open==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        upService.open();
-        downService.open();;
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                upService.open();
+                downService.open();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
     @Scheduled(cron = "0 10 15 ? * MON-FRI")
     //@Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe t close==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        marketService.temperatureClose();
-        upService.close();
-        downService.close();;
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                marketService.temperatureClose();
+                upService.close();
+                downService.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Scheduled(cron = "0 35 9 ? * MON-FRI")
     //@Scheduled(cron = "0 35 1 ? * MON-FRI")
     public void topen(){
         log.info("==>>exe t open==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        marketService.temperatureOpen();
+
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                marketService.temperatureOpen();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Scheduled(cron = "0 45 9,10,13,14 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void temperature(){
         log.info("==>>exe temperature==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        marketService.temperatureNormal();
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                marketService.temperatureNormal();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Scheduled(cron = "0 5 9 ? * MON-FRI")
     //@Scheduled(cron = "0 5 1 ? * MON-FRI")
@@ -82,7 +121,7 @@ public class ScheduledService {
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taogubaCurrent();
     }
-    @Scheduled(cron = "0 39,55 2 ? * MON-FRI")
+    @Scheduled(cron = "0 30,35,40 2 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void testTime(){
         log.info("==>>exe test==start>>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
