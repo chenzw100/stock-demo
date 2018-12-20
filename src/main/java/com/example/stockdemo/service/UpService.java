@@ -131,12 +131,13 @@ public class UpService {
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOneFlag(xgbStock.getOpenCount());
-                    myStock.setHotSort(i);
                     if(today.containsKey(code)){
                         MyStock todayStock= today.get(code);
                         if(todayStock.getStockType().intValue() !=NumberEnum.StockType.CURRENT.getCode()){
                             myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
                         }
+                    }else {
+                        myStock.setHotSort(i);
                     }
                     today.put(code,myStock);
                 }
