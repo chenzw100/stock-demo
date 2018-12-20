@@ -55,6 +55,9 @@ public class StockController {
             code = "sz"+code;
         }
         SinaStock sinaStock = getSinaStock(code);
+        if(sinaStock ==null){
+            return "fail";
+        }
         MyStock myStock = new MyStock(code,sinaStock.getName());
         myStock.setCreated(MyUtils.getCurrentDate());
         myStock.setStockType(NumberEnum.StockType.BID.getCode());
