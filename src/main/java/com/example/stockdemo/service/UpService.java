@@ -101,6 +101,7 @@ public class UpService {
                 log.info(i+"，taoguba:"+code+":"+stockName);
                 if(xgbStock!=null){
                     MyStock myStock = new MyStock(code,stockName);
+                    myStock.setHotSort(i);
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOneFlag(xgbStock.getOpenCount());
@@ -130,6 +131,7 @@ public class UpService {
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOneFlag(xgbStock.getOpenCount());
+                    myStock.setHotSort(i);
                     if(today.containsKey(code)){
                         MyStock todayStock= today.get(code);
                         if(todayStock.getStockType().intValue() !=NumberEnum.StockType.CURRENT.getCode()){
