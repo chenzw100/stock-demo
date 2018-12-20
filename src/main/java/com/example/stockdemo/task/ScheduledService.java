@@ -29,7 +29,7 @@ public class ScheduledService {
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
     @Scheduled(cron = "40 55 8 ? * MON-FRI")
-    //@Scheduled(cron = "0 45 0 ? * MON-FRI")
+    //@Scheduled(cron = "0 55 0 ? * MON-FRI")
     public void choice(){
         log.info("==>>exe choice==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
@@ -92,7 +92,7 @@ public class ScheduledService {
     @Scheduled(cron = "0 45 9,10,13,14 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void temperature(){
-        log.info("==>>exe temperature==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe temperature==>" + DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
@@ -110,24 +110,24 @@ public class ScheduledService {
     }
 
     @Scheduled(cron = "30 41 3 ? * SUN-SAT")
-    //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    //@Scheduled(cron = "30 41 20 ? * MON-FRI")
     public void taoguba(){
         log.info("==>>exe choiceLimitUp==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taoguba();
     }
     @Scheduled(cron = "0 15,31,49 7,8 ? * MON-FRI")
-    //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
+    //@Scheduled(cron = "0 15,31,49 23,0 ? * MON-FRI")
     public void currentTime(){
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taogubaCurrent();
     }
-    @Scheduled(cron = "0 30,35,40 2 ? * MON-FRI")
+   /* @Scheduled(cron = "0 30,35,40 2 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void testTime(){
         log.info("==>>exe test==start>>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbService.dayTimeStock();
         log.info("==>>exe test==end>>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-    }
+    }*/
 
 
 
