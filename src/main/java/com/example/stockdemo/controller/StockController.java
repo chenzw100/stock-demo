@@ -57,8 +57,10 @@ public class StockController {
         myStock.setCreated(MyUtils.getCurrentDate());
         myStock.setStockType(NumberEnum.StockType.BID.getCode());
         myStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getYesterdayClosingPrice()));
-        myStock.setContinuous("");
+        myStock.setContinuous("0");
         myStock.setOpenCount(0);
+        myStock.setHotSort(-1);
+        myStock.setOneFlag(-1);
         myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(sinaStock.getOpeningPrice()));
         myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(sinaStock.getCurrentPrice()));
         myStockRepository.save(myStock);
