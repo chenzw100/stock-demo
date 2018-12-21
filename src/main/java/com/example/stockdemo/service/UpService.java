@@ -134,12 +134,13 @@ public class UpService {
                     if(today.containsKey(code)){
                         MyStock todayStock= today.get(code);
                         if(todayStock.getStockType().intValue() !=NumberEnum.StockType.CURRENT.getCode()){
-                            myStock.setStockType(NumberEnum.StockType.COMMON.getCode());
+                            todayStock.setStockType(NumberEnum.StockType.COMMON.getCode());
+                            today.put(code, todayStock);
                         }
                     }else {
                         myStock.setHotSort(i);
+                        today.put(code, myStock);
                     }
-                    today.put(code,myStock);
                 }
             }
         } catch (IOException e) {
@@ -158,19 +159,20 @@ public class UpService {
             myStockRepository.save(myStock);
             myStock.toChoice(sb);
         }
+        today.clear();
         //log.info(sb.toString());
         MailSendUtil.sendMail(sb.toString());
     }
 
     public void open(){
-        for (String code:today.keySet()){
-            MyStock myStock = today.get(code);
-            //选出来后，新的价格新的一天
-            String currentPrice = currentPrice(code);
-            myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
-            myStockRepository.save(myStock);
+        List<MyStock> todayStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat());
+        if(todayStocks!=null){
+            for(MyStock myStock :todayStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                myStockRepository.save(myStock);
+            }
         }
-
         List<MyStock> myStocks = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         if(myStocks!=null){
             for(MyStock myStock :myStocks){
@@ -182,7 +184,6 @@ public class UpService {
 
     }
     public void close(){
-        today.clear();
         closeLimitUp();
         StringBuilder sb = new StringBuilder();
         sb.append("收盘汇总：<br>");
