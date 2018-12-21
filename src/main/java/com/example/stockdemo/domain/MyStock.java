@@ -48,6 +48,8 @@ public class MyStock implements Comparable<MyStock>{
     private Integer oneFlag;
     @Column(nullable = true)
     private Integer hotSort;
+    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
+    private String plateName;
 
     @Column(nullable = true,columnDefinition="int(11) DEFAULT NULL COMMENT '1实时;2一天;3两者'")
     private Integer stockType;
@@ -62,6 +64,14 @@ public class MyStock implements Comparable<MyStock>{
     private String tomorrowCloseRate;
     @Transient
     private String sinaUrl;
+
+    public String getPlateName() {
+        return plateName;
+    }
+
+    public void setPlateName(String plateName) {
+        this.plateName = plateName;
+    }
 
     public Integer getHotSort() {
         return hotSort;
@@ -309,7 +319,7 @@ public class MyStock implements Comparable<MyStock>{
             sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",");;
         }
         sb.append(code).append(name).append(",连板:").append(continuous).append(",一字").append(oneFlag).append(",开板:").append(openCount).append(",热排").append(hotSort).append(",竞价:").append(getTodayOpenRate())
-        .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append("<br>");
+        .append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
         return sb.toString();
     }
 

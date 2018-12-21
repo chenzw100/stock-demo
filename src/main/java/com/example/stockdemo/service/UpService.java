@@ -82,6 +82,14 @@ public class UpService {
             String down = jsonArray.toArray()[4].toString();
             int downRate= MyUtils.getCentBySinaPriceStr(down);
             xgbStock.setDownRate(downRate);
+            JSONArray jsonArrayPlate = jsonArray.getJSONArray(15);
+            String plateName ="";
+            for(int j=0;j<jsonArrayPlate.size();j++){
+                plateName = plateName+","+jsonArrayPlate.getJSONObject(j).getString("plate_name");
+            }
+            plateName =plateName.substring(1,plateName.length());
+            xgbStock.setPlateName(plateName);
+           // System.out.println(plateName);
             log.info("当日涨停："+xgbStock.toString());
             yesterdayLimitUp.put(code,xgbStock);
         }
@@ -105,6 +113,7 @@ public class UpService {
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
                     myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
                     myStock.setOneFlag(xgbStock.getOpenCount());
+                    myStock.setPlateName(xgbStock.getPlateName());
                     myStock.setStockType(NumberEnum.StockType.DAY.getCode());
                     today.put(code,myStock);
                 }
@@ -129,8 +138,6 @@ public class UpService {
                     MyStock myStock = new MyStock(code,stockName);
                     myStock.setStockType(NumberEnum.StockType.CURRENT.getCode());
                     myStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(xgbStock.getPrice()));
-                    myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
-                    myStock.setOneFlag(xgbStock.getOpenCount());
                     if(today.containsKey(code)){
                         MyStock todayStock= today.get(code);
                         if(todayStock.getStockType().intValue() !=NumberEnum.StockType.CURRENT.getCode()){
@@ -138,6 +145,9 @@ public class UpService {
                             today.put(code, todayStock);
                         }
                     }else {
+                        myStock.setContinuous(xgbStock.getContinueBoardCount().toString());
+                        myStock.setOneFlag(xgbStock.getOpenCount());
+                        myStock.setPlateName(xgbStock.getPlateName());
                         myStock.setHotSort(i);
                         today.put(code, myStock);
                     }

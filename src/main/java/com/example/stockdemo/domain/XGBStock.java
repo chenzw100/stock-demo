@@ -9,6 +9,15 @@ public class XGBStock implements Comparable<XGBStock>{
     private Integer continueBoardCount;
     private int downRate;
     private String price;
+    private String plateName;
+
+    public String getPlateName() {
+        return plateName;
+    }
+
+    public void setPlateName(String plateName) {
+        this.plateName = plateName;
+    }
 
     public String getPrice() {
         return price;
@@ -74,7 +83,7 @@ public class XGBStock implements Comparable<XGBStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append(",open").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(getPrice()).append(",rate:").append(getDownRate());
+        sb.append(code).append(name).append(",open").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(getPrice()).append(",rate:").append(getDownRate()).append(plateName);
         return sb.toString();
     }
 }
