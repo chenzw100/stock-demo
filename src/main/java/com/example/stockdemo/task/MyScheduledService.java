@@ -16,11 +16,6 @@ import org.springframework.stereotype.Component;
 public class MyScheduledService {
     Log log = LogFactory.getLog(MyScheduledService.class);
     //选择，开盘，收盘
-
-    @Autowired
-    private MarketService marketService;
-    @Autowired
-    private MarketStockService tgbMarketStockService;
     @Autowired
     protected TgbHotService tgbHotService;
     //服务器时间 1-9；7-15，差8小时
@@ -46,7 +41,7 @@ public class MyScheduledService {
         log.info("==>>exe choice dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbHotService.dayTimeStockHoliday();
     }
-    @Scheduled(cron = "30 26 9 ? * MON-FRI")
+    @Scheduled(cron = "30 27 9 ? * MON-FRI")
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
         log.info("==>>exe open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -62,7 +57,7 @@ public class MyScheduledService {
         }
 
     }
-    @Scheduled(cron = "0 10 15 ? * MON-FRI")
+    @Scheduled(cron = "0 20 15 ? * MON-FRI")
     //@Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe t close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));

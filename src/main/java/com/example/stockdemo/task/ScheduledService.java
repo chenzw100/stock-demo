@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class ScheduledService {
-    Log log = LogFactory.getLog(ScheduledService.class);
+    /*Log log = LogFactory.getLog(ScheduledService.class);
 
     @Autowired
     TgbService tgbService;
@@ -120,7 +120,7 @@ public class ScheduledService {
     public void currentTime(){
         log.info("==>>exe currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         upService.taogubaCurrent();
-    }
+    }*/
    /* @Scheduled(cron = "0 30,35,40 2 ? * MON-FRI")
     //@Scheduled(cron = "0 45 1,2,5,6 ? * MON-FRI")
     public void testTime(){

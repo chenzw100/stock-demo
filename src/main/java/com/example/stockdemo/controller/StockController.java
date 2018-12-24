@@ -1,13 +1,7 @@
 package com.example.stockdemo.controller;
 
-import com.example.stockdemo.dao.DownStockRepository;
-import com.example.stockdemo.dao.MyStockRepository;
-import com.example.stockdemo.dao.StrongStocksDownRepository;
-import com.example.stockdemo.dao.TemperatureRepository;
-import com.example.stockdemo.domain.DownStock;
-import com.example.stockdemo.domain.MyStock;
-import com.example.stockdemo.domain.SinaStock;
-import com.example.stockdemo.domain.Temperature;
+import com.example.stockdemo.dao.*;
+import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
@@ -38,9 +32,19 @@ public class StockController {
     @Autowired
     DownStockRepository downStockRepository;
     @Autowired
+    TgbStockRepository tgbStockRepository;
+    @Autowired
     RestTemplate restTemplate;
     @Autowired
     private TgbHotService tgbHotService;
+    @RequestMapping("/f/{format}")
+    String f(@PathVariable("format")String format) {
+        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(format);
+        List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
+        return format+":<br>"+hotSort+":<br>"+temperatures+":<br>"+downStocks;
+    }
+
     @RequestMapping("zt")
     String zt() {
         tgbHotService.closeLimitUp();
@@ -83,7 +87,7 @@ public class StockController {
     }
     private SinaStock getSinaStock(String code) {
         String url ="https://hq.sinajs.cn/list="+code;
-        Object response =  restTemplate.getForObject(url,String.class);
+        Object response =  restTemplate.getForObject(url, String.class);
         String str = response.toString();
         String[] stockObj = str.split(",");
         if(stockObj.length<3){
