@@ -11,6 +11,7 @@ import com.example.stockdemo.domain.Temperature;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
+import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.service.UpService;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -38,6 +39,19 @@ public class StockController {
     DownStockRepository downStockRepository;
     @Autowired
     RestTemplate restTemplate;
+    @Autowired
+    private TgbHotService tgbHotService;
+    @RequestMapping("zt")
+    String zt() {
+        tgbHotService.closeLimitUp();
+        return "success";
+    }
+
+    @RequestMapping("xz")
+    String xz() {
+        tgbHotService.dayTimeStockWorkday();
+        return "success";
+    }
 
     @RequestMapping("/bid/{code}")
     public String bid(@PathVariable("code")String code)  {
@@ -115,6 +129,8 @@ public class StockController {
         MailSendUtil.sendMail("test");
         return "test-success";
     }
+
+
 
     public static void main(String[] args) {
         System.out.println(11);

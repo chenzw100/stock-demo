@@ -45,6 +45,8 @@ public class NumberEnum {
         STRONG(11,"强势"),
         OPEN(12,"炸板"),
         DOWN(13,"低吸"),
+        WORKDAY(20,"炸板"),
+        HOLIDAY(21,"低吸"),
         ;
 
         private StockType(int code, String desc) {

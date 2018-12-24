@@ -2,14 +2,67 @@ package com.example.stockdemo.domain;
 
 import com.example.stockdemo.utils.MyUtils;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity(name="xgb_stock")
 public class XGBStock implements Comparable<XGBStock>{
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyymmdd'")
+    private String dayFormat;
+    @Column(nullable = false,columnDefinition="varchar(8)")
     private String code;
+    @Column(nullable = false,columnDefinition="varchar(8)")
     private String name;
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '开板次数'")
     private Integer openCount;
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '连板'")
     private Integer continueBoardCount;
-    private int downRate;
-    private String price;
+    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
     private String plateName;
+    @Column(nullable = false,columnDefinition="int(11) DEFAULT 0 COMMENT '昨日收盘'")
+    private Integer yesterdayClosePrice;
+    @Column(nullable = false)
+    private Date created;
+    @Transient
+    private int downRate;
+    @Transient
+    private String price;
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.dayFormat=MyUtils.getDayFormat(created);
+        this.created = created;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDayFormat() {
+        return dayFormat;
+    }
+
+    public void setDayFormat(String dayFormat) {
+        this.dayFormat = dayFormat;
+    }
+
+    public Integer getYesterdayClosePrice() {
+        return yesterdayClosePrice;
+    }
+
+    public void setYesterdayClosePrice(Integer yesterdayClosePrice) {
+        this.yesterdayClosePrice = yesterdayClosePrice;
+    }
 
     public String getPlateName() {
         return plateName;
@@ -24,6 +77,7 @@ public class XGBStock implements Comparable<XGBStock>{
     }
 
     public void setPrice(String price) {
+        yesterdayClosePrice=MyUtils.getCentBySinaPriceStr(getPrice());
         this.price = price;
     }
 

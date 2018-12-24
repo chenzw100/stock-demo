@@ -86,6 +86,8 @@ public class TgbService {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            log.info("==>重新执行");
+            dayTimeStock();
         }
     }
 
