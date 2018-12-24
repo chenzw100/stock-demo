@@ -8,6 +8,7 @@ import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.TgbStock;
 import com.example.stockdemo.domain.XGBStock;
 import com.example.stockdemo.enums.NumberEnum;
+import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +34,54 @@ public class TgbHotService {
     XgbStockRepository xgbStockRepository;
     @Autowired
     RestTemplate restTemplate;
+
+    public void open(){
+        List<TgbStock> todayStocks = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
+        if(todayStocks!=null){
+            for(TgbStock myStock :todayStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                tgbStockRepository.save(myStock);
+            }
+        }
+        List<TgbStock> myStocks = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        if(myStocks!=null){
+            for(TgbStock myStock :myStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTomorrowOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                tgbStockRepository.save(myStock);
+            }
+        }
+
+    }
+    public void close(){
+        closeLimitUp();
+        List<TgbStock> myStocksTomorrow = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        if(myStocksTomorrow!=null){
+            for(TgbStock myStock :myStocksTomorrow){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTomorrowClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                tgbStockRepository.save(myStock);
+            }
+        }
+        List<TgbStock> myStocks = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
+        if(myStocks!=null){
+            for(TgbStock myStock :myStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                String code = myStock.getCode();
+                List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(code, MyUtils.getDayFormat());
+                if(xgbStocks!=null && xgbStocks.size()>0){
+                    XGBStock xgbStock =xgbStocks.get(0);
+                    myStock.setOpenCount(xgbStock.getOpenCount());
+                }else {
+                    myStock.setOpenCount(-1);
+                }
+                tgbStockRepository.save(myStock);
+            }
+        }
+    }
+
     public void dayTimeStockWorkday(){
         try {
             Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
@@ -45,7 +94,12 @@ public class TgbHotService {
                 String url = element.getElementsByAttribute("href").attr("href");
                 int length = url.length();
                 String code = url.substring(length-9,length-1);
+                String currentPrice = currentPrice(code);
+                if(currentPrice == null){
+                    continue;
+                }
                 TgbStock tgbStock = new TgbStock(code,stockName);
+                tgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
                 List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat());
                 if(list!=null && list.size()>0){
                     tgbStock = list.get(0);
@@ -69,8 +123,6 @@ public class TgbHotService {
                     tgbStock.setContinuous(0);
                     tgbStock.setLimitUp(0);
                 }
-                String currentPrice = currentPrice(tgbStock.getCode());
-                tgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
                 tgbStockRepository.save(tgbStock);
 
             }
@@ -97,7 +149,12 @@ public class TgbHotService {
                 String url = element.getElementsByAttribute("href").attr("href");
                 int length = url.length();
                 String code = url.substring(length-9,length-1);
+                String currentPrice = currentPrice(code);
+                if(currentPrice == null){
+                    continue;
+                }
                 TgbStock tgbStock = new TgbStock(code,stockName);
+                tgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
                 List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(MyUtils.getTomorrowDate()));
                 if(list!=null && list.size()>0){
                     tgbStock = list.get(0);
@@ -121,8 +178,7 @@ public class TgbHotService {
                     tgbStock.setContinuous(0);
                     tgbStock.setLimitUp(0);
                 }
-                String currentPrice = currentPrice(tgbStock.getCode());
-                tgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+
                 tgbStockRepository.save(tgbStock);
             }
         } catch (IOException e) {
@@ -147,6 +203,11 @@ public class TgbHotService {
                 xgbStock.setCreated(MyUtils.getCurrentDate());
                 xgbStock.setName(jsonArray.toArray()[1].toString());
                 String code = jsonArray.toArray()[0].toString().substring(0,6);
+                if(code.indexOf("6")==0){
+                    code = "sh"+code;
+                }else {
+                    code = "sz"+code;
+                }
                 xgbStock.setCode(code);
                 xgbStock.setOpenCount(Integer.parseInt(jsonArray.toArray()[11].toString()));
                 xgbStock.setContinueBoardCount(Integer.parseInt(jsonArray.toArray()[12].toString()));
