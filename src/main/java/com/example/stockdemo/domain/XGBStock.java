@@ -77,7 +77,7 @@ public class XGBStock implements Comparable<XGBStock>{
     }
 
     public void setPrice(String price) {
-        yesterdayClosePrice=MyUtils.getCentBySinaPriceStr(getPrice());
+        yesterdayClosePrice=MyUtils.getCentBySinaPriceStr(price);
         this.price = price;
     }
 

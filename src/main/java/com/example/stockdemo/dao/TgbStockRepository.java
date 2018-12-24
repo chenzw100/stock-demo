@@ -20,7 +20,7 @@ import java.util.List;
 public interface TgbStockRepository extends JpaRepository<TgbStock,Long> {
     List<TgbStock> findAll();
     List<TgbStock> findByCodeAndDayFormat(String code, String dayFormat);
-    List<TgbStock> findByDayFormatOrderByOpenBidRateDesc(String dayFormat);
+    List<TgbStock> findByDayFormatOrderByHotSort(String dayFormat);
     List<TgbStock> findByDayFormatOrderByStockType(String dayFormat);
     TgbStock save(TgbStock tgbStock);
 
