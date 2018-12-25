@@ -109,7 +109,7 @@ public class TgbHotService {
                 tgbStock.setHotValue(Integer.parseInt(tds.get(2).text()));
                 tgbStock.setHotSeven(Integer.parseInt(tds.get(3).text()));
                 tgbStock.setCreated(MyUtils.getCurrentDate());
-                log.info("WORKDAY:"+code+":"+stockName);
+                log.info("==>WORKDAY:"+code+":"+stockName);
                 List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
                 if(xgbStocks!=null && xgbStocks.size()>0){
                     XGBStock xgbStock =xgbStocks.get(0);
@@ -164,7 +164,7 @@ public class TgbHotService {
                 tgbStock.setHotValue(Integer.parseInt(tds.get(2).text()));
                 tgbStock.setHotSeven(Integer.parseInt(tds.get(3).text()));
                 tgbStock.setCreated(MyUtils.getYesterdayDate());
-                log.info("HOLIDAY:"+code+":"+stockName);
+                log.info("==>HOLIDAY:"+code+":"+stockName);
                 List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
                 if(xgbStocks!=null && xgbStocks.size()>0){
                     XGBStock xgbStock =xgbStocks.get(0);
@@ -190,6 +190,31 @@ public class TgbHotService {
             }
             log.info("==>重新执行");
             dayTimeStockHoliday();
+        }
+    }
+    public void taogubaCurrent(){
+        try {
+            Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
+            Elements elements = doc.getElementsByClass("tbleft");
+            for(int i=0;i<10;i++){
+                Element element = elements.get(i);
+                String url = element.getElementsByAttribute("href").attr("href");
+                int length = url.length();
+                String code = url.substring(length - 9, length - 1);
+                String stockName = element.text();
+                log.info("==>PRE:"+code+":"+stockName);
+                List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code, MyUtils.getDayFormat());
+                TgbStock tgbStock=null;
+                if(list!=null && list.size()>0){
+                    tgbStock = list.get(0);
+                    if(tgbStock.getStockType().intValue()!=NumberEnum.StockType.PRE.getCode()){
+                        tgbStock.setStockType(NumberEnum.StockType.PRE.getCode());
+                        tgbStockRepository.save(tgbStock);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     public void closeLimitUp(){
