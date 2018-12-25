@@ -127,6 +127,11 @@ public class TgbStock implements Comparable<TgbStock>{
         this.code =code;
         this.name = name;
         this.sinaUrl="https://hq.sinajs.cn/list="+code;
+        this.yesterdayClosePrice=10;
+        this.todayOpenPrice=10;
+        this.todayClosePrice=10;
+        this.tomorrowOpenPrice=10;
+        this.tomorrowClosePrice=10;
     }
 
     public Integer getHotValue() {
@@ -176,6 +181,7 @@ public class TgbStock implements Comparable<TgbStock>{
     public void setCreated(Date created) {
         this.dayFormat=MyUtils.getDayFormat(created);
         this.created = created;
+
     }
 
     public String getCode() {
