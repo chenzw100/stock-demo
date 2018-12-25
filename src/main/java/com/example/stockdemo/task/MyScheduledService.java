@@ -1,7 +1,5 @@
 package com.example.stockdemo.task;
 
-import com.example.stockdemo.service.MarketService;
-import com.example.stockdemo.service.MarketStockService;
 import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.utils.ChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
@@ -23,13 +21,13 @@ public class MyScheduledService {
     @Scheduled(cron = "40 48 4 ? * MON-FRI")
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceWorkDay(){
-        log.info("==>>exe choice dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe choice new dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
                 tgbHotService.dayTimeStockWorkday();
             }else {
-                log.info("==>>exe choice dayTimeStockWorkday HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+                log.info("==>>exe choice new dayTimeStockWorkday HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,13 +36,13 @@ public class MyScheduledService {
     @Scheduled(cron = "40 48 4 ? * SUN,SAT")
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceHoliday(){
-        log.info("==>>exe choice dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe choice new dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbHotService.dayTimeStockHoliday();
     }
     @Scheduled(cron = "30 27 9 ? * MON-FRI")
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
-        log.info("==>>exe open"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe open new "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
@@ -60,13 +58,13 @@ public class MyScheduledService {
     @Scheduled(cron = "0 20 15 ? * MON-FRI")
     //@Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
-        log.info("==>>exe t close"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe t closenew "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
                 tgbHotService.close();
             }else {
-                log.info("==>>exe close closeLimitUp HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+                log.info("==>>exe close new closeLimitUp HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }
         } catch (Exception e) {
             e.printStackTrace();
