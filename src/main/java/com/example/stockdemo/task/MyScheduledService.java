@@ -1,5 +1,8 @@
 package com.example.stockdemo.task;
 
+import com.example.stockdemo.dao.TgbStockRepository;
+import com.example.stockdemo.domain.TgbStock;
+import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.utils.ChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
@@ -10,12 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class MyScheduledService {
     Log log = LogFactory.getLog(MyScheduledService.class);
     //选择，开盘，收盘
     @Autowired
     protected TgbHotService tgbHotService;
+    @Autowired
+    TgbStockRepository tgbStockRepository;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
     @Scheduled(cron = "40 48 4 ? * MON-FRI")
@@ -38,6 +45,7 @@ public class MyScheduledService {
     public void choiceHoliday(){
         log.info("==>>exe choice new dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbHotService.dayTimeStockHoliday();
+
     }
     @Scheduled(cron = "30 27 9 ? * MON-FRI")
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
@@ -63,6 +71,8 @@ public class MyScheduledService {
         try {
             if(chineseWorkDay.isWorkday()){
                 tgbHotService.close();
+                List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+                MailSendUtil.sendMail(hotSort.toString());
             }else {
                 log.info("==>>exe close new  HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }
