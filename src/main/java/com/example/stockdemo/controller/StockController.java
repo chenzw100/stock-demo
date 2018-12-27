@@ -39,10 +39,17 @@ public class StockController {
     private TgbHotService tgbHotService;
     @RequestMapping("/f/{format}")
     String f(@PathVariable("format")String format) {
-        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(format);
+        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByStockType(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         return format+":<br>"+hotSort+":<br>"+temperatures+":<br>"+downStocks;
+    }
+    @RequestMapping("/s/{format}")
+    String s(@PathVariable("format")String format) {
+        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(format);
+        List<TgbStock> hotSeven = tgbStockRepository.findByDayFormatOrderByHotSevenDesc(format);
+        List<TgbStock> openBidRate = tgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
+        return format+":<br>"+hotSort+":<br>"+openBidRate+":<br>"+hotSeven;
     }
 
     @RequestMapping("zt")
