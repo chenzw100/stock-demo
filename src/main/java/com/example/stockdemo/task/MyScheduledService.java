@@ -40,7 +40,7 @@ public class MyScheduledService {
             e.printStackTrace();
         }
     }
-    @Scheduled(cron = "40 48 4 ? * SUN,SAT")
+    @Scheduled(cron = "40 48 4 ? * SUN")
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceHoliday(){
         log.info("==>>exe choice new Holiday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
