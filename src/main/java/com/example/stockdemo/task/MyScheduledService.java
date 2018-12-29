@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+//5.0
 @Component
 public class MyScheduledService {
     Log log = LogFactory.getLog(MyScheduledService.class);
