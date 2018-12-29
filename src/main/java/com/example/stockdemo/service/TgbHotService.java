@@ -180,7 +180,6 @@ public class TgbHotService {
                     tgbStock.setContinuous(0);
                     tgbStock.setLimitUp(0);
                 }
-
                 tgbStockRepository.save(tgbStock);
             }
         } catch (IOException e) {

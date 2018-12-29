@@ -28,7 +28,7 @@ public class MyScheduledService {
     @Scheduled(cron = "40 48 4 ? * MON-FRI")
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceWorkDay(){
-        log.info("==>>exe choice new dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe choice new Workday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
@@ -43,7 +43,7 @@ public class MyScheduledService {
     @Scheduled(cron = "40 48 4 ? * SUN,SAT")
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceHoliday(){
-        log.info("==>>exe choice new dayTimeStockWorkday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe choice new Holiday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbHotService.dayTimeStockHoliday();
 
     }
