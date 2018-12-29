@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,6 +142,7 @@ public class TgbHotService {
         try {
             Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
             Elements elements = doc.getElementsByClass("tbleft");
+            Date nextWorkDay = MyUtils.getTomorrowDate();
             for(int i=10;i<20;i++){
                 Element element = elements.get(i);
                 Element parent =element.parent();
@@ -155,7 +157,7 @@ public class TgbHotService {
                 }
                 TgbStock tgbStock = new TgbStock(code,stockName);
                 tgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
-                List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(MyUtils.getTomorrowDate()));
+                List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(nextWorkDay));
                 if(list!=null && list.size()>0){
                     tgbStock = list.get(0);
                 }
@@ -163,8 +165,8 @@ public class TgbHotService {
                 tgbStock.setHotSort(i - 9);
                 tgbStock.setHotValue(Integer.parseInt(tds.get(2).text()));
                 tgbStock.setHotSeven(Integer.parseInt(tds.get(3).text()));
-                tgbStock.setCreated(MyUtils.getYesterdayDate());
-                log.info("==>HOLIDAY:"+code+":"+stockName);
+                tgbStock.setCreated(nextWorkDay);
+                log.info(tgbStock.getDayFormat()+"==>HOLIDAY:"+code+":"+stockName);
                 List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
                 if(xgbStocks!=null && xgbStocks.size()>0){
                     XGBStock xgbStock =xgbStocks.get(0);
