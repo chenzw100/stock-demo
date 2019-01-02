@@ -14,9 +14,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+//5.0
 @Component
 public class MyScheduledService {
+    //reset
     Log log = LogFactory.getLog(MyScheduledService.class);
     //选择，开盘，收盘
     @Autowired
@@ -40,7 +41,7 @@ public class MyScheduledService {
             e.printStackTrace();
         }
     }
-    @Scheduled(cron = "40 48 4 ? * SUN,SAT")
+    @Scheduled(cron = "40 48 4 ? * SUN")
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceHoliday(){
         log.info("==>>exe choice new Holiday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
