@@ -188,6 +188,8 @@ public class MyChineseWorkDay {
     public static Date nextWorkDay(){
         try {
             date = new Date();
+            date.setTime(date.getTime()+hour24);
+            MyChineseWorkDay.setDate(date);
             while (isHoliday()){
                 date.setTime(date.getTime()+hour24);
                 MyChineseWorkDay.setDate(date);
@@ -201,6 +203,8 @@ public class MyChineseWorkDay {
     public static Date preWorkDay(){
         try {
             date = new Date();
+            date.setTime(date.getTime()-hour24);
+            MyChineseWorkDay.setDate(date);
             while (isHoliday()){
                 date.setTime(date.getTime()-hour24);
                 MyChineseWorkDay.setDate(date);
@@ -214,6 +218,8 @@ public class MyChineseWorkDay {
     public static Date nextWorkDay(Date mydate){
         try {
             date = mydate;
+            date.setTime(date.getTime()+hour24);
+            MyChineseWorkDay.setDate(date);
             while (isHoliday()){
                 date.setTime(date.getTime()+hour24);
                 MyChineseWorkDay.setDate(date);
@@ -227,6 +233,8 @@ public class MyChineseWorkDay {
     public static Date preWorkDay(Date mydate){
         try {
             date = mydate;
+            date.setTime(date.getTime()-hour24);
+            MyChineseWorkDay.setDate(date);
             while (isHoliday()){
                 date.setTime(date.getTime()-hour24);
                 MyChineseWorkDay.setDate(date);
@@ -240,10 +248,10 @@ public class MyChineseWorkDay {
 
     public static void main(String[] args) throws Exception {
 
-        System.out.println("下一个工作日:"+ MyUtils.getDayFormat(MyChineseWorkDay.nextWorkDay()));
-        System.out.println("上一个工作日:"+MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay()));
+        System.out.println(MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay()));
+        //System.out.println( MyUtils.getDayFormat(MyChineseWorkDay.nextWorkDay()));
 
-        System.out.println("是否是法定节假日：" + MyChineseWorkDay.isLawHoliday());
+        /*System.out.println("是否是法定节假日：" + MyChineseWorkDay.isLawHoliday());
         System.out.println("是否是周末：" + MyChineseWorkDay.isWeekends());
         System.out.println("是否是需要额外补班的周末：" + MyChineseWorkDay.isExtraWorkday());
         System.out.println("是否是休息日：" + MyChineseWorkDay.isHoliday());
@@ -252,7 +260,7 @@ public class MyChineseWorkDay {
         System.out.println("今年总共有" + MyChineseWorkDay.getTotalLawHolidays() + "天法定节假日");
         System.out.println("今年总共有" + MyChineseWorkDay.getTotalExtraWorkdays() + "天需要补班的周末");
         System.out.println("今年总共有" + MyChineseWorkDay.getTotalWeekends() + "天周末");
-        System.out.println("今年总共有" + MyChineseWorkDay.getTotalHolidays() + "天休息日");
+        System.out.println("今年总共有" + MyChineseWorkDay.getTotalHolidays() + "天休息日");*/
     }
 
 }
