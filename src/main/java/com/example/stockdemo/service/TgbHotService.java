@@ -10,6 +10,7 @@ import com.example.stockdemo.domain.XGBStock;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.utils.MyUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
@@ -246,8 +247,12 @@ public class TgbHotService {
                 for(int j=0;j<jsonArrayPlate.size();j++){
                     plateName = plateName+","+jsonArrayPlate.getJSONObject(j).getString("plate_name");
                 }
-                plateName =plateName.substring(1,plateName.length());
-                xgbStock.setPlateName(plateName);
+                if(StringUtils.isNotBlank(plateName)){
+                    plateName =plateName.substring(1,plateName.length());
+                    xgbStock.setPlateName(plateName);
+                }else {
+                    xgbStock.setPlateName("无");
+                }
                 // System.out.println(plateName);
                 log.info(xgbStock.getDayFormat()+":当日涨停：" + xgbStock.toString());
                 xgbStockRepository.save(xgbStock);
