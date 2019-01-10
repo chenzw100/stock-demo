@@ -4,6 +4,9 @@ import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -17,6 +20,15 @@ public class MyUtils {
         date.setTime(date.getTime()+eight_hour);
         return date;
 
+    }
+    public static Date getFormatDate(String format)  {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+            return simpleDateFormat.parse(format);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
     }
     public static Date getYesterdayDate(){
         return MyChineseWorkDay.preWorkDay();

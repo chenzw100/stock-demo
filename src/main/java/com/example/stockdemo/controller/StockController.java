@@ -7,6 +7,7 @@ import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.service.UpService;
+import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -48,8 +50,25 @@ public class StockController {
         }
         List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
+        List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
-        return start+"-"+end+":<br>"+hotSort+":<br>"+temperatures+":<br>"+downStocks+":<br>"+totalStocks1;
+        return start+"-"+end+":热议<br>"+totalStocks1+":竞价<br>"+hotSort+":<br>"+temperatures+end+":当日<br>"+downBeforeStocks+":昨日<br>"+downStocks;
+    }
+    @RequestMapping("/e/{end}")
+    String e(@PathVariable("end")String end) {
+        Date endDate =  MyUtils.getFormatDate(end);
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,endDate));
+        List<TotalStock> totalStocks =tgbStockRepository.stockInfo(start, end);
+        List<TotalStockImpl> totalStocks1 = new ArrayList<>();
+        for(TotalStock totalStock:totalStocks){
+            TotalStockImpl totalStock1= new TotalStockImpl(totalStock);
+            totalStocks1.add(totalStock1);
+        }
+        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
+        List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
+        List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
+        return start+"-"+end+":热议<br>"+totalStocks1+":竞价<br>"+hotSort+":<br>"+temperatures+end+":当日<br>"+downBeforeStocks+":昨日<br>"+downStocks;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {

@@ -22,6 +22,8 @@ public class DownStock implements Comparable<DownStock>{
     private Long id;
     @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyymmdd'")
     private String dayFormat;
+    @Column(nullable = false,columnDefinition="varchar(10) COMMENT 'yyyymmdd'")
+    private String preFormat;
     @Column(nullable = false)
     private Date created;
     @Column(nullable = false,columnDefinition="varchar(8)")
@@ -79,7 +81,13 @@ public class DownStock implements Comparable<DownStock>{
         this.stockType = stockType;
     }
 
+    public String getPreFormat() {
+        return preFormat;
+    }
 
+    public void setPreFormat(String preFormat) {
+        this.preFormat = preFormat;
+    }
 
     public DownStock(){
     }

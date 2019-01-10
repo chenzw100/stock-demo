@@ -215,6 +215,19 @@ public class MyChineseWorkDay {
         System.out.println("上一个交易日:"+MyUtils.getDayFormat(date));;
         return date;
     }
+    public static Date preDaysWorkDay(int days){
+        Date d = new Date();
+        for(int i=0;i<days;i++){
+            d=preWorkDay(d);
+        }
+        return d;
+    }
+    public static Date preDaysWorkDay(int days,Date d){
+        for(int i=0;i<days;i++){
+            d=preWorkDay(d);
+        }
+        return d;
+    }
     public static Date nextWorkDay(Date mydate){
         try {
             date = mydate;

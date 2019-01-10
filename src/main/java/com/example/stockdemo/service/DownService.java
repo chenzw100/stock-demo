@@ -103,8 +103,9 @@ public class DownService {
                     downStock.setStockType(NumberEnum.StockType.DOWN.getCode());
                 }
             }
-            downStock.setCreated(MyUtils.getTomorrowDate());
             downStock.setDayFormat(MyUtils.getDayFormat(MyUtils.getTomorrowDate()));
+            downStock.setCreated(MyUtils.getCurrentDate());
+            downStock.setPreFormat(MyUtils.getDayFormat());
             downStockRepository.save(downStock);
         }
 
@@ -139,8 +140,9 @@ public class DownService {
 
         for(XGBStock xgbStock:ds){
             DownStock downStock = xgbStock.coverDownStock();
-            downStock.setCreated(MyUtils.getTomorrowDate());
+            downStock.setCreated(MyUtils.getCurrentDate());
             downStock.setDayFormat(MyUtils.getDayFormat(MyUtils.getTomorrowDate()));
+            downStock.setPreFormat(MyUtils.getDayFormat());
             downStock.setStockType(NumberEnum.StockType.STRONG.getCode());
             downStockRepository.save(downStock);
         }
