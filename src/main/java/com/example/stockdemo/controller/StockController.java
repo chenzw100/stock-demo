@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,12 +38,18 @@ public class StockController {
     RestTemplate restTemplate;
     @Autowired
     private TgbHotService tgbHotService;
-    @RequestMapping("/f/{format}")
-    String f(@PathVariable("format")String format) {
-        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByStockType(format);
-        List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
-        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
-        return format+":<br>"+hotSort+":<br>"+temperatures+":<br>"+downStocks;
+    @RequestMapping("/f/{start}/{end}")
+    String f(@PathVariable("start")String start,@PathVariable("end")String end) {
+        List<TotalStock> totalStocks =tgbStockRepository.stockInfo(start, end);
+        List<TotalStockImpl> totalStocks1 = new ArrayList<>();
+        for(TotalStock totalStock:totalStocks){
+            TotalStockImpl totalStock1= new TotalStockImpl(totalStock);
+            totalStocks1.add(totalStock1);
+        }
+        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
+        List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
+        return start+"-"+end+":<br>"+hotSort+":<br>"+temperatures+":<br>"+downStocks+":<br>"+totalStocks1;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {

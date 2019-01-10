@@ -17,12 +17,12 @@ import java.util.List;
 //5.0
 @Component
 public class MyScheduledService {
-    private static final String openCron = "30 26 1 ? * MON-FRI";
-    private static final String closeCron ="0 10 7 ? * MON-FRI";
-    private static final String choiceWorkDayCron="42 48 20 ? * MON-FRI";
-    private static final String choiceHolidayCron="43 48 20 ? * SAT";
-    private static final String currentTimeCron="10 10 0,1 ? * MON-FRI";
-    private static final String currentTime2Cron="0 25,35,45,55 0 ? * MON-FRI";
+    private static final String openCron = "50 25 9 ? * MON-FRI";
+    private static final String closeCron ="0 8 15 ? * MON-FRI";
+    private static final String choiceWorkDayCron="42 48 4 ? * MON-FRI";
+    private static final String choiceHolidayCron="43 48 4 ? * SAT";
+    private static final String currentTimeCron="10 10 8,9 ? * MON-FRI";
+    private static final String currentTime2Cron="0 25,35,45,55 8 ? * MON-FRI";
     //reset
     Log log = LogFactory.getLog(MyScheduledService.class);
     //选择，开盘，收盘

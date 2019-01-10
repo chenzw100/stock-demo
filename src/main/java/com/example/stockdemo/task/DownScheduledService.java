@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class DownScheduledService {
     Log log = LogFactory.getLog(DownScheduledService.class);
-    private static final String openCron = "40 26 1 ? * MON-FRI";
-    private static final String closeCron ="20 10 7 ? * MON-FRI";
-    private static final String temperatureCron="0 45 1,2,5,6 ? * MON-FRI";
-    private static final String temperatureOpenCron="0 35 1 ? * MON-FRI";
+    private static final String openCron = "40 26 9 ? * MON-FRI";
+    private static final String closeCron ="20 10 15 ? * MON-FRI";
+    private static final String temperatureCron="0 45 9,10,13,14 ? * MON-FRI";
+    private static final String temperatureOpenCron="0 35 9 ? * MON-FRI";
     @Autowired
     private MarketService marketService;
     @Autowired

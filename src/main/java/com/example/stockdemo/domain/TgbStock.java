@@ -68,6 +68,16 @@ public class TgbStock implements Comparable<TgbStock>{
     private String tomorrowOpenRate;
     @Transient
     private String tomorrowCloseRate;
+    @Transient
+    private Integer totalCount;
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
 
     @Transient
     private String sinaUrl;
