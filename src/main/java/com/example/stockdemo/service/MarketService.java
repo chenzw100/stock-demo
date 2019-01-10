@@ -160,7 +160,6 @@ public class MarketService {
         sb.append("] [涨:").append(raiseNormal).append(", 跌:").append(downNormal).append("]<br>");
         String record=sb.toString();
         log.info("===>>record:"+record);
-        temperatureRecord = record+temperatureRecord;
         temperature.setDown(Integer.valueOf(downNormal.toString()));
         temperature.setRaise(Integer.valueOf(raiseNormal.toString()));
         temperatureRepository.save(temperature);
@@ -175,9 +174,5 @@ public class MarketService {
     public String temperatureNormal()  {
         return temperature(NumberEnum.TemperatureType.NORMAL.getCode());
     }
-    public void clearTemperature()  {
-        temperatureRecord ="";
-    }
-
 
 }

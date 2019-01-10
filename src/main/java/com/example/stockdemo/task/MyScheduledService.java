@@ -17,6 +17,12 @@ import java.util.List;
 //5.0
 @Component
 public class MyScheduledService {
+    private static final String openCron = "30 26 1 ? * MON-FRI";
+    private static final String closeCron ="0 10 7 ? * MON-FRI";
+    private static final String choiceWorkDayCron="42 48 20 ? * MON-FRI";
+    private static final String choiceHolidayCron="43 48 20 ? * SAT";
+    private static final String currentTimeCron="10 10 0,1 ? * MON-FRI";
+    private static final String currentTime2Cron="0 25,35,45,55 0 ? * MON-FRI";
     //reset
     Log log = LogFactory.getLog(MyScheduledService.class);
     //选择，开盘，收盘
@@ -26,7 +32,7 @@ public class MyScheduledService {
     TgbStockRepository tgbStockRepository;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
-    @Scheduled(cron = "40 48 4 ? * MON-FRI")
+    @Scheduled(cron = choiceWorkDayCron)
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceWorkDay(){
         log.info("==>>exe choice new Workday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -41,14 +47,14 @@ public class MyScheduledService {
             e.printStackTrace();
         }
     }
-    @Scheduled(cron = "40 48 4 ? * SAT")
+    @Scheduled(cron = choiceHolidayCron)
     //@Scheduled(cron = "0 45 20 ? * MON-FRI")
     public void choiceHoliday(){
         log.info("==>>exe choice new Holiday"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         tgbHotService.dayTimeStockHoliday();
 
     }
-    @Scheduled(cron = "30 27 9 ? * MON-FRI")
+    @Scheduled(cron = openCron)
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
         log.info("==>>exe open new "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -64,7 +70,7 @@ public class MyScheduledService {
         }
 
     }
-    @Scheduled(cron = "0 20 15 ? * MON-FRI")
+    @Scheduled(cron = closeCron)
     //@Scheduled(cron = "0 10 7 ? * MON-FRI")
     public void close(){
         log.info("==>>exe t close new "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -81,7 +87,7 @@ public class MyScheduledService {
             e.printStackTrace();
         }
     }
-    @Scheduled(cron = "0 10 8,9 ? * MON-FRI")
+    @Scheduled(cron =currentTimeCron)
     //@Scheduled(cron = "0 15,31,49 23,0 ? * MON-FRI")
     public void currentTime(){
         log.info("==>>exe new currentTime" + DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
@@ -97,7 +103,7 @@ public class MyScheduledService {
         }
 
     }
-    @Scheduled(cron = "0 25,35,45,55 8 ? * MON-FRI")
+    @Scheduled(cron = currentTime2Cron)
     //@Scheduled(cron = "0 15,31,49 23,0 ? * MON-FRI")
     public void currentTime2(){
         log.info("==>>exe new currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
