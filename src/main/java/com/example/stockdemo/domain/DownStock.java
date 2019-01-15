@@ -119,7 +119,6 @@ public class DownStock implements Comparable<DownStock>{
     }
 
     public void setCreated(Date created) {
-        this.dayFormat=DateFormatUtils.format(created, "yyyy-MM-dd");
         this.created = created;
     }
 
