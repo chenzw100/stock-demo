@@ -2,8 +2,10 @@ package com.example.stockdemo.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.stockdemo.dao.CurrentStockRepository;
 import com.example.stockdemo.dao.TgbStockRepository;
 import com.example.stockdemo.dao.XgbStockRepository;
+import com.example.stockdemo.domain.CurrentStock;
 import com.example.stockdemo.domain.MyStock;
 import com.example.stockdemo.domain.TgbStock;
 import com.example.stockdemo.domain.XGBStock;
@@ -32,6 +34,8 @@ public class TgbHotService {
     Log log = LogFactory.getLog(TgbHotService.class);
     @Autowired
     TgbStockRepository tgbStockRepository;
+    @Autowired
+    CurrentStockRepository currentStockRepository;
     @Autowired
     XgbStockRepository xgbStockRepository;
     @Autowired
@@ -200,20 +204,23 @@ public class TgbHotService {
             Elements elements = doc.getElementsByClass("tbleft");
             for(int i=0;i<10;i++){
                 Element element = elements.get(i);
+                Element parent =element.parent();
+                Elements tds =parent.siblingElements();
+                String stockName = element.text();
                 String url = element.getElementsByAttribute("href").attr("href");
                 int length = url.length();
-                String code = url.substring(length - 9, length - 1);
-                String stockName = element.text();
-                log.info("==>PRE:"+code+":"+stockName);
-                List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code, MyUtils.getDayFormat());
-                TgbStock tgbStock=null;
-                if(list!=null && list.size()>0){
-                    tgbStock = list.get(0);
-                    if(tgbStock.getStockType().intValue()!=NumberEnum.StockType.PRE.getCode()){
-                        tgbStock.setStockType(NumberEnum.StockType.PRE.getCode());
-                        tgbStockRepository.save(tgbStock);
-                    }
+                String code = url.substring(length-9,length-1);
+                String currentPrice = currentPrice(code);
+                if(currentPrice == null){
+                    continue;
                 }
+                CurrentStock currentStock = new CurrentStock(code,stockName);
+                currentStock.setHotSort(i - 9);
+                currentStock.setHotValue(Integer.parseInt(tds.get(2).text()));
+                currentStock.setHotSeven(Integer.parseInt(tds.get(3).text()));
+                currentStock.setCreated(MyUtils.getCurrentDate());
+                currentStockRepository.save(currentStock);
+
             }
         } catch (IOException e) {
             e.printStackTrace();

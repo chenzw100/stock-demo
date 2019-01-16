@@ -21,8 +21,7 @@ public class MyScheduledService {
     private static final String closeCron ="0 8 15 ? * MON-FRI";
     private static final String choiceWorkDayCron="42 48 4 ? * MON-FRI";
     private static final String choiceHolidayCron="43 48 4 ? * SAT";
-    private static final String currentTimeCron="10 10 8,9 ? * MON-FRI";
-    private static final String currentTime2Cron="0 25,35,45,55 8 ? * MON-FRI";
+    private static final String currentTimeCron="1 1 0/2 ? * MON-FRI";
     //reset
     Log log = LogFactory.getLog(MyScheduledService.class);
     //选择，开盘，收盘
@@ -103,21 +102,7 @@ public class MyScheduledService {
         }
 
     }
-    @Scheduled(cron = currentTime2Cron)
-    //@Scheduled(cron = "0 15,31,49 23,0 ? * MON-FRI")
-    public void currentTime2(){
-        log.info("==>>exe new currentTime"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
-        try {
-            if(chineseWorkDay.isWorkday()){
-                tgbHotService.taogubaCurrent();
-            }else {
-                log.info("==>>no exe  currentTime2 HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
  /*   *
      * 一个cron表达式有至少6个（也可能7个）有空格分隔的时间元素。按顺序依次为：
