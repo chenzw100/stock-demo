@@ -20,9 +20,9 @@ import java.util.List;
  userRepository.exists(1l);
  */
 public interface CurrentStockRepository extends JpaRepository<CurrentStock,Long> {
-    TgbStock save(CurrentStock tgbStock);
+    CurrentStock save(CurrentStock tgbStock);
     @Query(value="SELECT * FROM ( SELECT *, COUNT(id) as total_count from tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>36 ORDER BY total_count DESC ", nativeQuery = true)
-    public List<TgbStock> totalCount(String start, String end);
+    public List<CurrentStock> totalCount(String start, String end);
 
     @Query(value="SELECT * FROM ( SELECT code, name, COUNT(id) as total_count from tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>36 ORDER BY total_count DESC ", nativeQuery = true)
     public List<TotalStock> stockInfo(String start, String end);
