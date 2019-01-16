@@ -21,7 +21,7 @@ public class MyScheduledService {
     private static final String closeCron ="0 8 15 ? * MON-FRI";
     private static final String choiceWorkDayCron="42 48 4 ? * MON-FRI";
     private static final String choiceHolidayCron="43 48 4 ? * SAT";
-    private static final String currentTimeCron="1 1 0/2 ? * MON-FRI";
+    private static final String currentTimeCron="1 59 0/2 ? * MON-FRI";
     //reset
     Log log = LogFactory.getLog(MyScheduledService.class);
     //选择，开盘，收盘

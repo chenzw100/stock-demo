@@ -215,7 +215,7 @@ public class TgbHotService {
                     continue;
                 }
                 CurrentStock currentStock = new CurrentStock(code,stockName);
-                currentStock.setHotSort(i - 9);
+                currentStock.setHotSort(i +1);
                 currentStock.setHotValue(Integer.parseInt(tds.get(2).text()));
                 currentStock.setHotSeven(Integer.parseInt(tds.get(3).text()));
                 currentStock.setCreated(MyUtils.getCurrentDate());
