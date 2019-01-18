@@ -3,6 +3,7 @@ package com.example.stockdemo.task;
 import com.example.stockdemo.dao.TgbStockRepository;
 import com.example.stockdemo.domain.TgbStock;
 import com.example.stockdemo.mail.MailSendUtil;
+import com.example.stockdemo.service.MyTgbService;
 import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.utils.ChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
@@ -19,6 +20,7 @@ import java.util.List;
 public class MyScheduledService {
     private static final String openCron = "50 25 9 ? * MON-FRI";
     private static final String closeCron ="0 8 15 ? * MON-FRI";
+    private static final String choiceMy="42 1 9 ? * MON-FRI";
     private static final String choiceWorkDayCron="42 48 4 ? * MON-FRI";
     private static final String choiceHolidayCron="43 48 4 ? * SAT";
     private static final String currentTimeCron="1 59 0/2 ? * MON-FRI";
@@ -29,6 +31,8 @@ public class MyScheduledService {
     protected TgbHotService tgbHotService;
     @Autowired
     TgbStockRepository tgbStockRepository;
+    @Autowired
+    MyTgbService myTgbService;
     //服务器时间 1-9；7-15，差8小时
     //0 0 9 ? * MON-FRI
     @Scheduled(cron = choiceWorkDayCron)
@@ -53,6 +57,21 @@ public class MyScheduledService {
         tgbHotService.dayTimeStockHoliday();
 
     }
+    @Scheduled(cron = choiceMy)
+    public void choice(){
+        log.info("==>>exe open new "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                myTgbService.choice();
+            }else {
+                log.info("==>>no exe open  HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     @Scheduled(cron = openCron)
     //@Scheduled(cron = "0 26 1 ? * MON-FRI")
     public void open(){
@@ -61,6 +80,7 @@ public class MyScheduledService {
         try {
             if(chineseWorkDay.isWorkday()){
                 tgbHotService.open();
+                myTgbService.open();
             }else {
                 log.info("==>>no exe open  HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }
@@ -77,6 +97,7 @@ public class MyScheduledService {
         try {
             if(chineseWorkDay.isWorkday()){
                 tgbHotService.close();
+                myTgbService.close();
                 List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
                 MailSendUtil.sendMail(hotSort.toString());
             }else {
@@ -93,7 +114,7 @@ public class MyScheduledService {
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
-                tgbHotService.taogubaCurrent();
+                myTgbService.taogubaCurrent();
             }else {
                 log.info("==>>no exe  currentTime2 HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }

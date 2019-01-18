@@ -1,8 +1,7 @@
 package com.example.stockdemo.dao;
 
 import com.example.stockdemo.domain.CurrentStock;
-import com.example.stockdemo.domain.TgbStock;
-import com.example.stockdemo.domain.TotalStock;
+import com.example.stockdemo.domain.MyTotalStock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -21,10 +20,10 @@ import java.util.List;
  */
 public interface CurrentStockRepository extends JpaRepository<CurrentStock,Long> {
     CurrentStock save(CurrentStock tgbStock);
-    @Query(value="SELECT * FROM ( SELECT *, COUNT(id) as total_count from tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>36 ORDER BY total_count DESC ", nativeQuery = true)
-    public List<CurrentStock> totalCount(String start, String end);
+    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) hot_seven,sum(hot_value) hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>36 ORDER BY total_count DESC ", nativeQuery = true)
+    public List<MyTotalStock> fiveDayInfo(String start, String end);
 
-    @Query(value="SELECT * FROM ( SELECT code, name, COUNT(id) as total_count from tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>36 ORDER BY total_count DESC ", nativeQuery = true)
-    public List<TotalStock> stockInfo(String start, String end);
+    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) hot_seven,sum(hot_value) hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>10 ORDER BY total_count DESC ", nativeQuery = true)
+    public List<MyTotalStock> oneDayInfo(String start, String end);
 
 }

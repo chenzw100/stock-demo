@@ -45,7 +45,7 @@ public class StockController {
     @RequestMapping("/f/{start}/{end}")
     String f(@PathVariable("start")String start,@PathVariable("end")String end) {
         List<TotalStock> totalStocks =tgbStockRepository.stockInfo(start, end);
-        List<TotalStock> totalStocksCurrent =currentStockRepository.stockInfo(start, end);
+        List<MyTotalStock> totalStocksCurrent =currentStockRepository.fiveDayInfo(start, end);
         List<TotalStockImpl> totalStocks1 = new ArrayList<>();
         for(TotalStock totalStock:totalStocks){
             TotalStockImpl totalStock1= new TotalStockImpl(totalStock);
@@ -62,7 +62,7 @@ public class StockController {
         Date endDate =  MyUtils.getFormatDate(end);
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,endDate));
         List<TotalStock> totalStocks =tgbStockRepository.stockInfo(start, end);
-        List<TotalStock> totalStocksCurrent =currentStockRepository.stockInfo(start, end);
+        List<MyTotalStock> totalStocksCurrent =currentStockRepository.fiveDayInfo(start, end);
         List<TotalStockImpl> totalStocks1 = new ArrayList<>();
         for(TotalStock totalStock:totalStocks){
             TotalStockImpl totalStock1= new TotalStockImpl(totalStock);
