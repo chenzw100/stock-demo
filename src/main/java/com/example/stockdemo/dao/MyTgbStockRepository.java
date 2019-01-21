@@ -25,7 +25,7 @@ public interface MyTgbStockRepository extends JpaRepository<MyTgbStock,Long> {
     List<MyTgbStock> findByDayFormatOrderByHotSort(String dayFormat);
     List<MyTgbStock> findByDayFormatOrderByHotSevenDesc(String dayFormat);
     List<MyTgbStock> findByDayFormatOrderByOpenBidRateDesc(String dayFormat);
-    TgbStock save(MyTgbStock tgbStock);
+    MyTgbStock save(MyTgbStock tgbStock);
     @Query(value="SELECT * FROM ( SELECT *, COUNT(id) as total_count from my_tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>2 ORDER BY total_count DESC ", nativeQuery = true)
     public List<MyTgbStock> totalCount(String start, String end);
 

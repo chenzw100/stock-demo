@@ -38,25 +38,26 @@ public class MyTgbService {
         String end = MyUtils.getDayFormat();
         List<MyTotalStock> totalStocks =  currentStockRepository.oneDayInfo(start, end);
         for(MyTotalStock myTotalStock : totalStocks){
-            MyTgbStock tgbStock = new MyTgbStock();
-            tgbStock.setCode(myTotalStock.getCode());
-            tgbStock.setName(myTotalStock.getName());
-            tgbStock.setHotSort(myTotalStock.getTotalCount());
-            tgbStock.setHotValue(myTotalStock.getHotValue());
-            tgbStock.setHotSeven(myTotalStock.getHotSeven());
+            MyTgbStock myTgbStock = new MyTgbStock();
+            myTgbStock.setCode(myTotalStock.getCode());
+            myTgbStock.setName(myTotalStock.getName());
+            myTgbStock.setHotSort(myTotalStock.getTotalCount());
+            myTgbStock.setHotValue(myTotalStock.getHotValue());
+            myTgbStock.setHotSeven(myTotalStock.getHotSeven());
             List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(myTotalStock.getCode(),MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
             if(xgbStocks!=null && xgbStocks.size()>0){
                 XGBStock xgbStock =xgbStocks.get(0);
-                tgbStock.setPlateName(xgbStock.getPlateName());
-                tgbStock.setOneFlag(xgbStock.getOpenCount());
-                tgbStock.setContinuous(xgbStock.getContinueBoardCount());
-                tgbStock.setLimitUp(1);
+                myTgbStock.setPlateName(xgbStock.getPlateName());
+                myTgbStock.setOneFlag(xgbStock.getOpenCount());
+                myTgbStock.setContinuous(xgbStock.getContinueBoardCount());
+                myTgbStock.setLimitUp(1);
             }else {
-                tgbStock.setPlateName("");
-                tgbStock.setOneFlag(1);
-                tgbStock.setContinuous(0);
-                tgbStock.setLimitUp(0);
+                myTgbStock.setPlateName("");
+                myTgbStock.setOneFlag(1);
+                myTgbStock.setContinuous(0);
+                myTgbStock.setLimitUp(0);
             }
+            myTgbStockRepository.save(myTgbStock);
         }
     }
 
