@@ -57,6 +57,8 @@ public class MyTgbService {
                 myTgbStock.setContinuous(0);
                 myTgbStock.setLimitUp(0);
             }
+            myTgbStock.setCreated(MyUtils.getCurrentDate());
+
             myTgbStockRepository.save(myTgbStock);
         }
     }

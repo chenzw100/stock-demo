@@ -59,13 +59,14 @@ public class MyScheduledService {
     }
     @Scheduled(cron = choiceMy)
     public void choice(){
-        log.info("==>>exe open new "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        log.info("==>>exe choice new "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
+                log.info("==>>exe choice go.. "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
                 myTgbService.choice();
             }else {
-                log.info("==>>no exe open  HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+                log.info("==>>no exe choice  HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }
         } catch (Exception e) {
             e.printStackTrace();
