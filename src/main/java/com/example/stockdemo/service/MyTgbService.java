@@ -38,12 +38,12 @@ public class MyTgbService {
         String end = MyUtils.getDayFormat();
         List<MyTotalStock> totalStocks =  currentStockRepository.oneDayInfo(start, end);
         for(MyTotalStock myTotalStock : totalStocks){
-            MyTgbStock myTgbStock = new MyTgbStock();
-            myTgbStock.setCode(myTotalStock.getCode());
-            myTgbStock.setName(myTotalStock.getName());
+            MyTgbStock myTgbStock = new MyTgbStock(myTotalStock.getCode(),myTotalStock.getName());
             myTgbStock.setHotSort(myTotalStock.getTotalCount());
             myTgbStock.setHotValue(myTotalStock.getHotValue());
             myTgbStock.setHotSeven(myTotalStock.getHotSeven());
+            String currentPrice = currentPrice(myTotalStock.getCode());
+            myTgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
             List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(myTotalStock.getCode(),MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
             if(xgbStocks!=null && xgbStocks.size()>0){
                 XGBStock xgbStock =xgbStocks.get(0);
