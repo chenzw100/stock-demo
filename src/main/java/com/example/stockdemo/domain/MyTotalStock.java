@@ -6,8 +6,8 @@ package com.example.stockdemo.domain;
 public interface MyTotalStock {
     public String getCode();
     public String getName();
-    public Integer getTotalCount();
-    public Integer getHotValue();
     public Integer getHotSeven();
+    public Integer getHotValue();
+    public Integer getTotalCount();
 
 }

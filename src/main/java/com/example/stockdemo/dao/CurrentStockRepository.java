@@ -20,10 +20,10 @@ import java.util.List;
  */
 public interface CurrentStockRepository extends JpaRepository<CurrentStock,Long> {
     CurrentStock save(CurrentStock tgbStock);
-    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) hot_seven,sum(hot_value) hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>26 ORDER BY total_count DESC ", nativeQuery = true)
+    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) as hot_seven,sum(hot_value) as hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>26 ORDER BY total_count DESC ", nativeQuery = true)
     public List<MyTotalStock> fiveDayInfo(String start, String end);
 
-    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) hot_seven,sum(hot_value) hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>10 ORDER BY total_count DESC ", nativeQuery = true)
+    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) as hot_seven,sum(hot_value) as hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>10 ORDER BY total_count DESC ", nativeQuery = true)
     public List<MyTotalStock> oneDayInfo(String start, String end);
 
 }

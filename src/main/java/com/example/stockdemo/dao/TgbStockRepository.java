@@ -1,8 +1,7 @@
 package com.example.stockdemo.dao;
 
-import com.example.stockdemo.domain.StockInfo;
+import com.example.stockdemo.domain.MyTotalStock;
 import com.example.stockdemo.domain.TgbStock;
-import com.example.stockdemo.domain.TotalStock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -29,7 +28,7 @@ public interface TgbStockRepository extends JpaRepository<TgbStock,Long> {
     @Query(value="SELECT * FROM ( SELECT *, COUNT(id) as total_count from tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>2 ORDER BY total_count DESC ", nativeQuery = true)
     public List<TgbStock> totalCount(String start ,String end);
 
-    @Query(value="SELECT * FROM ( SELECT code, name, COUNT(id) as total_count from tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>2 ORDER BY total_count DESC ", nativeQuery = true)
-    public List<TotalStock> stockInfo(String start ,String end);
+    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) as hot_seven,sum(hot_value)as hot_value, COUNT(id) as total_count from tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>2 ORDER BY total_count DESC ", nativeQuery = true)
+    public List<MyTotalStock> stockInfo(String start ,String end);
 
 }

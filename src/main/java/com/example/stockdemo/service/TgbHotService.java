@@ -3,14 +3,13 @@ package com.example.stockdemo.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.CurrentStockRepository;
+import com.example.stockdemo.dao.FiveTgbStockRepository;
 import com.example.stockdemo.dao.TgbStockRepository;
 import com.example.stockdemo.dao.XgbStockRepository;
-import com.example.stockdemo.domain.CurrentStock;
-import com.example.stockdemo.domain.MyStock;
-import com.example.stockdemo.domain.TgbStock;
-import com.example.stockdemo.domain.XGBStock;
+import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.mail.MailSendUtil;
+import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -39,9 +38,59 @@ public class TgbHotService {
     @Autowired
     XgbStockRepository xgbStockRepository;
     @Autowired
+    FiveTgbStockRepository fiveTgbStockRepository;
+    @Autowired
     RestTemplate restTemplate;
+    public void choiceFive(){
+        String end = MyUtils.getDayFormat();
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4, MyUtils.getCurrentDate()));
+        List<MyTotalStock> totalStocks =  tgbStockRepository.stockInfo(start, end);
+        for(MyTotalStock myTotalStock : totalStocks){
+            FiveTgbStock myFiveTgbStock = new FiveTgbStock(myTotalStock.getCode(),myTotalStock.getName());
+            myFiveTgbStock.setHotSort(myTotalStock.getTotalCount());
+            myFiveTgbStock.setHotValue(myTotalStock.getHotValue());
+            myFiveTgbStock.setHotSeven(myTotalStock.getHotSeven());
+            String currentPrice = currentPrice(myTotalStock.getCode());
+            myFiveTgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+            List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(myTotalStock.getCode(),MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+            if(xgbStocks!=null && xgbStocks.size()>0){
+                XGBStock xgbStock =xgbStocks.get(0);
+                myFiveTgbStock.setPlateName(xgbStock.getPlateName());
+                myFiveTgbStock.setOneFlag(xgbStock.getOpenCount());
+                myFiveTgbStock.setContinuous(xgbStock.getContinueBoardCount());
+                myFiveTgbStock.setLimitUp(1);
+            }else {
+                myFiveTgbStock.setPlateName("");
+                myFiveTgbStock.setOneFlag(1);
+                myFiveTgbStock.setContinuous(0);
+                myFiveTgbStock.setLimitUp(0);
+            }
+            myFiveTgbStock.setCreated(MyUtils.getCurrentDate());
 
+            fiveTgbStockRepository.save(myFiveTgbStock);
+        }
+    }
+
+    public void openFive(){
+        List<FiveTgbStock> todayStocks = fiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
+        if(todayStocks!=null){
+            for(FiveTgbStock myStock :todayStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                fiveTgbStockRepository.save(myStock);
+            }
+        }
+        List<FiveTgbStock> myStocks = fiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        if(myStocks!=null){
+            for(FiveTgbStock myStock :myStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTomorrowOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                fiveTgbStockRepository.save(myStock);
+            }
+        }
+    }
     public void open(){
+        openFive();
         List<TgbStock> todayStocks = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
         if(todayStocks!=null){
             for(TgbStock myStock :todayStocks){
@@ -58,7 +107,6 @@ public class TgbHotService {
                 tgbStockRepository.save(myStock);
             }
         }
-
     }
     public void close(){
         closeLimitUp();

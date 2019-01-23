@@ -1,14 +1,12 @@
 package com.example.stockdemo.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.CurrentStockRepository;
+import com.example.stockdemo.dao.MyFiveTgbStockRepository;
 import com.example.stockdemo.dao.MyTgbStockRepository;
 import com.example.stockdemo.dao.XgbStockRepository;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
@@ -32,8 +30,11 @@ public class MyTgbService {
     @Autowired
     XgbStockRepository xgbStockRepository;
     @Autowired
+    MyFiveTgbStockRepository myFiveTgbStockRepository;
+    @Autowired
     RestTemplate restTemplate;
     public void choice(){
+        choiceFive();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay());
         String end = MyUtils.getDayFormat();
         List<MyTotalStock> totalStocks =  currentStockRepository.oneDayInfo(start, end);
@@ -62,8 +63,57 @@ public class MyTgbService {
             myTgbStockRepository.save(myTgbStock);
         }
     }
+    public void choiceFive(){
+        String end = MyUtils.getDayFormat();
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4, MyUtils.getCurrentDate()));
+        List<MyTotalStock> totalStocks =  currentStockRepository.fiveDayInfo(start, end);
+        for(MyTotalStock myTotalStock : totalStocks){
+            MyFiveTgbStock myFiveTgbStock = new MyFiveTgbStock(myTotalStock.getCode(),myTotalStock.getName());
+            myFiveTgbStock.setHotSort(myTotalStock.getTotalCount());
+            myFiveTgbStock.setHotValue(myTotalStock.getHotValue());
+            myFiveTgbStock.setHotSeven(myTotalStock.getHotSeven());
+            String currentPrice = currentPrice(myTotalStock.getCode());
+            myFiveTgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+            List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(myTotalStock.getCode(),MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+            if(xgbStocks!=null && xgbStocks.size()>0){
+                XGBStock xgbStock =xgbStocks.get(0);
+                myFiveTgbStock.setPlateName(xgbStock.getPlateName());
+                myFiveTgbStock.setOneFlag(xgbStock.getOpenCount());
+                myFiveTgbStock.setContinuous(xgbStock.getContinueBoardCount());
+                myFiveTgbStock.setLimitUp(1);
+            }else {
+                myFiveTgbStock.setPlateName("");
+                myFiveTgbStock.setOneFlag(1);
+                myFiveTgbStock.setContinuous(0);
+                myFiveTgbStock.setLimitUp(0);
+            }
+            myFiveTgbStock.setCreated(MyUtils.getCurrentDate());
 
+            myFiveTgbStockRepository.save(myFiveTgbStock);
+        }
+    }
+
+    public void openFive(){
+        List<MyFiveTgbStock> todayStocks = myFiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
+        if(todayStocks!=null){
+            for(MyFiveTgbStock myStock :todayStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTodayOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                myFiveTgbStockRepository.save(myStock);
+            }
+        }
+        List<MyFiveTgbStock> myStocks = myFiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        if(myStocks!=null){
+            for(MyFiveTgbStock myStock :myStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTomorrowOpenPrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                myFiveTgbStockRepository.save(myStock);
+            }
+        }
+
+    }
     public void open(){
+        openFive();
         List<MyTgbStock> todayStocks = myTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
         if(todayStocks!=null){
             for(MyTgbStock myStock :todayStocks){
