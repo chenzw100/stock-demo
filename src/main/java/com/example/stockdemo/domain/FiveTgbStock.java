@@ -31,8 +31,7 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private Integer limitUp;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '开盘竞价'")
     private Integer openBidRate;
-    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '1两者;2一天;3实时'")
-    private Integer stockType;
+
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '今日热搜'")
     private Integer hotValue;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '最近7日'")
@@ -115,13 +114,7 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
         this.oneFlag = oneFlag;
     }
 
-    public Integer getStockType() {
-        return stockType;
-    }
 
-    public void setStockType(Integer stockType) {
-        this.stockType = stockType;
-    }
 
     public Integer getContinuous() {
         return continuous;
@@ -303,7 +296,7 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",").append(code).append(name).append(",连板:").
+        sb.append(code).append(name).append(",连板:").
                 append(continuous).append(",一字").append(oneFlag).append(",开板:").append(openCount).append(",热排:").append(hotSort).append(",:热值").append(hotValue).
                 append("七日:").append(hotSeven)
         .append(",竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
