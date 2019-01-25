@@ -132,7 +132,34 @@ public class MyTgbService {
         }
 
     }
+    public void closeFive(){
+        List<MyFiveTgbStock> myStocksTomorrow = myFiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        if(myStocksTomorrow!=null){
+            for(MyFiveTgbStock myStock :myStocksTomorrow){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTomorrowClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                myFiveTgbStockRepository.save(myStock);
+            }
+        }
+        List<MyFiveTgbStock> myStocks = myFiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
+        if(myStocks!=null){
+            for(MyFiveTgbStock myStock :myStocks){
+                String currentPrice = currentPrice(myStock.getCode());
+                myStock.setTodayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+                String code = myStock.getCode();
+                List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(code, MyUtils.getDayFormat());
+                if(xgbStocks!=null && xgbStocks.size()>0){
+                    XGBStock xgbStock =xgbStocks.get(0);
+                    myStock.setOpenCount(xgbStock.getOpenCount());
+                }else {
+                    myStock.setOpenCount(-1);
+                }
+                myFiveTgbStockRepository.save(myStock);
+            }
+        }
+    }
     public void close(){
+        closeFive();
         List<MyTgbStock> myStocksTomorrow = myTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         if(myStocksTomorrow!=null){
             for(MyTgbStock myStock :myStocksTomorrow){
