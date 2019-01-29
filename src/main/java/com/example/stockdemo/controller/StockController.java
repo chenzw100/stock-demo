@@ -74,17 +74,20 @@ public class StockController {
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
         List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
-        return start+"-"+end+"热议:<br>"+totalStocks1+"竞价:<br>"+hotSort+"5日竞价:<br>"+hotSortFive+"实时:<br>"+myTotalStocks+"实时竞价:<br>"+myTgbStockList+"5日实时竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks+"昨日:<br>"+downStocks;
+        return start+"-"+end+"昨日:<br>"+downStocks+"热议:<br>"+totalStocks1+"竞价:<br>"+hotSort+"5日竞价:<br>"+hotSortFive+"实时:<br>"+myTotalStocks+"实时竞价:<br>"+myTgbStockList+"5日实时竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
     }
     @RequestMapping("/m/{end}")
     String m(@PathVariable("end")String end) {
         String desc ="查询20190124之后的数据，坚持模式！！！<br>查询日期";
+        Date endDate =  MyUtils.getFormatDate(end);
+        String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
+        List<Temperature> yesterdays = temperatureRepository.findByDayFormatAndType(yesterday,NumberEnum.TemperatureType.CLOSE.getCode());
         List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
         List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
         List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
-        return desc+end+"<br>竞价:<br>"+hotSortFive+"<br>实时竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks+"昨日:<br>"+downStocks;
+        return desc+end+"昨日情况:<br>"+downStocks+"<br>"+yesterdays+"<br>股吧竞价:<br>"+hotSortFive+"end"+end+"<br>我的竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {
