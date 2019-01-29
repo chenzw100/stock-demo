@@ -73,7 +73,7 @@ public class StockController {
 
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
         List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
-        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(end);
         return start+"-"+end+"昨日:<br>"+downStocks+"热议:<br>"+totalStocks1+"竞价:<br>"+hotSort+"5日竞价:<br>"+hotSortFive+"实时:<br>"+myTotalStocks+"实时竞价:<br>"+myTgbStockList+"5日实时竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
     }
     @RequestMapping("/m/{end}")
@@ -82,11 +82,13 @@ public class StockController {
         Date endDate =  MyUtils.getFormatDate(end);
         String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
         List<Temperature> yesterdays = temperatureRepository.findByDayFormatAndType(yesterday,NumberEnum.TemperatureType.CLOSE.getCode());
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(end);
+
         List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
         List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
         List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
-        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
+
         return desc+end+"昨日情况:<br>"+downStocks+"<br>"+yesterdays+"<br>股吧竞价:<br>"+hotSortFive+"end"+end+"<br>我的竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
     }
     @RequestMapping("/s/{format}")
@@ -95,7 +97,7 @@ public class StockController {
         List<TgbStock> hotSeven = tgbStockRepository.findByDayFormatOrderByHotSevenDesc(format);
         List<TgbStock> openBidRate = tgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
-        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(format);
         return format+":竞价<br>"+openBidRate+":温度<br>"+temperatures+":亏钱<br>"+downStocks+":<br>"+format+":热排<br>"+hotSort+":<br>"+format+":七日<br>"+hotSeven;
     }
 
@@ -166,7 +168,7 @@ public class StockController {
         List<MyStock> openBidRate = myStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
         List<MyStock> stockType = myStockRepository.findByDayFormatOrderByStockType(format);
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(format);
-        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(format);
         //List<StrongStocksDown> strongStocksDowns =strongStocksDownRepository.findByDayFormat(format);
         return format+":<br>"+openBidRate+":<br>"+temperatures+":<br>"+downStocks+":<br>"+stockType;
     }

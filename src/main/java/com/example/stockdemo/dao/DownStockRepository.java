@@ -20,7 +20,7 @@ import java.util.List;
 public interface DownStockRepository extends JpaRepository<DownStock,Long> {
     List<DownStock> findAll();
     List<DownStock> findByCodeAndDayFormat(String code, String dayFormat);
-    List<DownStock> findByDayFormatOrderByOpenBidRateDesc(String dayFormat);
+    List<DownStock> findByDayFormatOrderByOpenBidRate(String dayFormat);
     List<DownStock> findByPreFormatOrderByOpenBidRateDesc(String preFormat);
     DownStock save(DownStock downStock);
 

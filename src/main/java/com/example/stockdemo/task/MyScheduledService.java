@@ -18,11 +18,17 @@ import java.util.List;
 //5.0
 @Component
 public class MyScheduledService {
-    private static final String openCron = "50 25 9 ? * MON-FRI";
+    /*private static final String openCron = "50 25 9 ? * MON-FRI";
     private static final String closeCron ="0 8 15 ? * MON-FRI";
     private static final String choiceMy="42 1 9 ? * MON-FRI";
     private static final String choiceWorkDayCron="42 48 4 ? * MON-FRI";
     private static final String choiceHolidayCron="43 48 4 ? * SAT";
+    private static final String currentTimeCron="1 59 0/2 ? * MON-FRI";*/
+    private static final String openCron = "50 25 1 ? * MON-FRI";
+    private static final String choiceMy="49 1 1 ? * MON-FRI";
+    private static final String closeCron ="0 8 7 ? * MON-FRI";
+    private static final String choiceWorkDayCron="42 48 20 ? * MON-FRI";
+    private static final String choiceHolidayCron="43 48 20 ? * SAT";
     private static final String currentTimeCron="1 59 0/2 ? * MON-FRI";
     //reset
     Log log = LogFactory.getLog(MyScheduledService.class);

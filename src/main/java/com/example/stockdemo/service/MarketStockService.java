@@ -241,7 +241,7 @@ public abstract class MarketStockService {
         today.clear();
         StringBuilder sb = new StringBuilder();
         sb.append("选股:<br>");
-        List<DownStock> downStocks = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat());
+        List<DownStock> downStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat());
 
         sb.append("开盘竞价：<br>");
         for (DownStock downStock:downStocks){
@@ -253,7 +253,7 @@ public abstract class MarketStockService {
         }
         sb.append("明天情况:<br>");
         if(tomorrow.isEmpty()){
-            List<DownStock> downStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyy-MM-dd"));
+            List<DownStock> downStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRate(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyy-MM-dd"));
             if(downStocksTomorrow!=null){
                 for(DownStock downStock :downStocksTomorrow){
                     SinaStock sinaStock = getSinaStock(downStock.getCode());
@@ -271,7 +271,7 @@ public abstract class MarketStockService {
         StringBuilder sb = new StringBuilder();
         sb.append("收盘汇总：<br>");
         sb.append("明天汇总：<br>");
-        List<DownStock> myStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyy-MM-dd"));
+        List<DownStock> myStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRate(DateFormatUtils.format(MyUtils.getYesterdayDate(), "yyyy-MM-dd"));
         if(myStocksTomorrow!=null){
             for(DownStock myStock :myStocksTomorrow){
                 SinaStock sinaStock = getSinaStock(myStock.getCode());
@@ -281,7 +281,7 @@ public abstract class MarketStockService {
             }
         }
         sb.append("今天汇总：<br>");
-        List<DownStock> myStocks = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
+        List<DownStock> myStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(DateFormatUtils.format(MyUtils.getCurrentDate(), "yyyy-MM-dd"));
         if(myStocks!=null){
             for(DownStock myStock :myStocks){
                 SinaStock sinaStock = getSinaStock(myStock.getCode());

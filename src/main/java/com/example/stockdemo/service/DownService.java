@@ -155,7 +155,7 @@ public class DownService {
     public String open(){
         StringBuilder sb = new StringBuilder();
         sb.append("选股:<br>");
-        List<DownStock> downStocks = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat());
+        List<DownStock> downStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat());
         sb.append("开盘竞价：<br>");
         for (DownStock downStock:downStocks){
             //选出来后，新的价格新的一天
@@ -165,7 +165,7 @@ public class DownService {
             downStockRepository.save(downStock);
         }
         sb.append("明天情况:<br>");
-        List<DownStock> downStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        List<DownStock> downStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         if(downStocksTomorrow!=null){
             for(DownStock downStock :downStocksTomorrow){
                 String currentPrice = currentPrice(downStock.getCode());
@@ -182,7 +182,7 @@ public class DownService {
         StringBuilder sb = new StringBuilder();
         sb.append("收盘汇总：<br>");
         sb.append("明天汇总：<br>");
-        List<DownStock> myStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        List<DownStock> myStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         if(myStocksTomorrow!=null){
             for(DownStock downStock :myStocksTomorrow){
                 String currentPrice = currentPrice(downStock.getCode());
@@ -192,7 +192,7 @@ public class DownService {
             }
         }
         sb.append("今天汇总：<br>");
-        List<DownStock> myStocks = downStockRepository.findByDayFormatOrderByOpenBidRateDesc(MyUtils.getDayFormat());
+        List<DownStock> myStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat());
         if(myStocks!=null){
             for(DownStock downStock :myStocks){
                 String currentPrice = currentPrice(downStock.getCode());
