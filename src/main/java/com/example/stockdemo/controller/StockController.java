@@ -51,6 +51,7 @@ public class StockController {
 
     @RequestMapping("/e/{end}")
     String e(@PathVariable("end")String end) {
+        String desc ="坚持模式！！！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>查询日期";
         Date endDate =  MyUtils.getFormatDate(end);
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,endDate));
         List<MyTotalStock> totalStocks =tgbStockRepository.stockInfo(start, end);
@@ -74,22 +75,25 @@ public class StockController {
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
         List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(end);
-        return start+"-"+end+"昨日:<br>"+downStocks+"热议:<br>"+totalStocks1+"竞价:<br>"+hotSort+"5日竞价:<br>"+hotSortFive+"实时:<br>"+myTotalStocks+"实时竞价:<br>"+myTgbStockList+"5日实时竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
+        return desc+start+"-"+end+"昨日:<br>"+downStocks+"热议:<br>"+totalStocks1+"竞价:<br>"+hotSort+"5日竞价:<br>"+hotSortFive+"实时:<br>"+myTotalStocks+"实时竞价:<br>"+myTgbStockList+"5日实时竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
     }
     @RequestMapping("/m/{end}")
     String m(@PathVariable("end")String end) {
-        String desc ="查询20190124之后的数据，坚持模式！！！<br>查询日期";
+        String desc ="查询20190124之后的数据，坚持模式！！！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>查询日期";
         Date endDate =  MyUtils.getFormatDate(end);
         String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
         List<Temperature> yesterdays = temperatureRepository.findByDayFormatAndType(yesterday,NumberEnum.TemperatureType.CLOSE.getCode());
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(end);
 
-        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
-        List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(end);
+        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+
+        List<TgbStock> tgbHots = tgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderByIdDesc(end);
         List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
 
-        return desc+end+"昨日情况:<br>"+downStocks+"<br>"+yesterdays+"<br>股吧竞价:<br>"+hotSortFive+"end"+end+"<br>我的竞价:<br>"+myTgbStockFive+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
+        return desc+end+"昨日情况:<br>"+downStocks+"<br>"+yesterdays+"<br>股吧竞价:<br>"+hotSortFive+"end"+end+"<br>我的竞价:<br>"+myTgbStockFive+"<br>股吧热门:<br>"+tgbHots+":<br>"+temperatures+end+"当日:<br>"+downBeforeStocks;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {

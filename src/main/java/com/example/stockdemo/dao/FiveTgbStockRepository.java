@@ -22,6 +22,8 @@ public interface FiveTgbStockRepository extends JpaRepository<FiveTgbStock,Long>
     List<FiveTgbStock> findByDayFormatOrderByHotSort(String dayFormat);
     List<FiveTgbStock> findByDayFormatOrderByHotSevenDesc(String dayFormat);
     List<FiveTgbStock> findByDayFormatOrderByOpenBidRateDesc(String dayFormat);
+    List<FiveTgbStock> findByDayFormatOrderByOpenBidRate(String dayFormat);
+
     FiveTgbStock save(FiveTgbStock tgbStock);
 
 
