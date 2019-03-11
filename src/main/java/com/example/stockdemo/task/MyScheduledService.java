@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class MyScheduledService {
     private static final String openCron = "50 25 9 ? * MON-FRI";
-    private static final String closeCron ="0 8 15 ? * MON-FRI";
+    private static final String closeCron ="0 6 15 ? * MON-FRI";
     private static final String choiceMy="42 1 9 ? * MON-FRI";
     private static final String choiceWorkDayCron="42 48 4 ? * MON-FRI";
     private static final String choiceHolidayCron="43 48 4 ? * SAT";
@@ -106,8 +106,8 @@ public class MyScheduledService {
             if(chineseWorkDay.isWorkday()){
                 tgbHotService.close();
                 myTgbService.close();
-                List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
-                MailSendUtil.sendMail(hotSort.toString());
+                //List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+                //MailSendUtil.sendMail(hotSort.toString());
             }else {
                 log.info("==>>no exe close new  HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }

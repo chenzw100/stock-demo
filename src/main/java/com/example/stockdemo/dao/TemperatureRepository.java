@@ -19,7 +19,7 @@ import java.util.List;
 public interface TemperatureRepository extends JpaRepository<Temperature,Long> {
     List<Temperature> findAll();
     List<Temperature> findByDayFormat(String dayFormat);
-    List<Temperature> findByDayFormatOrderByIdDesc(String dayFormat);
+    List<Temperature> findByDayFormatOrderById(String dayFormat);
     List<Temperature> findByDayFormatAndType(String dayFormat,int type);
     Temperature save(Temperature temperature);
 

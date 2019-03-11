@@ -15,8 +15,9 @@ import org.springframework.stereotype.Component;
 public class DownScheduledService {
     Log log = LogFactory.getLog(DownScheduledService.class);
     private static final String openCron = "40 26 9 ? * MON-FRI";
-    private static final String closeCron ="20 10 15 ? * MON-FRI";
-    private static final String temperatureCron="0 45 9,10,13,14 ? * MON-FRI";
+    private static final String closeCron ="20 8 15 ? * MON-FRI";
+    private static final String closeCron2 ="20 46 14 ? * MON-FRI";
+    private static final String temperatureCron="0 45 9,10,11,13,14 ? * MON-FRI";
     private static final String temperatureOpenCron="0 35 9 ? * MON-FRI";
     /*private static final String openCron = "40 26 1 ? * MON-FRI";
     private static final String closeCron ="20 10 7 ? * MON-FRI";
@@ -51,6 +52,20 @@ public class DownScheduledService {
         try {
             if(chineseWorkDay.isWorkday()){
                 marketService.temperatureClose();
+                downService.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Scheduled(cron = closeCron2)
+    //@Scheduled(cron = "0 10 7 ? * MON-FRI")
+    public void closePre(){
+        log.info("==>>exe t closePre==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
                 downService.close();
             }
         } catch (Exception e) {
