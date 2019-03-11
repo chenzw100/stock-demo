@@ -303,10 +303,10 @@ public class TgbStock implements Comparable<TgbStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("热门:").append(NumberEnum.StockType.getStockType(getStockType())).append(",").append(code).append(name).append(",连板:").
+        sb.append(NumberEnum.StockType.getStockType(getStockType())).append(",").append(code).append(name).append(",连板:").
                 append(continuous).append(",一字").append(oneFlag).append(",开板:").append(openCount).append(",热排:").append(hotSort).append(",:热值").append(hotValue).
                 append("七日:").append(hotSeven)
-        .append(",竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
+                .append(name).append(",竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
                 append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
         return sb.toString();
     }
