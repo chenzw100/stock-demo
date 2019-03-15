@@ -25,5 +25,7 @@ public interface CurrentStockRepository extends JpaRepository<CurrentStock,Long>
 
     @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) as hot_seven,sum(hot_value) as hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp WHERE temp.total_count>10 ORDER BY total_count DESC ", nativeQuery = true)
     public List<MyTotalStock> oneDayInfo(String start, String end);
+    @Query(value="SELECT * FROM ( SELECT code, name,sum(hot_seven) as hot_seven,sum(hot_value) as hot_value, COUNT(id) as total_count from current_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code) as temp  ORDER BY total_count DESC  LIMIT 4", nativeQuery = true)
+    public List<MyTotalStock> limit4(String start, String end);
 
 }
