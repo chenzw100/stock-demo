@@ -72,7 +72,7 @@ public class StockController {
     @RequestMapping("/m/{end}")
     String m(@PathVariable("end")String end) {
         String desc ="查询20190124之后的数据，坚持模式！！【聚焦强势聚焦主流聚焦前排】！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>【热闹之后，强势股开盘大跌；开一字封单跟不上；大牛市沸点到冰点一根稻草20190308，一天时间逆转那么多】<br>" +
-                "【市场疯狂调整更疯狂，请查看20190226；第二次20190308,第三次20190313】<br><br>查询日期";
+                "【有利空的还是尽量规避!如：20190317之002750龙津药业】<br><br>【市场疯狂调整更疯狂，请查看20190226；第二次20190308,第三次20190313】<br><br>查询日期";
         Date endDate =  MyUtils.getFormatDate(end);
         String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
         List<Temperature> yesterdays = temperatureRepository.findByDayFormatAndType(yesterday,NumberEnum.TemperatureType.CLOSE.getCode());
