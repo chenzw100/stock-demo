@@ -86,7 +86,7 @@ public class StockController {
         List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderById(end);
         List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
 
-        return desc+end+"昨日情况 数量："+downStocks.size()+":<br>"+downStocks+"<br>"+yesterdays+"<br>【聚焦强势聚焦主流聚焦前排】股吧竞价:<br>"+hotSortFive+"end"+end+"<br>【聚焦强势聚焦主流聚焦前排】我的竞价:<br>"+myTgbStockFive+"<br>股吧热门:<br>"+tgbHots+":<br>"+temperatures+end+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
+        return desc+end+"昨日情况 数量："+downStocks.size()+":<br>"+downStocks+"<br>"+yesterdays+"<br>【聚焦强势聚焦主流聚焦前排 相信数据】股吧竞价:<br>"+hotSortFive+"end"+end+"<br>【聚焦强势聚焦主流聚焦前排 相信数据】我的竞价:<br>"+myTgbStockFive+"<br>股吧热门:<br>"+tgbHots+":<br>"+temperatures+end+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {
