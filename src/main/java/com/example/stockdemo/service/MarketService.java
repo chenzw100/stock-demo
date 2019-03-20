@@ -162,6 +162,7 @@ public class MarketService {
         log.info("===>>record:"+record);
         temperature.setDown(Integer.valueOf(downNormal.toString()));
         temperature.setRaise(Integer.valueOf(raiseNormal.toString()));
+        temperature.setTradeVal(currentTradeVal());
         temperatureRepository.save(temperature);
         return record;
     }
@@ -174,5 +175,17 @@ public class MarketService {
     public String temperatureNormal()  {
         return temperature(NumberEnum.TemperatureType.NORMAL.getCode());
     }
-
+    private Integer currentTradeVal() {
+        String url ="http://qt.gtimg.cn/q=s_sh000001";
+        Object response =  restTemplate.getForObject(url,String.class);
+        String str = response.toString();
+        String[] stockObj = str.split("~");
+        if(stockObj.length<7){
+            log.error( ":err=" + str);
+            return null;
+        }
+        str =stockObj[7];
+        str = str.substring(0,str.length()-4);
+        return Integer.parseInt(str);
+    }
 }

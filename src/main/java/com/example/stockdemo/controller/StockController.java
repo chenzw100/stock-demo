@@ -183,7 +183,7 @@ public class StockController {
     }
     @RequestMapping("t")
     String t() {
-        MailSendUtil.sendMail("test");
+        marketService.temperatureNormal();
         return "test-success";
     }
 

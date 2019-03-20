@@ -37,6 +37,17 @@ public class Temperature {
     private int down;
     @Column(nullable = false)
     private int type;
+    @Column(nullable = false)
+    private int tradeVal;
+
+    public int getTradeVal() {
+        return tradeVal;
+    }
+
+    public void setTradeVal(int tradeVal) {
+        this.tradeVal = tradeVal;
+    }
+
     public Temperature(){
     }
     public Temperature(int type){
@@ -138,7 +149,7 @@ public class Temperature {
         sb.append(dateStr+"==>> [昨现:").append(MyUtils.getYuanByCent(getYesterdayShow()));
         sb.append("] [温度:").append(getNowTemperature());
         sb.append("] [涨停:").append(getRaiseUp()).append(", 跌停:").append(getDownUp()).append(", 炸版:").append(getOpen());
-        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("]<br>");
+        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append(",上证额:").append(getTradeVal()).append("亿]<br>");
         return sb.toString();
     }
 }
