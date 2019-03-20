@@ -296,9 +296,8 @@ public class MyFiveTgbStock implements Comparable<MyFiveTgbStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(",一字").append(oneFlag).append(",开板:").append(openCount).append(",热排:").append(hotSort).append(",:热值").append(hotValue).
-                append("七日:").append(hotSeven)
-                .append(code).append(name).append(",连板:").append(",竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
+        sb.append(code).append(name).append("[热值:").append(hotValue).
+                append("七日:").append(hotSeven).append(",连板:").append(continuous).append("]竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
                 append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
         return sb.toString();
     }
