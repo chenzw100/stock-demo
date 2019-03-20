@@ -145,11 +145,11 @@ public class Temperature {
     }
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        String dateStr = DateFormatUtils.format(getCreated(), "HH:mm:ss");
-        sb.append(dateStr+"==>> [昨现:").append(MyUtils.getYuanByCent(getYesterdayShow()));
+        String dateStr = DateFormatUtils.format(getCreated(), "HH:mm");
+        sb.append(dateStr+"=> [昨现:").append(MyUtils.getYuanByCent(getYesterdayShow()));
         sb.append("] [温度:").append(getNowTemperature());
         sb.append("] [涨停:").append(getRaiseUp()).append(", 跌停:").append(getDownUp()).append(", 炸版:").append(getOpen());
-        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append(",上证额:").append(getTradeVal()).append("亿]<br>");
+        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿]<br>");
         return sb.toString();
     }
 }
