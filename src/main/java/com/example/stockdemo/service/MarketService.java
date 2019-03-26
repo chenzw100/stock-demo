@@ -163,6 +163,7 @@ public class MarketService {
         temperature.setDown(Integer.valueOf(downNormal.toString()));
         temperature.setRaise(Integer.valueOf(raiseNormal.toString()));
         temperature.setTradeVal(currentTradeVal());
+        temperature.setContinueVal(currentContinueVal());
         temperatureRepository.save(temperature);
         return record;
     }
@@ -187,5 +188,17 @@ public class MarketService {
         str =stockObj[7];
         str = str.substring(0,str.length()-4);
         return Integer.parseInt(str);
+    }
+    private String currentContinueVal() {
+        String url ="http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd=BK08161&sty=FDPBPFB&token=7bc05d0d4c3c22ef9fca8c2a912d779c";
+        Object response =  restTemplate.getForObject(url,String.class);
+        String str = response.toString();
+        String[] stockObj = str.split(",");
+        if(stockObj.length<7){
+            log.error( ":err=" + str);
+            return null;
+        }
+        str =stockObj[5];
+        return str;
     }
 }

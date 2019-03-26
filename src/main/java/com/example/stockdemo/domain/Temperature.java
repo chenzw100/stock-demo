@@ -39,6 +39,8 @@ public class Temperature {
     private int type;
     @Column(nullable = false)
     private int tradeVal;
+    @Column(nullable = false)
+    private String continueVal;
 
     public int getTradeVal() {
         return tradeVal;
@@ -143,10 +145,20 @@ public class Temperature {
     public void setType(int type) {
         this.type = type;
     }
+
+    public String getContinueVal() {
+        return continueVal;
+    }
+
+    public void setContinueVal(String continueVal) {
+        this.continueVal = continueVal;
+    }
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         String dateStr = DateFormatUtils.format(getCreated(), "HH:mm");
         sb.append(dateStr+"=> [昨现:").append(MyUtils.getYuanByCent(getYesterdayShow()));
+        sb.append("] [连板:").append(getContinueVal());
         sb.append("] [温度:").append(getNowTemperature());
         sb.append("] [涨停:").append(getRaiseUp()).append(", 跌停:").append(getDownUp()).append(", 炸版:").append(getOpen());
         sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿]<br>");
