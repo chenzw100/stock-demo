@@ -156,7 +156,7 @@ public class Temperature {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        String dateStr = DateFormatUtils.format(getCreated(), "HH:mm");
+        String dateStr = DateFormatUtils.format(getCreated(), "MM-dd HH:mm");
         sb.append(dateStr+"=> [昨现:").append(MyUtils.getYuanByCent(getYesterdayShow()));
         sb.append("] [连板:").append(getContinueVal());
         sb.append("] [温度:").append(getNowTemperature());
