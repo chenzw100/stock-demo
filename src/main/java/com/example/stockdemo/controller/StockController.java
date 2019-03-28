@@ -187,7 +187,7 @@ public class StockController {
     }
     @RequestMapping("t")
     String t() {
-        //marketService.temperatureNormal();
+        marketService.temperatureClose();
 
         return "开盘:";
     }

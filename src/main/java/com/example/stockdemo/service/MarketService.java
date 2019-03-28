@@ -2,12 +2,10 @@ package com.example.stockdemo.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.stockdemo.dao.DownStockRepository;
 import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
-import com.example.stockdemo.domain.MyStock;
-import com.example.stockdemo.domain.StrongStocksDown;
-import com.example.stockdemo.domain.Temperature;
-import com.example.stockdemo.domain.XGBStock;
+import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -36,6 +34,8 @@ public class MarketService {
     private TemperatureRepository temperatureRepository;
     @Autowired
     private StrongStocksDownRepository strongStocksDownRepository;
+    @Autowired
+    private DownStockRepository downStockRepository;
     //3.10执行
     public String boomStock(){
         Object response =  restTemplate.getForObject(boom_stock_url, String.class);
@@ -164,6 +164,12 @@ public class MarketService {
         temperature.setRaise(Integer.valueOf(raiseNormal.toString()));
         temperature.setTradeVal(currentTradeVal());
         temperature.setContinueVal(currentContinueVal());
+        if(type==NumberEnum.TemperatureType.CLOSE.getCode()){
+            List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat(MyUtils.getTomorrowDate()));
+            temperature.setStrongDowns(downStocks.size());
+        }else {
+            temperature.setStrongDowns(0);
+        }
         temperatureRepository.save(temperature);
         return record;
     }

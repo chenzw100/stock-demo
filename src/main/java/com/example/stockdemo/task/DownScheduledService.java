@@ -51,8 +51,8 @@ public class DownScheduledService {
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){
-                marketService.temperatureClose();
                 downService.close();
+                marketService.temperatureClose();
             }
         } catch (Exception e) {
             e.printStackTrace();

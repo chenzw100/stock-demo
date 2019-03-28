@@ -41,6 +41,16 @@ public class Temperature {
     private int tradeVal;
     @Column(nullable = false)
     private String continueVal;
+    @Column(nullable = false)
+    private int strongDowns;
+
+    public int getStrongDowns() {
+        return strongDowns;
+    }
+
+    public void setStrongDowns(int strongDowns) {
+        this.strongDowns = strongDowns;
+    }
 
     public int getTradeVal() {
         return tradeVal;
@@ -161,7 +171,7 @@ public class Temperature {
         sb.append("] [连板:").append(getContinueVal());
         sb.append("] [温度:").append(getNowTemperature());
         sb.append("] [涨停:").append(getRaiseUp()).append(", 跌停:").append(getDownUp()).append(", 炸版:").append(getOpen());
-        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿]<br>");
+        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿] [计提:").append(getStrongDowns()).append("]<br>");
         return sb.toString();
     }
 }
