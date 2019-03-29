@@ -21,7 +21,7 @@ import java.util.List;
 public interface XgbStockRepository extends JpaRepository<XGBStock,Long> {
     List<XGBStock> findAll();
     List<XGBStock> findByCodeAndDayFormat(String code, String dayFormat);
-    List<XGBStock> findByDayFormatOrderByIdDesc(String dayFormat);
+    List<XGBStock> findByDayFormatAndContinueBoardCountGreaterThan(String dayFormat,int min);
     XGBStock save(XGBStock xgbStock);
 
 }

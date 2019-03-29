@@ -48,6 +48,8 @@ public class StockController {
     RestTemplate restTemplate;
     @Autowired
     private TgbHotService tgbHotService;
+    @Autowired
+    private XgbStockRepository xgbStockRepository;
 
     @RequestMapping("/e/{end}")
     String e(@PathVariable("end")String end) {
@@ -75,7 +77,9 @@ public class StockController {
                 "【有利空的还是尽量规避!如：20190317之002750龙津药业】<br>【市场疯狂调整更疯狂，请查看20190226,20190308,20190313,20190321,20190328】<br><br>查询日期";
         Date endDate =  MyUtils.getFormatDate(end);
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(5,endDate));
-        //String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
+        endDate =  MyUtils.getFormatDate(end);
+        String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
+        List<XGBStock> xs=xgbStockRepository.findByDayFormatAndContinueBoardCountGreaterThan(yesterday,1);
         //List<Temperature> yesterdays = temperatureRepository.findByDayFormatAndType(yesterday,NumberEnum.TemperatureType.CLOSE.getCode());
         List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(end);
 
@@ -90,7 +94,7 @@ public class StockController {
         List<Temperature> temperaturesOpen=temperatureRepository.open(start,end);
         List<Temperature> temperaturesClose=temperatureRepository.close(start,end);
 
-        return desc+end+"昨日情况 数量："+downStocks.size()+":<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>【信号123 注意集体高潮 相信数据】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮 相信数据】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
+        return desc+end+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>【信号123 注意集体高潮 相信数据】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮 相信数据】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {

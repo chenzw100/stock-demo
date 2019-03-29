@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.DownStockRepository;
 import com.example.stockdemo.dao.StrongStocksDownRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
+import com.example.stockdemo.dao.XgbStockRepository;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.utils.MyUtils;
@@ -36,6 +37,8 @@ public class MarketService {
     private StrongStocksDownRepository strongStocksDownRepository;
     @Autowired
     private DownStockRepository downStockRepository;
+    @Autowired
+    private XgbStockRepository xgbStockRepository;
     //3.10执行
     public String boomStock(){
         Object response =  restTemplate.getForObject(boom_stock_url, String.class);
@@ -167,6 +170,12 @@ public class MarketService {
         if(type==NumberEnum.TemperatureType.CLOSE.getCode()){
             List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat(MyUtils.getTomorrowDate()));
             temperature.setStrongDowns(downStocks.size());
+            List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatAndContinueBoardCountGreaterThan(dateParam,1);
+            if(xgbStocks!=null){
+                temperature.setContinueCount(xgbStocks.size());
+            }else {
+                temperature.setContinueCount(0);
+            }
         }else {
             temperature.setStrongDowns(0);
         }

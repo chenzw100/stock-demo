@@ -43,6 +43,16 @@ public class Temperature {
     private String continueVal;
     @Column(nullable = false)
     private int strongDowns;
+    @Column(nullable = false)
+    private int continueCount;
+
+    public int getContinueCount() {
+        return continueCount;
+    }
+
+    public void setContinueCount(int continueCount) {
+        this.continueCount = continueCount;
+    }
 
     public int getStrongDowns() {
         return strongDowns;
@@ -171,7 +181,7 @@ public class Temperature {
         sb.append("] [连板:").append(getContinueVal());
         sb.append("] [温度:").append(getNowTemperature());
         sb.append("] [涨停:").append(getRaiseUp()).append(", 跌停:").append(getDownUp()).append(", 炸版:").append(getOpen());
-        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿] [计提:").append(getStrongDowns()).append("]<br>");
+        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿] [计提:").append(getStrongDowns()).append("] [连板:").append(getContinueCount()).append("]<br>");
         return sb.toString();
     }
 }
