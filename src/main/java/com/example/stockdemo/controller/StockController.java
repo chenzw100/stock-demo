@@ -93,8 +93,12 @@ public class StockController {
 
         List<Temperature> temperaturesOpen=temperatureRepository.open(start,end);
         List<Temperature> temperaturesClose=temperatureRepository.close(start,end);
-
-        return desc+end+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>【信号123 注意集体高潮 相信数据】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮 相信数据】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
+        List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(yesterday);
+        XGBStock hstock=null;
+        if(hs!=null && hs.size()>0){
+            hstock = hs.get(0);
+        }
+        return desc+end+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>【信号123 注意集体高潮 相信数据】股吧数量:"+hotSortFive.size()+"<br>最高版:<br>"+hstock+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮 相信数据】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {
