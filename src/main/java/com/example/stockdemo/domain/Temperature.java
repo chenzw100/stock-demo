@@ -177,11 +177,17 @@ public class Temperature {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         String dateStr = DateFormatUtils.format(getCreated(), "MM-dd HH:mm");
-        sb.append(dateStr+"=> [昨现:").append(MyUtils.getYuanByCent(getYesterdayShow()));
-        sb.append("] [连板:").append(getContinueVal());
-        sb.append("] [温度:").append(getNowTemperature());
-        sb.append("] [涨停:").append(getRaiseUp()).append(", 跌停:").append(getDownUp()).append(", 炸版:").append(getOpen());
-        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿] [计提:").append(getStrongDowns()).append("] [连板:").append(getContinueCount()).append("]<br>");
+        sb.append(dateStr+"=> [昨:").append(MyUtils.getYuanByCent(getYesterdayShow()));
+        sb.append("] [连:").append(getContinueVal());
+        sb.append("] [温:").append(getNowTemperature());
+        sb.append("] [涨:").append(getRaiseUp()).append(", 跌:").append(getDownUp()).append(", 炸:").append(getOpen());
+        sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿]");
+        if(dateStr.substring(6,8).equals("15")){
+            sb.append(" [负:").append(getStrongDowns()).append("] [正:").append(getContinueCount()).append("]<br>");
+        }else {
+            sb.append("<br>");
+        }
+
         return sb.toString();
     }
 }

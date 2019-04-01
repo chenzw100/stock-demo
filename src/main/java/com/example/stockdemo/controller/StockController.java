@@ -98,7 +98,7 @@ public class StockController {
         if(hs!=null && hs.size()>0){
             hstock = hs.get(0);
         }
-        return desc+end+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>【信号123 注意集体高潮 相信数据】股吧数量:"+hotSortFive.size()+"<br>最高版:<br>"+hstock+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮 相信数据】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
+        return desc+end+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>【信号123 注意集体高潮 相信数据】股吧数量:"+hotSortFive.size()+"<br>最高版:"+hstock+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮 相信数据】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
     }
     @RequestMapping("/s/{format}")
     String s(@PathVariable("format")String format) {
@@ -203,7 +203,7 @@ public class StockController {
 
 
     public static void main(String[] args) {
-        System.out.println(11);
+       /* System.out.println(11);
         String code = "600555";
         String code1 = "600655";
         String code2 = "000655";
@@ -215,6 +215,13 @@ public class StockController {
         }
         if(code2.indexOf("6")==0){
             System.out.println(code2);
+        }*/
+        String dateStr =DateFormatUtils.format(new Date(), "MM-dd HH:mm");
+        System.out.println(dateStr.substring(7,8));
+        if(dateStr.substring(6,8).equals("15")){
+            System.out.println("ok");
+        }else {
+            System.out.println("no");
         }
     }
 }
