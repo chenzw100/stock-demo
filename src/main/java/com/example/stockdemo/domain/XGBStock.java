@@ -137,7 +137,7 @@ public class XGBStock implements Comparable<XGBStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append(",open").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(getPrice()).append(plateName);
+        sb.append(code).append(name).append(",open:").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append(plateName);
         return sb.toString();
     }
 }
