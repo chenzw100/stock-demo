@@ -293,7 +293,7 @@ function drawing(){
     //=====
     var option5 = {
         title : {
-            text: '实时开盘连板&涨停'
+            text: '实时连板&涨停'
         },
         tooltip : {
             trigger: 'axis'
@@ -357,7 +357,7 @@ function drawing(){
     myChart5.setOption(option5);
     var option6 = {
         title : {
-            text: '开盘市场温度'
+            text: '实时市场温度'
         },
         tooltip : {
             trigger: 'axis'
