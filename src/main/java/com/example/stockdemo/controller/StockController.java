@@ -3,7 +3,6 @@ package com.example.stockdemo.controller;
 import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
-import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.service.UpService;
@@ -195,9 +194,9 @@ public class StockController {
     }
     @RequestMapping("t")
     String t() {
-        marketService.temperatureClose();
+        //marketService.temperatureClose();
 
-        return "开盘:";
+        return "success";
     }
 
 

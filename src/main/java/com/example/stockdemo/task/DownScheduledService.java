@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class DownScheduledService {
     Log log = LogFactory.getLog(DownScheduledService.class);
     private static final String openCron = "40 26 9 ? * MON-FRI";

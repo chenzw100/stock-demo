@@ -1,0 +1,23 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="jquery-2.2.4.min.js"></script> <!--自己找一个jquery，在线的也可以-->
+    <script type="text/javascript">
+        function show(){
+            var date =$("#date").val();
+            $.get("t/"+date,{},
+                    function(result){
+                        alert(result);
+                    }
+            );
+        }
+
+    </script>
+</head>
+<body>
+<input type="text" value="" id="date">
+<button onclick="show()">你大爷</button>
+</body>
+</html>

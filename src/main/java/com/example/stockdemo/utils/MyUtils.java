@@ -38,6 +38,9 @@ public class MyUtils {
     public static String getDayFormat(){
         return DateFormatUtils.format(getCurrentDate(), "yyyyMMdd");
     }
+    public static String getDayHHFormat(Date date){
+        return DateFormatUtils.format(date, "MMdd HH");
+    }
     public static String getDayFormat(Date date){
         return DateFormatUtils.format(date, "yyyyMMdd");
     }
