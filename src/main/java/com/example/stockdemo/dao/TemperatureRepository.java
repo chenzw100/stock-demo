@@ -21,6 +21,8 @@ import java.util.List;
  SELECT * FROM temperature WHERE type=3 ORDER BY id DESC LIMIT 5
  WHERE day_format BETWEEN ?1 AND ?2
  SELECT * FROM temperature WHERE type=1 and day_format BETWEEN '20190321' AND '20190328' ORDER BY id DESC;
+ SELECT continue_val,yesterday_show/100,now_temperature FROM temperature WHERE day_format='20190402'
+ SELECT continue_val,yesterday_show/100,now_temperature FROM temperature WHERE day_format BETWEEN '20190301' AND '20190402'  and type=2;
  */
 public interface TemperatureRepository extends JpaRepository<Temperature,Long> {
     List<Temperature> findAll();
