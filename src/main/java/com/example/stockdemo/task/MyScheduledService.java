@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 //5.0
-//@Component
+@Component
 public class MyScheduledService {
     private static final String openCron = "50 25 9 ? * MON-FRI";
     private static final String closeCron ="0 6 15 ? * MON-FRI";
