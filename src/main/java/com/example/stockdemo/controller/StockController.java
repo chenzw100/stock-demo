@@ -3,9 +3,7 @@ package com.example.stockdemo.controller;
 import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
-import com.example.stockdemo.service.MarketService;
-import com.example.stockdemo.service.TgbHotService;
-import com.example.stockdemo.service.UpService;
+import com.example.stockdemo.service.*;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -49,6 +47,10 @@ public class StockController {
     private TgbHotService tgbHotService;
     @Autowired
     private XgbStockRepository xgbStockRepository;
+    @Autowired
+    MyTgbService myTgbService;
+    @Autowired
+    private DownService downService;
 
     @RequestMapping("/e/{end}")
     String e(@PathVariable("end")String end) {
@@ -194,7 +196,10 @@ public class StockController {
     }
     @RequestMapping("t")
     String t() {
-        //marketService.temperatureClose();
+        tgbHotService.close();
+        myTgbService.close();
+        downService.close();
+        marketService.temperatureClose();
 
         return "success";
     }
