@@ -1,8 +1,8 @@
-var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yUpData,yDownData;
+var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData;
 var myChartContinueVal = echarts.init(document.getElementById('mainContinueVal'));
 var myChartNowTemperature = echarts.init(document.getElementById('mainNowTemperature'));
-var myChartTradeVal = echarts.init(document.getElementById('mainTradeVal'));
-var myChartCount = echarts.init(document.getElementById('mainCount'));
+
+
 
 $(function() {
 
@@ -43,8 +43,7 @@ function getViewData(){
             yNowTemperatureData=d["yNowTemperature"];
             yTradeValData=d["yTradeVal"];
 
-            yUpData=d["yUp"];
-            yDownData=d["yDown"];
+
 
         }
     });
@@ -168,123 +167,9 @@ function drawing(){
     myChartNowTemperature.setOption(optionNowTemperature);
     //=====
 
-    var optionTradeVal = {
-        title : {
-            text: '开盘量'
-        },
-        tooltip : {
-            trigger: 'axis'
-        },
 
-        calculable : true,
-        xAxis : [
-            {
-                type : 'category',
-                boundaryGap : false,
-                data : xData
-            }
-        ],
-        yAxis : [
-            {
-                type : 'value',
-                axisLabel : {
-                    formatter: '{value} '
-                }
-            }
-        ],
-        series : [
-            {
-                name:'量',
-                type:'line',
-                smooth:true,
-                data:yTradeValData,
-                itemStyle: {
-                    normal: {
-                        lineStyle: {
-                            color : 'gray'
-                        }
-                    }
-                },
-                markPoint : {
-                    data : [
-                        {type : 'max', name: '最大值'},
-                        {type : 'min', name: '最小值'}
-                    ]
-                },
-                markLine : {
-                    data : [
-                        {type : 'average', name : '平均值'}
-                    ]
-                }
-            }
-        ]
-    };
 
-    myChartTradeVal.setOption(optionTradeVal);
 
-    var optionCount = {
-        title : {
-            text: '涨停&跌停'
-        },
-        tooltip : {
-            trigger: 'axis'
-        },
-        calculable : true,
-        xAxis : [
-            {
-                type : 'category',
-                boundaryGap : false,
-                data : xData
-            }
-        ],
-        yAxis : [
-            {
-                type : 'value',
-                axisLabel : {
-                    formatter: '{value} '
-                }
-            }
-        ],
-        series : [
-            {
-                name:'涨停',
-                type:'line',
-                smooth:true,
-                data:yUpData,
-                itemStyle: {
-                    normal: {
-                        lineStyle: {
-                            color : 'gray'
-                        }
-                    }
-                },
-                markPoint : {
-                    data : [
-                        {type : 'max', name: '最大值'},
-                        {type : 'min', name: '最小值'}
-                    ]
-                },
-                markLine : {
-                    data : [
-                        {type : 'average', name : '平均值'}
-                    ]
-                }
-            },
-            {
-                name:'跌停',
-                type:'line',
-                data:yDownData,
-                markPoint : {
-                    data : [
-                        {type : 'max', name: '最大值'},
-                        {type : 'min', name: '最小值'}
-                    ]
-                }
-            }
-        ]
-    };
-    // 使用刚指定的配置项和数据显示图表。
-    myChartCount.setOption(optionCount);
 
 }
 

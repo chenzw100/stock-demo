@@ -118,16 +118,12 @@ public class ChartsController {
         TreeMap nowTemperatureMap = new TreeMap<>();
         TreeMap tradeValMap = new TreeMap<>();
 
-        TreeMap upMap = new TreeMap<>();
-        TreeMap downMap = new TreeMap<>();
+
         for (Temperature t:temperaturesOpen){
             String key = MyUtils.getDayHHFormat(t.getCreated());
             continueValMap.put(key, t.getContinueVal());
             yesterdayShowMap.put(key, MyUtils.getYuanByCent(t.getYesterdayShow()));
             nowTemperatureMap.put(key, t.getNowTemperature());
-
-            upMap.put(key, t.getRaiseUp());
-            downMap.put(key, t.getDownUp());
         }
         HashMap resultMap =new HashMap();
         resultMap.put("x", continueValMap.keySet());
@@ -138,8 +134,7 @@ public class ChartsController {
         resultMap.put("yNowTemperature", nowTemperatureMap.values());
         resultMap.put("yTradeVal", tradeValMap.values());
 
-        resultMap.put("yUp", upMap.values());
-        resultMap.put("yDown", downMap.values());
+
         return resultMap;
     }
     @RequestMapping(value = "/close/{end}", method = RequestMethod.GET)
@@ -157,6 +152,8 @@ public class ChartsController {
 
         TreeMap continueCountMap = new TreeMap<>();
         TreeMap downCountMap = new TreeMap<>();
+        TreeMap upMap = new TreeMap<>();
+        TreeMap downMap = new TreeMap<>();
         for (Temperature t:temperaturesOpen){
             continueValMap.put(t.getDayFormat(), t.getContinueVal());
             yesterdayShowMap.put(t.getDayFormat(), MyUtils.getYuanByCent(t.getYesterdayShow()));
@@ -164,6 +161,8 @@ public class ChartsController {
             tradeValMap.put(t.getDayFormat(), t.getTradeVal());
             continueCountMap.put(t.getDayFormat(), t.getContinueCount());
             downCountMap.put(t.getDayFormat(), t.getStrongDowns());
+            upMap.put(t.getDayFormat(), t.getRaiseUp());
+            downMap.put(t.getDayFormat(), t.getDownUp());
         }
         HashMap resultMap =new HashMap();
         resultMap.put("x", continueValMap.keySet());
@@ -176,6 +175,9 @@ public class ChartsController {
 
         resultMap.put("yContinueCount", continueCountMap.values());
         resultMap.put("yDownCount", downCountMap.values());
+
+        resultMap.put("yUp", upMap.values());
+        resultMap.put("yDown", downMap.values());
         return resultMap;
     }
 

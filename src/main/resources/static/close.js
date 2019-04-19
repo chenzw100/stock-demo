@@ -1,7 +1,8 @@
-var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData;
+var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData;
 var myChartContinueVal = echarts.init(document.getElementById('mainContinueVal'));
 var myChartNowTemperature = echarts.init(document.getElementById('mainNowTemperature'));
 var myChartTradeVal = echarts.init(document.getElementById('mainTradeVal'));
+var myChartStrongCount = echarts.init(document.getElementById('mainStrongCount'));
 var myChartCount = echarts.init(document.getElementById('mainCount'));
 
 $(function() {
@@ -46,6 +47,8 @@ function getViewData(){
             yContinueCountData=d["yContinueCount"];
             yDownCountData=d["yDownCount"];
 
+            yUpData=d["yUp"];
+            yDownData=d["yDown"];
         }
     });
 }
@@ -170,7 +173,7 @@ function drawing(){
 
     var optionTradeVal = {
         title : {
-            text: '开盘量'
+            text: '量'
         },
         tooltip : {
             trigger: 'axis'
@@ -222,7 +225,7 @@ function drawing(){
 
     myChartTradeVal.setOption(optionTradeVal);
 
-    var optionCount = {
+    var optionStrongCount = {
         title : {
             text: '连板数&亏损数'
         },
@@ -274,6 +277,70 @@ function drawing(){
                 name:'亏损数',
                 type:'line',
                 data:yDownCountData,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChartStrongCount.setOption(optionStrongCount);
+
+    var optionCount = {
+        title : {
+            text: '涨停&跌停'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'涨停',
+                type:'line',
+                smooth:true,
+                data:yUpData,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            color : 'gray'
+                        }
+                    }
+                },
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'跌停',
+                type:'line',
+                data:yDownData,
                 markPoint : {
                     data : [
                         {type : 'max', name: '最大值'},
