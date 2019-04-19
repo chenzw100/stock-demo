@@ -29,7 +29,7 @@ function getViewData(){
         end="1";
     }
     $.ajax({
-        url : 'index/'+end,
+        url : 'current/'+end,
         dataType : 'json',
         type : 'get',
         async : false,
