@@ -308,36 +308,41 @@ public class TgbHotService {
             JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
             for(int i=0;i<closeLimitUp.size();i++){
                 JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
-                XGBStock xgbStock = new XGBStock();
-                xgbStock.setCreated(MyUtils.getCurrentDate());
-                xgbStock.setName(jsonArray.toArray()[1].toString());
-                String code = jsonArray.toArray()[0].toString().substring(0,6);
-                if(code.indexOf("6")==0){
-                    code = "sh"+code;
+                String name = jsonArray.toArray()[1].toString();
+                if(!name.contains("S")){
+                    XGBStock xgbStock = new XGBStock();
+                    xgbStock.setName(name);
+                    xgbStock.setCreated(MyUtils.getCurrentDate());
+                    String code = jsonArray.toArray()[0].toString().substring(0,6);
+                    if(code.indexOf("6")==0){
+                        code = "sh"+code;
+                    }else {
+                        code = "sz"+code;
+                    }
+                    xgbStock.setCode(code);
+                    xgbStock.setOpenCount(Integer.parseInt(jsonArray.toArray()[11].toString()));
+                    xgbStock.setContinueBoardCount(Integer.parseInt(jsonArray.toArray()[12].toString()));
+                    xgbStock.setPrice(jsonArray.toArray()[3].toString());
+                    String down = jsonArray.toArray()[4].toString();
+                    int downRate= MyUtils.getCentBySinaPriceStr(down);
+                    xgbStock.setDownRate(downRate);
+                    JSONArray jsonArrayPlate = jsonArray.getJSONArray(15);
+                    String plateName ="";
+                    for(int j=0;j<jsonArrayPlate.size();j++){
+                        plateName = plateName+","+jsonArrayPlate.getJSONObject(j).getString("plate_name");
+                    }
+                    if(StringUtils.isNotBlank(plateName)){
+                        plateName =plateName.substring(1,plateName.length());
+                        xgbStock.setPlateName(plateName);
+                    }else {
+                        xgbStock.setPlateName("无");
+                    }
+                    // System.out.println(plateName);
+                    log.info(xgbStock.getDayFormat()+":当日涨停：" + xgbStock.toString());
+                    xgbStockRepository.save(xgbStock);
                 }else {
-                    code = "sz"+code;
+                    log.info(name+",st涨停");
                 }
-                xgbStock.setCode(code);
-                xgbStock.setOpenCount(Integer.parseInt(jsonArray.toArray()[11].toString()));
-                xgbStock.setContinueBoardCount(Integer.parseInt(jsonArray.toArray()[12].toString()));
-                xgbStock.setPrice(jsonArray.toArray()[3].toString());
-                String down = jsonArray.toArray()[4].toString();
-                int downRate= MyUtils.getCentBySinaPriceStr(down);
-                xgbStock.setDownRate(downRate);
-                JSONArray jsonArrayPlate = jsonArray.getJSONArray(15);
-                String plateName ="";
-                for(int j=0;j<jsonArrayPlate.size();j++){
-                    plateName = plateName+","+jsonArrayPlate.getJSONObject(j).getString("plate_name");
-                }
-                if(StringUtils.isNotBlank(plateName)){
-                    plateName =plateName.substring(1,plateName.length());
-                    xgbStock.setPlateName(plateName);
-                }else {
-                    xgbStock.setPlateName("无");
-                }
-                // System.out.println(plateName);
-                log.info(xgbStock.getDayFormat()+":当日涨停：" + xgbStock.toString());
-                xgbStockRepository.save(xgbStock);
             }
         }catch (Exception e) {
             e.printStackTrace();

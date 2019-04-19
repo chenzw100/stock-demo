@@ -7,6 +7,8 @@ import com.example.stockdemo.service.*;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @RestController
 public class StockController {
+    private final static Logger LOG = LoggerFactory.getLogger(StockController.class);
     @Autowired
     private UpService upService;
     @Autowired
@@ -54,6 +57,7 @@ public class StockController {
 
     @RequestMapping("/e/{end}")
     String e(@PathVariable("end")String end) {
+
         String desc ="坚持模式！！！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>查询日期";
         Date endDate =  MyUtils.getFormatDate(end);
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,endDate));
@@ -69,11 +73,13 @@ public class StockController {
             MyTotalStockImpl totalStock1= new MyTotalStockImpl(totalStock);
             myTotalStocks.add(totalStock1);
         }
+        List<TgbStock> list = tgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
 
-        return desc+start+"-"+end+"股吧热议:<br>"+totalStocks1+"自助热议:<br>"+myTotalStocks;
+        return desc+start+"-"+end+"股吧热议:<br>"+totalStocks1+"自助热议:<br>"+myTotalStocks+"当日股吧:<br>"+list;
     }
     @RequestMapping("/m/{end}")
     String m(@PathVariable("end")String end) {
+        LOG.info("day："+end);
         String desc ="查询20190124之后的数据，坚持模式！！【聚焦主流前排】！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>【热闹之后，强势股开盘大跌；开一字封单跟不上；大牛市沸点到冰点一根稻草20190308，一天时间逆转那么多】<br>" +
                 "【有利空的还是尽量规避!如：20190317之002750龙津药业】<br>【市场疯狂调整更疯狂，请查看20190226,20190308,20190313,20190321,20190328】<br><br>查询日期";
         Date endDate =  MyUtils.getFormatDate(end);
@@ -194,8 +200,8 @@ public class StockController {
         marketService.multiStock();
         return "success";
     }
-    @RequestMapping("t")
-    String t() {
+    @RequestMapping("mmg")
+    String mmg() {
         tgbHotService.close();
         myTgbService.close();
         downService.close();
@@ -220,9 +226,15 @@ public class StockController {
         if(code2.indexOf("6")==0){
             System.out.println(code2);
         }*/
-        String dateStr =DateFormatUtils.format(new Date(), "MM-dd HH:mm");
+        /*String dateStr =DateFormatUtils.format(new Date(), "MM-dd HH:mm");
         System.out.println(dateStr.substring(7,8));
         if(dateStr.substring(6,8).equals("15")){
+            System.out.println("ok");
+        }else {
+            System.out.println("no");
+        }*/
+        String name = "*T大唐";
+        if(!name.contains("S")){
             System.out.println("ok");
         }else {
             System.out.println("no");
