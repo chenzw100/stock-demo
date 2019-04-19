@@ -38,5 +38,4 @@ public interface TemperatureRepository extends JpaRepository<Temperature,Long> {
     public List<Temperature> normal(String start, String end);
     @Query(value=" SELECT * FROM temperature WHERE day_format BETWEEN ?1 AND ?2 ORDER BY id ", nativeQuery = true)
     public List<Temperature> current(String start, String end);
-
 }
