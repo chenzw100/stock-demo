@@ -1,6 +1,8 @@
 package com.example.stockdemo.controller;
 
+import com.example.stockdemo.dao.FiveTgbStockRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
+import com.example.stockdemo.domain.FiveTgbStock;
 import com.example.stockdemo.domain.Temperature;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
@@ -16,6 +18,8 @@ import java.util.*;
 public class ChartsController {
     @Autowired
     TemperatureRepository temperatureRepository;
+    @Autowired
+    FiveTgbStockRepository fiveTgbStockRepository;
     @RequestMapping("/t/{end}")
     List<Temperature> m(@PathVariable("end")String end) {
         Date endDate =  MyUtils.getFormatDate(end);
@@ -178,6 +182,8 @@ public class ChartsController {
 
         resultMap.put("yUp", upMap.values());
         resultMap.put("yDown", downMap.values());
+        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        resultMap.put("hot",hotSortFive);
         return resultMap;
     }
 

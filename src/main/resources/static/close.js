@@ -1,4 +1,4 @@
-var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData;
+var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData,hotData;
 var myChartContinueVal = echarts.init(document.getElementById('mainContinueVal'));
 var myChartNowTemperature = echarts.init(document.getElementById('mainNowTemperature'));
 var myChartTradeVal = echarts.init(document.getElementById('mainTradeVal'));
@@ -49,6 +49,7 @@ function getViewData(){
 
             yUpData=d["yUp"];
             yDownData=d["yDown"];
+            hotData=d["hot"];
         }
     });
 }
@@ -354,7 +355,10 @@ function drawing(){
     myChartCount.setOption(optionCount);
 
 }
-
+function hotDataShow() {
+    $("mainHot").text(hotData);
+    $("mainHotHtml").html(hotData);
+}
 function checkSelectTime(){
     if($('input:radio[name="item"]:checked').val() == "m") {
         if($("#d5").val()!=""){
