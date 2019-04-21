@@ -25,18 +25,18 @@ function changeView(){
 }
 
 function getViewData(){
-        var end = $("#dateEnd").val();
-        if(end==undefined || end==""){
-            end="1";
-        }
+    var end = $("#dateEnd").val();
+    if(end==undefined || end==""){
+        end="1";
+    }
     $.ajax({
         url : 'close/'+end,
         dataType : 'json',
         type : 'get',
         async : false,
         success : function(ret){
-                var d = ret;
-                xData=d["x"];
+            var d = ret;
+            xData=d["x"];
 
             yContinueValData=d["yContinueVal"];
             yYesterdayShowData=d["yYesterdayShow"];
@@ -353,11 +353,16 @@ function drawing(){
     };
     // 使用刚指定的配置项和数据显示图表。
     myChartCount.setOption(optionCount);
+    hotDataShow();
 
 }
 function hotDataShow() {
-    $("mainHot").text(hotData);
-    $("mainHotHtml").html(hotData);
+    $("#mainHot").empty();
+    for (var i=0;i<hotData.length;i++)
+    {
+        $("#mainHot").append(hotData[i].name +":"+hotData[i].tomorrowOpenRate+ ":"+hotData[i].tomorrowCloseRate+":"+hotData[i].plateName+"<br>");
+    }
+
 }
 function checkSelectTime(){
     if($('input:radio[name="item"]:checked').val() == "m") {
