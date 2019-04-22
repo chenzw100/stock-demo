@@ -46,7 +46,7 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '大于0开板'")
     private Integer oneFlag;
     @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
-    private String desc;
+    private String remark;
 
 
 
@@ -61,12 +61,12 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     @Column(nullable = false)
     private Date created;
 
-    public String getDesc() {
-        return desc;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Transient

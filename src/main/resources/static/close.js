@@ -360,7 +360,7 @@ function hotDataShow() {
     $("#mainHot").empty();
     for (var i=0;i<hotData.length;i++)
     {
-        $("#mainHot").append(hotData[i].name+"【竞价:" +hotData[i].todayOpenRate+"["+hotData[i].desc+"],明天开:"+hotData[i].tomorrowOpenRate+ ",明天收:"+hotData[i].tomorrowCloseRate+":"+hotData[i].plateName+"】<br>");
+        $("#mainHot").append(hotData[i].name+"【竞价:" +hotData[i].todayOpenRate+"["+hotData[i].remark+"],明天开:"+hotData[i].tomorrowOpenRate+ ",明天收:"+hotData[i].tomorrowCloseRate+":"+hotData[i].plateName+"】<br>");
     }
 
 }

@@ -200,12 +200,10 @@ public class StockController {
         marketService.multiStock();
         return "success";
     }
-    @RequestMapping("mmg")
+    @RequestMapping("t")
     String mmg() {
         tgbHotService.close();
         myTgbService.close();
-        downService.close();
-        marketService.temperatureClose();
 
         return "success";
     }
