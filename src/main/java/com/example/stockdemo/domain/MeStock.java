@@ -1,6 +1,5 @@
 package com.example.stockdemo.domain;
 
-import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.utils.MyUtils;
 
 import javax.persistence.*;
@@ -12,8 +11,8 @@ import java.util.Date;
  * 今天竞价涨幅，相对于昨天收盘的涨幅 (todayOpenPrice-yesterdayPrice)/yesterdayPrice
  * 明天竞价涨幅，相对于今天开盘的涨幅 (tomorrowPrice-todayOpenPrice)/todayOpenPrice;此处就代表了盈利幅度
  */
-@Entity(name="five_tgb_stock")
-public class FiveTgbStock implements Comparable<FiveTgbStock>{
+@Entity(name="me_stock")
+public class MeStock {
     @Id
     @GeneratedValue
     private Long id;
@@ -23,33 +22,19 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private String code;
     @Column(nullable = false,columnDefinition="varchar(8)")
     private String name;
-    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '热门排序'")
-    private Integer hotSort;
+
     @Column(nullable = true,columnDefinition="varchar(30) COMMENT '板块'")
     private String plateName;
-    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '0未涨停;1涨停'")
-    private Integer limitUp;
+
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '开盘竞价'")
     private Integer openBidRate;
-
-    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '今日热搜'")
-    private Integer hotValue;
-    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '最近7日'")
-    private Integer hotSeven;
 
     @Column(nullable = false,columnDefinition="int(11) DEFAULT 0 COMMENT '昨日收盘'")
     private Integer yesterdayClosePrice;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '连板'")
     private Integer continuous;
-    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '开板次数'")
-    private Integer openCount;
-    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '大于0开板'")
-    private Integer oneFlag;
-    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
+    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '竞价开盘简讯'")
     private String remark;
-
-
-
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '今日开盘'")
     private Integer todayOpenPrice;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '今日收盘'")
@@ -92,13 +77,6 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private String sinaUrl;
 
 
-    public Integer getLimitUp() {
-        return limitUp;
-    }
-
-    public void setLimitUp(Integer limitUp) {
-        this.limitUp = limitUp;
-    }
 
     public String getPlateName() {
         return plateName;
@@ -108,21 +86,6 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
         this.plateName = plateName;
     }
 
-    public Integer getHotSort() {
-        return hotSort;
-    }
-
-    public void setHotSort(Integer hotSort) {
-        this.hotSort = hotSort;
-    }
-
-    public Integer getOneFlag() {
-        return oneFlag;
-    }
-
-    public void setOneFlag(Integer oneFlag) {
-        this.oneFlag = oneFlag;
-    }
 
 
 
@@ -134,9 +97,9 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
         this.continuous = continuous;
     }
 
-    public FiveTgbStock(){
+    public MeStock(){
     }
-    public FiveTgbStock(String code, String name){
+    public MeStock(String code, String name){
         this.code =code;
         this.name = name;
         this.sinaUrl="https://hq.sinajs.cn/list="+code;
@@ -145,34 +108,11 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
         this.todayClosePrice=10;
         this.tomorrowOpenPrice=10;
         this.tomorrowClosePrice=10;
-        this.oneFlag=-1;
-        this.openCount=-1;
+
         this.continuous=-1;
     }
 
-    public Integer getHotValue() {
-        return hotValue;
-    }
 
-    public void setHotValue(Integer hotValue) {
-        this.hotValue = hotValue;
-    }
-
-    public Integer getHotSeven() {
-        return hotSeven;
-    }
-
-    public void setHotSeven(Integer hotSeven) {
-        this.hotSeven = hotSeven;
-    }
-
-    public Integer getOpenCount() {
-        return openCount;
-    }
-
-    public void setOpenCount(Integer openCount) {
-        this.openCount = openCount;
-    }
 
     public Long getId() {
         return id;
@@ -306,32 +246,10 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append("[热值:").append(hotValue).
-                append("七日:").append(hotSeven).append(",连板:").append(continuous).append("]竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
+        sb.append(code).append(name).append("[连板:").append(continuous).append("]竞价:").append(getTodayOpenRate()).append("【简讯:").append(remark).append("】,收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
                 append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
         return sb.toString();
     }
-    public MeStock toMeStock(){
-        MeStock stock = new MeStock();
-        stock.setName(name);
-        stock.setYesterdayClosePrice(yesterdayClosePrice);
-        stock.setCode(code);
-        stock.setContinuous(continuous);
-        stock.setCreated(created);
-        stock.setDayFormat(dayFormat);
-        stock.setOpenBidRate(openBidRate);
-        stock.setPlateName(plateName);
-        stock.setRemark(remark);
-        stock.setTodayClosePrice(todayClosePrice);
-        stock.setTodayOpenPrice(todayOpenPrice);
-        stock.setTomorrowClosePrice(tomorrowClosePrice);
-        stock.setTomorrowOpenPrice(tomorrowOpenPrice);
-        return stock;
-    }
 
 
-    @Override
-    public int compareTo(FiveTgbStock o) {
-        return o.openBidRate-this.openBidRate;
-    }
 }

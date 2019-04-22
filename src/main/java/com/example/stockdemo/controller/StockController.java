@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class StockController {
@@ -54,6 +52,8 @@ public class StockController {
     MyTgbService myTgbService;
     @Autowired
     private DownService downService;
+    @Autowired
+    MeStockRepository meStockRepository;
 
     @RequestMapping("/e/{end}")
     String e(@PathVariable("end")String end) {
@@ -74,8 +74,9 @@ public class StockController {
             myTotalStocks.add(totalStock1);
         }
         List<TgbStock> list = tgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        List<MeStock> hotMe = meStockRepository.findByDayFormatOrderByOpenBidRate(end);
 
-        return desc+start+"-"+end+"股吧热议:<br>"+totalStocks1+"自助热议:<br>"+myTotalStocks+"当日股吧:<br>"+list;
+        return desc+start+"-"+end+"最终:<br>"+hotMe+"股吧热议:<br>"+totalStocks1+"自助热议:<br>"+myTotalStocks+"当日股吧:<br>"+list;
     }
     @RequestMapping("/m/{end}")
     String m(@PathVariable("end")String end) {
@@ -107,14 +108,22 @@ public class StockController {
         }
         return desc+end+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>市场（新题材）最高版:"+hstock+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
     }
-    @RequestMapping("/s/{format}")
-    String s(@PathVariable("format")String format) {
-        List<TgbStock> hotSort = tgbStockRepository.findByDayFormatOrderByHotSort(format);
-        List<TgbStock> hotSeven = tgbStockRepository.findByDayFormatOrderByHotSevenDesc(format);
-        List<TgbStock> openBidRate = tgbStockRepository.findByDayFormatOrderByOpenBidRateDesc(format);
-        List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderById(format);
-        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(format);
-        return format+":竞价<br>"+openBidRate+":温度<br>"+temperatures+":亏钱<br>"+downStocks+":<br>"+format+":热排<br>"+hotSort+":<br>"+format+":七日<br>"+hotSeven;
+
+    String s(String end) {
+        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        Map map = new HashMap();
+        for(FiveTgbStock f: hotSortFive){
+            map.put(f.getCode(), f);
+        }
+        for(MyFiveTgbStock f: myTgbStockFive){
+            FiveTgbStock five = (FiveTgbStock)map.get(f.getCode());
+            if(five!=null){
+                //meStockRepository.save(five.toMeStock());
+            }
+        }
+        List<MeStock>  ms=meStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        return end+ms;
     }
 
     @RequestMapping("zt")
@@ -200,7 +209,7 @@ public class StockController {
         marketService.multiStock();
         return "success";
     }
-    @RequestMapping("t")
+    @RequestMapping("m4")
     String mmg() {
         tgbHotService.close();
         myTgbService.close();

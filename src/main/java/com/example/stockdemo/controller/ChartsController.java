@@ -1,8 +1,12 @@
 package com.example.stockdemo.controller;
 
 import com.example.stockdemo.dao.FiveTgbStockRepository;
+import com.example.stockdemo.dao.MeStockRepository;
+import com.example.stockdemo.dao.MyFiveTgbStockRepository;
 import com.example.stockdemo.dao.TemperatureRepository;
 import com.example.stockdemo.domain.FiveTgbStock;
+import com.example.stockdemo.domain.MeStock;
+import com.example.stockdemo.domain.MyFiveTgbStock;
 import com.example.stockdemo.domain.Temperature;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
@@ -20,6 +24,10 @@ public class ChartsController {
     TemperatureRepository temperatureRepository;
     @Autowired
     FiveTgbStockRepository fiveTgbStockRepository;
+    @Autowired
+    MyFiveTgbStockRepository myFiveTgbStockRepository;
+    @Autowired
+    MeStockRepository meStockRepository;
     private static String PRE_END="";
     @RequestMapping("/t/{end}")
     List<Temperature> m(@PathVariable("end")String end) {
@@ -191,62 +199,26 @@ public class ChartsController {
 
         resultMap.put("yUp", upMap.values());
         resultMap.put("yDown", downMap.values());
-        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
+        List<MeStock> hotSortFive = meStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
         resultMap.put("hot",hotSortFive);
+
         return resultMap;
     }
-    @RequestMapping(value = "/me/{end}", method = RequestMethod.GET)
-    public Map me(@PathVariable("end")String end){
-        String queryEnd = end;
-        if("1".equals(end)){
-            queryEnd=MyUtils.getDayFormat();
-        }else if("2".equals(end)){
-            Date endDate =  MyUtils.getFormatDate(PRE_END);
-            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay(endDate));
-        }else if("3".equals(end)){
-            Date endDate =  MyUtils.getFormatDate(PRE_END);
-            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.nextWorkDay(endDate));
+
+
+    void s1(String end) {
+        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        Map map = new HashMap();
+        for(FiveTgbStock f: hotSortFive){
+            map.put(f.getCode(), f);
         }
-        Date endDate =  MyUtils.getFormatDate(queryEnd);
-        PRE_END=queryEnd;
-        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(10, endDate));
-        List<Temperature> temperaturesOpen=temperatureRepository.close(start, queryEnd);
-        TreeMap continueValMap = new TreeMap<>();
-        TreeMap yesterdayShowMap = new TreeMap<>();
-        TreeMap nowTemperatureMap = new TreeMap<>();
-        TreeMap tradeValMap = new TreeMap<>();
-
-        TreeMap continueCountMap = new TreeMap<>();
-        TreeMap downCountMap = new TreeMap<>();
-        TreeMap upMap = new TreeMap<>();
-        TreeMap downMap = new TreeMap<>();
-        for (Temperature t:temperaturesOpen){
-            continueValMap.put(t.getDayFormat(), t.getContinueVal());
-            yesterdayShowMap.put(t.getDayFormat(), MyUtils.getYuanByCent(t.getYesterdayShow()));
-            nowTemperatureMap.put(t.getDayFormat(), t.getNowTemperature());
-            tradeValMap.put(t.getDayFormat(), t.getTradeVal());
-            continueCountMap.put(t.getDayFormat(), t.getContinueCount());
-            downCountMap.put(t.getDayFormat(), t.getStrongDowns());
-            upMap.put(t.getDayFormat(), t.getRaiseUp());
-            downMap.put(t.getDayFormat(), t.getDownUp());
+        for(MyFiveTgbStock f: myTgbStockFive){
+            FiveTgbStock five = (FiveTgbStock)map.get(f.getCode());
+            if(five!=null){
+                meStockRepository.save(five.toMeStock());
+            }
         }
-        HashMap resultMap =new HashMap();
-        resultMap.put("x", continueValMap.keySet());
-
-        resultMap.put("yContinueVal", continueValMap.values());
-        resultMap.put("yYesterdayShow", yesterdayShowMap.values());
-
-        resultMap.put("yNowTemperature", nowTemperatureMap.values());
-        resultMap.put("yTradeVal", tradeValMap.values());
-
-        resultMap.put("yContinueCount", continueCountMap.values());
-        resultMap.put("yDownCount", downCountMap.values());
-
-        resultMap.put("yUp", upMap.values());
-        resultMap.put("yDown", downMap.values());
-        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
-        resultMap.put("hot",hotSortFive);
-        return resultMap;
     }
 
 

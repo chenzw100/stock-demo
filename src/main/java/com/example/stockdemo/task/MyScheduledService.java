@@ -70,8 +70,8 @@ public class MyScheduledService {
         try {
             if(chineseWorkDay.isWorkday()){
                 log.info("==>>exe choice go.. "+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-                myTgbService.choice();
                 tgbHotService.choiceFive();
+                myTgbService.choice();
             }else {
                 log.info("==>>no exe choice  HOLIDAY"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
             }
