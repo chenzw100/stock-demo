@@ -9,12 +9,12 @@
 </style>
 <div class="container">
     <div class="">
-        <input type="text" id="dateEnd">
-        <input type="button" value="确定" id="search" onclick="getSelect()" />
+        <input type="text" id="dateEnd" onkeyup="onKeyUpEnter(event)">
+        <input type="button" value="确定" id="search" onclick="getSelect()"  />
     </div>
     <div>
         <div id="mainTradeVal" style="width: 900px;height:300px;"></div>
-        <div id="mainHot" style="margin-left: 300px;color:red;"></div>
+        <div id="mainHot" style="margin-left: 100px;color:red;"></div>
         <div id="mainContinueVal" style="width: 900px;height:300px;"></div>
 
         <div id="mainNowTemperature" style="width: 900px;height:300px;"></div>
@@ -26,8 +26,22 @@
 
 
 </div>
-<script type="text/javascript" src="close.js?v=2.1.2"></script>
+<script type="text/javascript" src="close.js?v=2.1.6"></script>
 <script type="application/javascript">
+    function onKeyUpEnter(e) {
+        if (e.keyCode == 13) {
+            getSelect();
+        }else if(e.keyCode == 37){
+            //pre
+            $("#dateEnd").val(2);
+            getSelect();
+        }
+        else if(e.keyCode == 39){
+            //next
+            $("#dateEnd").val(3);
+            getSelect();
+        }
+    }
     //-----------时间控件限制的处理 start-----------------------
     var getFirstAndLastMonthDay = function (year, month){
         var lastDay = new Date(year,month,0).getDate();

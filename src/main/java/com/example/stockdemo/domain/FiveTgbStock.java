@@ -25,7 +25,7 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private String name;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '热门排序'")
     private Integer hotSort;
-    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
+    @Column(nullable = true,columnDefinition="varchar(30) COMMENT '板块'")
     private String plateName;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '0未涨停;1涨停'")
     private Integer limitUp;
@@ -45,6 +45,8 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private Integer openCount;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '大于0开板'")
     private Integer oneFlag;
+    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
+    private String desc;
 
 
 
@@ -58,6 +60,14 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private Integer tomorrowClosePrice;
     @Column(nullable = false)
     private Date created;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     @Transient
     private String todayOpenRate;
