@@ -215,7 +215,7 @@ public class MyTgbService {
     }
     public void close(){
         closeFive();
-        choiceMe();
+        closeMe();
         List<MyTgbStock> myStocksTomorrow = myTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         if(myStocksTomorrow!=null){
             for(MyTgbStock myStock :myStocksTomorrow){
