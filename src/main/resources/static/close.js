@@ -228,7 +228,7 @@ function drawing(){
 
     var optionStrongCount = {
         title : {
-            text: '连板数&亏损数'
+            text: '连板&涨停'
         },
         tooltip : {
             trigger: 'axis'
@@ -275,9 +275,9 @@ function drawing(){
                 }
             },
             {
-                name:'亏损数',
+                name:'涨停数',
                 type:'line',
-                data:yDownCountData,
+                data:yUpData,
                 markPoint : {
                     data : [
                         {type : 'max', name: '最大值'},
@@ -292,7 +292,7 @@ function drawing(){
 
     var optionCount = {
         title : {
-            text: '涨停&跌停'
+            text: '亏损&跌停'
         },
         tooltip : {
             trigger: 'axis'
@@ -315,10 +315,10 @@ function drawing(){
         ],
         series : [
             {
-                name:'涨停',
+                name:'亏损',
                 type:'line',
                 smooth:true,
-                data:yUpData,
+                data:yDownCountData,
                 itemStyle: {
                     normal: {
                         lineStyle: {
