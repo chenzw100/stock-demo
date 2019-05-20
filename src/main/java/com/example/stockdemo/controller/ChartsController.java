@@ -200,7 +200,7 @@ public class ChartsController {
         resultMap.put("yDown", downMap.values());
         List<MeStock> hotSortFive = meStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
         resultMap.put("hot",hotSortFive);
-
+        s(queryEnd);
         return resultMap;
     }
 
@@ -246,7 +246,10 @@ public class ChartsController {
         if(list!=null && list.size()>0){
             return list.get(0);
         }
-        return null;
+        DownStockAverage downStockAverage = new DownStockAverage();
+        downStockAverage.setCreated(new Date());
+        downStockAverage.setDayFormat(dayFormat);
+        return downStockAverage;
     }
     private DownStockAverage saveDayFormat(DownStockAverage downStockAverage){
         return downStockAverageRepository.save(downStockAverage);
