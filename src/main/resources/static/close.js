@@ -4,6 +4,7 @@ var myChartNowTemperature = echarts.init(document.getElementById('mainNowTempera
 var myChartTradeVal = echarts.init(document.getElementById('mainTradeVal'));
 var myChartStrongCount = echarts.init(document.getElementById('mainStrongCount'));
 var myChartCount = echarts.init(document.getElementById('mainCount'));
+var myChartCount2 = echarts.init(document.getElementById('mainCount2'));
 
 $(function() {
 
@@ -292,7 +293,7 @@ function drawing(){
 
     var optionCount = {
         title : {
-            text: '亏损&跌停'
+            text: '核按钮'
         },
         tooltip : {
             trigger: 'axis'
@@ -315,7 +316,7 @@ function drawing(){
         ],
         series : [
             {
-                name:'亏损',
+                name:'核按钮',
                 type:'line',
                 smooth:true,
                 data:yDownCountData,
@@ -337,7 +338,36 @@ function drawing(){
                         {type : 'average', name : '平均值'}
                     ]
                 }
-            },
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChartCount.setOption(optionCount);
+
+    var optionCount2 = {
+        title : {
+            text: '跌停'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
             {
                 name:'跌停',
                 type:'line',
@@ -347,12 +377,17 @@ function drawing(){
                         {type : 'max', name: '最大值'},
                         {type : 'min', name: '最小值'}
                     ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
                 }
             }
         ]
     };
     // 使用刚指定的配置项和数据显示图表。
-    myChartCount.setOption(optionCount);
+    myChartCount2.setOption(optionCount2);
     hotDataShow();
 
 }

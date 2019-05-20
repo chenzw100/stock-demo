@@ -1,13 +1,7 @@
 package com.example.stockdemo.controller;
 
-import com.example.stockdemo.dao.FiveTgbStockRepository;
-import com.example.stockdemo.dao.MeStockRepository;
-import com.example.stockdemo.dao.MyFiveTgbStockRepository;
-import com.example.stockdemo.dao.TemperatureRepository;
-import com.example.stockdemo.domain.FiveTgbStock;
-import com.example.stockdemo.domain.MeStock;
-import com.example.stockdemo.domain.MyFiveTgbStock;
-import com.example.stockdemo.domain.Temperature;
+import com.example.stockdemo.dao.*;
+import com.example.stockdemo.domain.*;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +22,11 @@ public class ChartsController {
     MyFiveTgbStockRepository myFiveTgbStockRepository;
     @Autowired
     MeStockRepository meStockRepository;
+    @Autowired
+    DownStockAverageRepository downStockAverageRepository;
+    @Autowired
+    DownStockRepository downStockRepository;
+
     private static String PRE_END="";
     @RequestMapping("/t/{end}")
     List<Temperature> m(@PathVariable("end")String end) {
@@ -219,6 +218,38 @@ public class ChartsController {
                 meStockRepository.save(five.toMeStock());
             }
         }
+    }
+    void s(String end){
+        List<DownStock> downStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        int openAverage = 0;
+        int openAverageClose = 0;
+        int openTOpen = 0;
+        int openTClose = 0;
+        int dSize = downStocks.size();
+        for (DownStock downStock:downStocks){
+            openAverage=openAverage+downStock.getOpenBidRate();
+            openAverageClose = openAverageClose + MyUtils.getCentByYuanStr(downStock.getTodayCloseRate());
+            openTOpen=openTOpen+MyUtils.getCentByYuanStr(downStock.getTomorrowOpenRate());
+            openTClose = openTClose + MyUtils.getCentByYuanStr(downStock.getTomorrowCloseRate());
+        }
+        if(openAverage!=0){
+            DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat());
+            downStockAverage.setTodayOpenRate(MyUtils.getAverageRateCent(openAverage,dSize).intValue());
+            downStockAverage.setTodayCloseRate(MyUtils.getAverageRateCent(openAverageClose, dSize).intValue());
+            downStockAverage.setTomorrowOpenRate(MyUtils.getAverageRateCent(openTOpen, dSize).intValue());
+            downStockAverage.setTomorrowCloseRate(MyUtils.getAverageRateCent(openTClose, dSize).intValue());
+            saveDayFormat(downStockAverage);
+        }
+    }
+    private DownStockAverage queryDayFormat(String dayFormat){
+        List<DownStockAverage> list = downStockAverageRepository.findByDayFormat(dayFormat);
+        if(list!=null && list.size()>0){
+            return list.get(0);
+        }
+        return null;
+    }
+    private DownStockAverage saveDayFormat(DownStockAverage downStockAverage){
+        return downStockAverageRepository.save(downStockAverage);
     }
 
 
