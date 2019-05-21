@@ -1,5 +1,7 @@
 package com.example.stockdemo.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
@@ -240,11 +242,14 @@ public class StockController {
         }else {
             System.out.println("no");
         }*/
-        String name = "*T大唐";
+        /*String name = "*T大唐";
         if(!name.contains("S")){
             System.out.println("ok");
         }else {
             System.out.println("no");
-        }
+        }*/
+        String detail = "{\"code\":20000,\"message\":\"OK\",\"data\":{\"-1\":191,\"-10\":1,\"-2\":80,\"-3\":43,\"-4\":26,\"-5\":17,\"-6\":8,\"-7\":2,\"-8\":2,\"-9\":1,\"0\":41,\"1\":765,\"10\":0,\"2\":1116,\"3\":607,\"4\":260,\"5\":149,\"6\":82,\"7\":44,\"8\":23,\"9\":14,\"halt_count\":31,\"limit_down_count\":6,\"limit_up_count\":72,\"st_limit_down_count\":20,\"st_limit_up_count\":4,\"total_count\":3564,\"ts\":1558430530}}";
+        JSONObject detailInfo = JSONObject.parseObject(detail).getJSONObject("data");
+        System.out.printf(detailInfo.getInteger("limit_down_count")+"zt"+detailInfo.getInteger("limit_up_count"));
     }
 }
