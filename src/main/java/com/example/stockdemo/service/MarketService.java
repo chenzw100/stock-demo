@@ -29,6 +29,9 @@ public class MarketService {
     private static String kline_url = "https://wows-api.wallstreetcn.com/sheet/min_kline?kline_type=a-stock-behavior-kline&date=";
     private static String multi_stock_url="https://wows-api.wallstreetcn.com/v2/sheet/multi_stock";
     private static String boom_stock_url ="https://wows-api.wallstreetcn.com/v2/sheet/boom_stock";
+    private static String limit_down_url="https://flash-api.xuangubao.cn/api/pool/detail?pool_name=limit_down";
+    //https://flash-api.xuangubao.cn/api/market_indicator/pcp_distribution
+    //https://flash-api.xuangubao.cn/api/market_indicator/line?fields=limit_up_broken_count,limit_up_broken_ratio
     @Autowired
     private RestTemplate restTemplate;
     @Autowired

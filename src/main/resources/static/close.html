@@ -6,6 +6,9 @@
 </head>
 
 <style>
+    .mychart{
+        width: 950px;height:200px;
+    }
 </style>
 <div class="container">
     <div class="">
@@ -13,22 +16,27 @@
         <input type="button" value="确定" id="search" onclick="getSelect()"  />
     </div>
     <div>
-        <div id="mainCount" style="width: 900px;height:300px;"></div>
-        <div id="mainCount2" style="width: 900px;height:300px;"></div>
+        <div id="mainCount" class="mychart"></div>
+        <div id="mainCount2" class="mychart"></div>
+        <div id="mainContinueVal" class="mychart"></div>
+        <div id="mainNowTemperature" class="mychart"></div>
+        <div id="mainStrongCount" class="mychart"></div>
+        <div id="mainTradeVal" class="mychart"></div>
+
+        <div id="mainAverageTodayOpen" class="mychart"></div>
+        <div id="mainAverageTomorrowOpen" class="mychart"></div>
+        <div id="mainAverageTodayClose" class="mychart"></div>
+        <div id="mainAverageTomorrowClose" class="mychart"></div>
+
         <div id="" style="margin-left: 100px;color:blue;">竞价有人要，开盘分时承接好；是否主流，主升段</div>
         <div id="mainHot" style="margin-left: 100px;color:red;"></div>
-        <div id="mainTradeVal" style="width: 900px;height:300px;"></div>
-        <div id="mainContinueVal" style="width: 900px;height:300px;"></div>
-
-        <div id="mainNowTemperature" style="width: 900px;height:300px;"></div>
-        <div id="mainStrongCount" style="width: 900px;height:300px;"></div>
 
 
     </div>
 
 
 </div>
-<script type="text/javascript" src="close.js?v=2.2.8"></script>
+<script type="text/javascript" src="close.js?v=2.5.8"></script>
 <script type="application/javascript">
     function onKeyUpEnter(e) {
         if (e.keyCode == 13) {

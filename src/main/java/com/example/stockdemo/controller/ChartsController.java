@@ -163,8 +163,9 @@ public class ChartsController {
         }
         Date endDate =  MyUtils.getFormatDate(queryEnd);
         PRE_END=queryEnd;
-        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(10, endDate));
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(12, endDate));
         List<Temperature> temperaturesOpen=temperatureRepository.close(start, queryEnd);
+        List<DownStockAverage> downStockAverages = downStockAverageRepository.close(start, queryEnd);
         TreeMap continueValMap = new TreeMap<>();
         TreeMap yesterdayShowMap = new TreeMap<>();
         TreeMap nowTemperatureMap = new TreeMap<>();
@@ -174,6 +175,12 @@ public class ChartsController {
         TreeMap downCountMap = new TreeMap<>();
         TreeMap upMap = new TreeMap<>();
         TreeMap downMap = new TreeMap<>();
+
+        TreeMap downAverageTodayOpen = new TreeMap<>();
+        TreeMap downAverageTodayClose = new TreeMap<>();
+        TreeMap downAverageTomorrowOpen = new TreeMap<>();
+        TreeMap downAverageTomorrowClose = new TreeMap<>();
+
         for (Temperature t:temperaturesOpen){
             continueValMap.put(t.getDayFormat(), t.getContinueVal());
             yesterdayShowMap.put(t.getDayFormat(), MyUtils.getYuanByCent(t.getYesterdayShow()));
@@ -183,6 +190,12 @@ public class ChartsController {
             downCountMap.put(t.getDayFormat(), t.getStrongDowns());
             upMap.put(t.getDayFormat(), t.getRaiseUp());
             downMap.put(t.getDayFormat(), t.getDownUp());
+        }
+        for (DownStockAverage average :downStockAverages){
+            downAverageTodayOpen.put(average.getDayFormat(),average.getTodayOpenRate());
+            downAverageTodayClose.put(average.getDayFormat(),average.getTodayCloseRate());
+            downAverageTomorrowOpen.put(average.getDayFormat(),average.getTomorrowOpenRate());
+            downAverageTomorrowClose.put(average.getDayFormat(),average.getTomorrowCloseRate());
         }
         HashMap resultMap =new HashMap();
         resultMap.put("x", continueValMap.keySet());
@@ -198,9 +211,16 @@ public class ChartsController {
 
         resultMap.put("yUp", upMap.values());
         resultMap.put("yDown", downMap.values());
+
+        resultMap.put("yAverageTodayOpen", downAverageTodayOpen.values());
+        resultMap.put("yAverageTodayClose", downAverageTodayClose.values());
+
+        resultMap.put("yAverageTomorrowOpen", downAverageTomorrowOpen.values());
+        resultMap.put("yAverageTomorrowClose", downAverageTomorrowClose.values());
+
         List<MeStock> hotSortFive = meStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
         resultMap.put("hot",hotSortFive);
-        s(queryEnd);
+        //s(queryEnd);
         return resultMap;
     }
 
@@ -233,7 +253,7 @@ public class ChartsController {
             openTClose = openTClose + MyUtils.getCentByYuanStr(downStock.getTomorrowCloseRate());
         }
         if(openAverage!=0){
-            DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat());
+            DownStockAverage downStockAverage = queryDayFormat(end);
             downStockAverage.setTodayOpenRate(MyUtils.getAverageRateCent(openAverage,dSize).intValue());
             downStockAverage.setTodayCloseRate(MyUtils.getAverageRateCent(openAverageClose, dSize).intValue());
             downStockAverage.setTomorrowOpenRate(MyUtils.getAverageRateCent(openTOpen, dSize).intValue());

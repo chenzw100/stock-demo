@@ -1,10 +1,15 @@
-var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData,hotData;
+var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData,yAverageTodayOpenData,yAverageTodayCloseData,yAverageTomorrowOpenData,yAverageTomorrowCloseData,hotData;
 var myChartContinueVal = echarts.init(document.getElementById('mainContinueVal'));
 var myChartNowTemperature = echarts.init(document.getElementById('mainNowTemperature'));
 var myChartTradeVal = echarts.init(document.getElementById('mainTradeVal'));
 var myChartStrongCount = echarts.init(document.getElementById('mainStrongCount'));
 var myChartCount = echarts.init(document.getElementById('mainCount'));
 var myChartCount2 = echarts.init(document.getElementById('mainCount2'));
+
+var myChartAverageTodayOpen = echarts.init(document.getElementById('mainAverageTodayOpen'));
+var myChartAverageTodayClose = echarts.init(document.getElementById('mainAverageTodayClose'));
+var myChartAverageTomorrowOpen = echarts.init(document.getElementById('mainAverageTomorrowOpen'));
+var myChartAverageTomorrowClose = echarts.init(document.getElementById('mainAverageTomorrowClose'));
 
 $(function() {
 
@@ -50,15 +55,21 @@ function getViewData(){
 
             yUpData=d["yUp"];
             yDownData=d["yDown"];
+
+            yAverageTodayOpenData=d["yAverageTodayOpen"];
+            yAverageTodayCloseData=d["yAverageTodayClose"];
+            yAverageTomorrowOpenData=d["yAverageTomorrowOpen"];
+            yAverageTomorrowCloseData=d["yAverageTomorrowClose"];
+
             hotData=d["hot"];
         }
     });
 }
 function drawing(){
     var optionContinueVal = {
-        title : {
+        /*title : {
             text: '连板&昨日'
-        },
+        },*/
         tooltip : {
             trigger: 'axis'
         },
@@ -119,9 +130,9 @@ function drawing(){
     // 使用刚指定的配置项和数据显示图表。
     myChartContinueVal.setOption(optionContinueVal);
     var optionNowTemperature = {
-        title : {
+        /*title : {
             text: '市场温度'
-        },
+        },*/
         tooltip : {
             trigger: 'axis'
         },
@@ -174,9 +185,9 @@ function drawing(){
     //=====
 
     var optionTradeVal = {
-        title : {
+        /*title : {
             text: '量'
-        },
+        },*/
         tooltip : {
             trigger: 'axis'
         },
@@ -228,9 +239,9 @@ function drawing(){
     myChartTradeVal.setOption(optionTradeVal);
 
     var optionStrongCount = {
-        title : {
+        /*title : {
             text: '连板&涨停'
-        },
+        },*/
         tooltip : {
             trigger: 'axis'
         },
@@ -292,9 +303,9 @@ function drawing(){
     myChartStrongCount.setOption(optionStrongCount);
 
     var optionCount = {
-        title : {
+        /*title : {
             text: '核按钮'
-        },
+        },*/
         tooltip : {
             trigger: 'axis'
         },
@@ -345,9 +356,9 @@ function drawing(){
     myChartCount.setOption(optionCount);
 
     var optionCount2 = {
-        title : {
+        /*title : {
             text: '跌停'
-        },
+        },*/
         tooltip : {
             trigger: 'axis'
         },
@@ -388,6 +399,197 @@ function drawing(){
     };
     // 使用刚指定的配置项和数据显示图表。
     myChartCount2.setOption(optionCount2);
+    //----------核按钮-------
+    var optionAverageTodayOpen = {
+        /*title : {
+         text: '跌停'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'今日竞价',
+                type:'line',
+                data:yAverageTodayOpenData,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            color : 'gray'
+                        }
+                    }
+                },
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChartAverageTodayOpen.setOption(optionAverageTodayOpen);
+    var optionAverageTodayClose = {
+        /*title : {
+         text: '跌停'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'今日收盘',
+                type:'line',
+                data:yAverageTodayCloseData,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            color : 'gray'
+                        }
+                    }
+                },
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChartAverageTodayClose.setOption(optionAverageTodayClose);
+    var optionAverageTomorrowOpen = {
+        /*title : {
+         text: '跌停'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'明日开盘',
+                type:'line',
+                data:yAverageTomorrowOpenData,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChartAverageTomorrowOpen.setOption(optionAverageTomorrowOpen);
+    var optionAverageTomorrowClose = {
+        /*title : {
+         text: '跌停'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'明日收盘',
+                type:'line',
+                data:yAverageTomorrowCloseData,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChartAverageTomorrowClose.setOption(optionAverageTomorrowClose);
     hotDataShow();
 
 }

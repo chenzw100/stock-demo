@@ -2,7 +2,9 @@ package com.example.stockdemo.dao;
 
 import com.example.stockdemo.domain.DownStock;
 import com.example.stockdemo.domain.DownStockAverage;
+import com.example.stockdemo.domain.Temperature;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -21,5 +23,7 @@ public interface DownStockAverageRepository extends JpaRepository<DownStockAvera
     List<DownStockAverage> findAll();
     List<DownStockAverage> findByDayFormat(String dayFormat);
     DownStockAverage save(DownStockAverage downStock);
+    @Query(value=" SELECT * FROM down_stock_average WHERE  day_format BETWEEN ?1 AND ?2 ORDER BY id ", nativeQuery = true)
+    public List<DownStockAverage> close(String start, String end);
 
 }
