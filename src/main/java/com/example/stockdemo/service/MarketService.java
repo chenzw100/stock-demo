@@ -165,7 +165,7 @@ public class MarketService {
         temperature.setLimitDown(limitDownCount);
         temperature.setLimitUp(limitUpCount);
         response =  restTemplate.getForObject(broken_url, String.class);
-        JSONArray arrayBroken = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("datas");
+        JSONArray arrayBroken = JSONObject.parseObject(response.toString()).getJSONArray("data");
         JSONObject jsonBrokenLast = arrayBroken.getJSONObject(arrayBroken.size()-1);
         Double limitUpBrokenCount = jsonBrokenLast.getDouble("limit_up_broken_ratio")*100;
         temperature.setBrokenRatio(MyUtils.getCentBySinaPriceStr(decimalFormat.format(limitUpBrokenCount)));

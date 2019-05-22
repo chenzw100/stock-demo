@@ -189,11 +189,11 @@ public class DownService {
             openAverage=openAverage+downStock.getOpenBidRate();
 
         }
-        if(openAverage!=0){
-            DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat());
-            downStockAverage.setTodayOpenRate(MyUtils.getAverageRateCent(openAverage,openSize).intValue());
-            saveDayFormat(downStockAverage);
-        }
+
+        DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat());
+        downStockAverage.setTodayOpenRate(MyUtils.getAverageRateCent(openAverage,openSize).intValue());
+        saveDayFormat(downStockAverage);
+
         sb.append("明天情况:<br>");
         List<DownStock> downStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         int openAverageTomorrow = 0;
@@ -207,11 +207,9 @@ public class DownService {
                 openAverageTomorrow=openAverageTomorrow+MyUtils.getCentByYuanStr(downStock.getTomorrowOpenRate());
             }
         }
-        if(openAverageTomorrow!=0){
-            DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
-            downStockAverage.setTodayOpenRate(MyUtils.getAverageRateCent(openAverageTomorrow,openSizeTomorrow).intValue());
-            saveDayFormat(downStockAverage);
-        }
+        DownStockAverage downTomorrowStockAverage = queryDayFormat(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        downTomorrowStockAverage.setTodayOpenRate(MyUtils.getAverageRateCent(openAverageTomorrow, openSizeTomorrow).intValue());
+        saveDayFormat(downTomorrowStockAverage);
 
         log.info(sb.toString());
         return sb.toString();
@@ -232,11 +230,10 @@ public class DownService {
                 openAverageTomorrow = openAverageTomorrow + MyUtils.getCentByYuanStr(downStock.getTomorrowCloseRate());
             }
         }
-        if(openAverageTomorrow!=0){
-            DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
-            downStockAverage.setTomorrowCloseRate(MyUtils.getAverageRateCent(openAverageTomorrow,openSizeTomorrow).intValue());
-            saveDayFormat(downStockAverage);
-        }
+
+        DownStockAverage downTomorrowStockAverage = queryDayFormat(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
+        downTomorrowStockAverage.setTomorrowCloseRate(MyUtils.getAverageRateCent(openAverageTomorrow,openSizeTomorrow).intValue());
+        saveDayFormat(downTomorrowStockAverage);
         sb.append("今天汇总：<br>");
         List<DownStock> myStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat());
         int openAverage = 0;
@@ -250,11 +247,10 @@ public class DownService {
                 openAverage = openAverage + MyUtils.getCentByYuanStr(downStock.getTodayCloseRate());
             }
         }
-        if(openAverage!=0){
-            DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat());
-            downStockAverage.setTodayCloseRate(MyUtils.getAverageRateCent(openAverage,openSize).intValue());
-            saveDayFormat(downStockAverage);
-        }
+
+        DownStockAverage downStockAverage = queryDayFormat(MyUtils.getDayFormat());
+        downStockAverage.setTodayCloseRate(MyUtils.getAverageRateCent(openAverage,openSize).intValue());
+        saveDayFormat(downStockAverage);
         choice();
         log.info(sb.toString());
         return sb.toString();

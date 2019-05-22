@@ -1,10 +1,14 @@
 var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData,yAverageTodayOpenData,yAverageTodayCloseData,yAverageTomorrowOpenData,yAverageTomorrowCloseData,hotData;
+var yLimitUpCountData,yLimitUpCountData,yBrokenData;
 var myChartContinueVal = echarts.init(document.getElementById('mainContinueVal'));
 var myChartNowTemperature = echarts.init(document.getElementById('mainNowTemperature'));
 var myChartTradeVal = echarts.init(document.getElementById('mainTradeVal'));
 var myChartStrongCount = echarts.init(document.getElementById('mainStrongCount'));
 var myChartCount = echarts.init(document.getElementById('mainCount'));
 var myChartCount2 = echarts.init(document.getElementById('mainCount2'));
+var myChartLimitDownCount= echarts.init(document.getElementById('mainLimitDown'));
+var myChartLimitUpCount= echarts.init(document.getElementById('mainLimitUp'));
+var myChartBroken= echarts.init(document.getElementById('mainBroken'));
 
 var myChartAverageTodayOpen = echarts.init(document.getElementById('mainAverageTodayOpen'));
 var myChartAverageTodayClose = echarts.init(document.getElementById('mainAverageTodayClose'));
@@ -55,6 +59,9 @@ function getViewData(){
 
             yUpData=d["yUp"];
             yDownData=d["yDown"];
+            yLimitUpCountData=d["yLimitUp"];
+            yLimitDownCountData=d["yLimitDown"];
+            yBrokenData=d["yBroken"];
 
             yAverageTodayOpenData=d["yAverageTodayOpen"];
             yAverageTodayCloseData=d["yAverageTodayClose"];
@@ -590,6 +597,161 @@ function drawing(){
     };
     // 使用刚指定的配置项和数据显示图表。
     myChartAverageTomorrowClose.setOption(optionAverageTomorrowClose);
+
+    var optionLimitDownCount = {
+        /*title : {
+         text: '核按钮'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'跌停数',
+                type:'line',
+                smooth:true,
+                data:yLimitDownCountData,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            color : 'gray'
+                        }
+                    }
+                },
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    myChartLimitDownCount.setOption(optionLimitDownCount);
+    var optionLimitUpCount = {
+        /*title : {
+         text: '核按钮'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'涨停数',
+                type:'line',
+                smooth:true,
+                data:yLimitUpCountData,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            color : 'gray'
+                        }
+                    }
+                },
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    myChartLimitUpCount.setOption(optionLimitUpCount);
+
+    var optionBroken = {
+        /*title : {
+         text: '核按钮'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'炸板率',
+                type:'line',
+                smooth:true,
+                data:yBrokenData,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            color : 'gray'
+                        }
+                    }
+                },
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    myChartBroken.setOption(optionBroken);
     hotDataShow();
 
 }

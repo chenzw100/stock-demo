@@ -17,8 +17,8 @@ public class DownScheduledService {
     private static final String openCron = "40 26 9 ? * MON-FRI";
     private static final String closeCron ="20 8 15 ? * MON-FRI";
     private static final String closeCron2 ="20 46 14 ? * MON-FRI";
-    private static final String temperatureCron="0 44 9,10,11,13,14 ? * MON-FRI";
-    private static final String temperatureOpenCron="0 34 9 ? * MON-FRI";
+    private static final String temperatureCron="0 48 9,10,11,13,14 ? * MON-FRI";
+    private static final String temperatureOpenCron="0 33 9 ? * MON-FRI";
     /*private static final String openCron = "40 26 1 ? * MON-FRI";
     private static final String closeCron ="20 10 7 ? * MON-FRI";
     private static final String temperatureCron="0 45 1,2,5,6 ? * MON-FRI";

@@ -164,7 +164,7 @@ public class ChartsController {
         Date endDate =  MyUtils.getFormatDate(queryEnd);
         PRE_END=queryEnd;
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(12, endDate));
-        List<Temperature> temperaturesOpen=temperatureRepository.close(start, queryEnd);
+        List<Temperature> temperaturesClose=temperatureRepository.close(start, queryEnd);
         List<DownStockAverage> downStockAverages = downStockAverageRepository.close(start, queryEnd);
         TreeMap continueValMap = new TreeMap<>();
         TreeMap yesterdayShowMap = new TreeMap<>();
@@ -175,13 +175,16 @@ public class ChartsController {
         TreeMap downCountMap = new TreeMap<>();
         TreeMap upMap = new TreeMap<>();
         TreeMap downMap = new TreeMap<>();
+        TreeMap limitUpMap = new TreeMap<>();
+        TreeMap limitDownMap = new TreeMap<>();
+        TreeMap brokenMap = new TreeMap<>();
 
         TreeMap downAverageTodayOpen = new TreeMap<>();
         TreeMap downAverageTodayClose = new TreeMap<>();
         TreeMap downAverageTomorrowOpen = new TreeMap<>();
         TreeMap downAverageTomorrowClose = new TreeMap<>();
 
-        for (Temperature t:temperaturesOpen){
+        for (Temperature t:temperaturesClose){
             continueValMap.put(t.getDayFormat(), t.getContinueVal());
             yesterdayShowMap.put(t.getDayFormat(), MyUtils.getYuanByCent(t.getYesterdayShow()));
             nowTemperatureMap.put(t.getDayFormat(), t.getNowTemperature());
@@ -190,6 +193,9 @@ public class ChartsController {
             downCountMap.put(t.getDayFormat(), t.getStrongDowns());
             upMap.put(t.getDayFormat(), t.getRaiseUp());
             downMap.put(t.getDayFormat(), t.getDownUp());
+            limitUpMap.put(t.getDayFormat(), t.getLimitUp());
+            limitDownMap.put(t.getDayFormat(), t.getLimitDown());
+            brokenMap.put(t.getDayFormat(), MyUtils.getYuanByCent(t.getBrokenRatio()));
         }
         for (DownStockAverage average :downStockAverages){
             downAverageTodayOpen.put(average.getDayFormat(),average.getTodayOpenRate());
@@ -211,6 +217,10 @@ public class ChartsController {
 
         resultMap.put("yUp", upMap.values());
         resultMap.put("yDown", downMap.values());
+
+        resultMap.put("yLimitUp", limitUpMap.values());
+        resultMap.put("yLimitDown", limitDownMap.values());
+        resultMap.put("yBroken", brokenMap.values());
 
         resultMap.put("yAverageTodayOpen", downAverageTodayOpen.values());
         resultMap.put("yAverageTodayClose", downAverageTodayClose.values());

@@ -49,10 +49,11 @@ public class MyMarketService {
     //3.10执行
     public void broken(MyMarket myMarket){
         Object response =  restTemplate.getForObject(broken_url, String.class);
-        JSONArray arrayBroken = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("datas");
+        JSONArray arrayBroken = JSONObject.parseObject(response.toString()).getJSONArray("data");
         JSONObject jsonBrokenLast = arrayBroken.getJSONObject(arrayBroken.size()-1);
-        int limitUpBrokenCount = jsonBrokenLast.getInteger("limit_up_broken_ratio");
-        myMarket.setBroken(limitUpBrokenCount);
+        Double limitUpBrokenCount = jsonBrokenLast.getDouble("limit_up_broken_ratio")*100;
+        //temperature.setBrokenRatio(MyUtils.getCentBySinaPriceStr(decimalFormat.format(limitUpBrokenCount)));
+       // myMarket.setBroken(limitUpBrokenCount);
     }
 
     private Integer currentTradeVal() {
