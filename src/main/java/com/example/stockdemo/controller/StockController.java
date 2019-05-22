@@ -218,6 +218,16 @@ public class StockController {
 
         return "success";
     }
+    @RequestMapping("/m4/{end}")
+    String m4(@PathVariable("end")String end) {
+        List<XGBStock> xs=xgbStockRepository.findByDayFormatAndContinueBoardCountGreaterThan(end,1);
+        if(xs.size()>1){
+            xs.get(0);
+            xs.get(1);
+        }
+
+        return "最高"+xs.get(0)+"次高"+xs.get(1);
+    }
 
 
 

@@ -26,6 +26,10 @@ public class ChartsController {
     DownStockAverageRepository downStockAverageRepository;
     @Autowired
     DownStockRepository downStockRepository;
+    @Autowired
+    XgbStockRepository xgbStockRepository;
+    @Autowired
+    SpaceHeightRepository spaceHeightRepository;
 
     private static String PRE_END="";
     @RequestMapping("/t/{end}")
@@ -233,7 +237,33 @@ public class ChartsController {
         //s(queryEnd);
         return resultMap;
     }
+    void h(String end) {
+        List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(end);
+            SpaceHeight spaceHeight = new SpaceHeight();
+        if(hs!=null && hs.size()>0){
+            XGBStock hstock = hs.get(0);
+            spaceHeight.setCreated(new Date());
+            spaceHeight.setDayFormat(end);
+            spaceHeight.setFirstCode(hstock.getCode());
+            spaceHeight.setFirstName(hstock.getName());
+            spaceHeight.setFirstOpen(hstock.getOpenCount());
+            spaceHeight.setFirstContinue(hstock.getContinueBoardCount());
+            spaceHeight.setFirstPlate(hstock.getPlateName());
 
+        }
+        if(hs!=null && hs.size()>1){
+            XGBStock hstock = hs.get(1);
+            spaceHeight.setCreated(new Date());
+            spaceHeight.setDayFormat(end);
+            spaceHeight.setSecondCode(hstock.getCode());
+            spaceHeight.setSecondName(hstock.getName());
+            spaceHeight.setSecondOpen(hstock.getOpenCount());
+            spaceHeight.setSecondContinue(hstock.getContinueBoardCount());
+            spaceHeight.setSecondPlate(hstock.getPlateName());
+
+        }
+        spaceHeightRepository.save(spaceHeight);
+    }
 
     void s1(String end) {
         List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
