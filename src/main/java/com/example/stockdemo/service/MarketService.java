@@ -30,6 +30,8 @@ public class MarketService {
     private static String multi_stock_url="https://wows-api.wallstreetcn.com/v2/sheet/multi_stock";
     private static String boom_stock_url ="https://wows-api.wallstreetcn.com/v2/sheet/boom_stock";
     private static String limit_down_url="https://flash-api.xuangubao.cn/api/pool/detail?pool_name=limit_down";
+    private static String market_url="https://flash-api.xuangubao.cn/api/market_indicator/pcp_distribution";
+    private static String broken_url="https://flash-api.xuangubao.cn/api/market_indicator/line?fields=limit_up_broken_count,limit_up_broken_ratio";
     //https://flash-api.xuangubao.cn/api/market_indicator/pcp_distribution
     //https://flash-api.xuangubao.cn/api/market_indicator/line?fields=limit_up_broken_count,limit_up_broken_ratio
     @Autowired
@@ -156,6 +158,17 @@ public class MarketService {
         temperature.setDownUp(Integer.valueOf(down.toString()));
         temperature.setRaiseUp(Integer.valueOf(raise.toString()));
         temperature.setOpen(Integer.valueOf(open.toString()));
+        response =  restTemplate.getForObject(market_url, String.class);
+        JSONObject detailInfo = JSONObject.parseObject(response.toString()).getJSONObject("data");
+        int limitDownCount = detailInfo.getInteger("limit_down_count");
+        int limitUpCount = detailInfo.getInteger("limit_up_count");
+        temperature.setLimitDown(limitDownCount);
+        temperature.setLimitUp(limitUpCount);
+        response =  restTemplate.getForObject(broken_url, String.class);
+        JSONArray arrayBroken = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("datas");
+        JSONObject jsonBrokenLast = arrayBroken.getJSONObject(arrayBroken.size()-1);
+        Double limitUpBrokenCount = jsonBrokenLast.getDouble("limit_up_broken_ratio")*100;
+        temperature.setBrokenRatio(MyUtils.getCentBySinaPriceStr(decimalFormat.format(limitUpBrokenCount)));
 
         String urlNormal = normal_url+dateParam;
         response =  restTemplate.getForObject(urlNormal,String.class);

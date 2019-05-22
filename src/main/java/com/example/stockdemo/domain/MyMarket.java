@@ -12,8 +12,8 @@ import java.util.Date;
 /**
  * Created by chenzw on 2018/10/22.
  */
-@Entity(name="temperature")
-public class Temperature {
+@Entity(name="my_market")
+public class MyMarket {
     @Id
     @GeneratedValue
    private long id;
@@ -24,20 +24,17 @@ public class Temperature {
     @Column(nullable = false)
     private int yesterdayShow;
     @Column(nullable = false)
-    private int nowTemperature;
+    private int continueShow;
+    @Column(nullable = false)
+    private int brokenShow;
+    @Column(nullable = false)
+    private int temperature;
     @Column(nullable = false)
     private int raiseUp;
     @Column(nullable = false)
     private int downUp;
     @Column(nullable = false)
-    private int limitUp;
-    @Column(nullable = false)
-    private int limitDown;
-    @Column(nullable = false)
-    private int open;
-    @Column(nullable = false)
-    private int brokenRatio;
-
+    private int broken;
     @Column(nullable = false)
     private int raise;
     @Column(nullable = false)
@@ -46,8 +43,6 @@ public class Temperature {
     private int type;
     @Column(nullable = false)
     private int tradeVal;
-    @Column(nullable = false)
-    private String continueVal;
     @Column(nullable = false)
     private int strongDowns;
     @Column(nullable = false)
@@ -77,36 +72,12 @@ public class Temperature {
         this.tradeVal = tradeVal;
     }
 
-    public Temperature(){
+    public MyMarket(){
     }
-    public Temperature(int type){
+    public MyMarket(int type){
         this.type = type;
         this.created = MyUtils.getCurrentDate();
         this.dayFormat= MyUtils.getDayFormat();
-    }
-
-    public int getBrokenRatio() {
-        return brokenRatio;
-    }
-
-    public void setBrokenRatio(int brokenRatio) {
-        this.brokenRatio = brokenRatio;
-    }
-
-    public int getLimitUp() {
-        return limitUp;
-    }
-
-    public void setLimitUp(int limitUp) {
-        this.limitUp = limitUp;
-    }
-
-    public int getLimitDown() {
-        return limitDown;
-    }
-
-    public void setLimitDown(int limitDown) {
-        this.limitDown = limitDown;
     }
 
     public long getId() {
@@ -141,12 +112,12 @@ public class Temperature {
         this.yesterdayShow = yesterdayShow;
     }
 
-    public int getNowTemperature() {
-        return nowTemperature;
+    public int getTemperature() {
+        return temperature;
     }
 
-    public void setNowTemperature(int nowTemperature) {
-        this.nowTemperature = nowTemperature;
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
     }
 
     public int getRaiseUp() {
@@ -165,12 +136,12 @@ public class Temperature {
         this.downUp = downUp;
     }
 
-    public int getOpen() {
-        return open;
+    public int getBroken() {
+        return broken;
     }
 
-    public void setOpen(int open) {
-        this.open = open;
+    public void setBroken(int broken) {
+        this.broken = broken;
     }
 
     public int getRaise() {
@@ -197,21 +168,29 @@ public class Temperature {
         this.type = type;
     }
 
-    public String getContinueVal() {
-        return continueVal;
+    public int getContinueShow() {
+        return continueShow;
     }
 
-    public void setContinueVal(String continueVal) {
-        this.continueVal = continueVal;
+    public void setContinueShow(int continueShow) {
+        this.continueShow = continueShow;
+    }
+
+    public int getBrokenShow() {
+        return brokenShow;
+    }
+
+    public void setBrokenShow(int brokenShow) {
+        this.brokenShow = brokenShow;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
         String dateStr = DateFormatUtils.format(getCreated(), "MM-dd HH:mm");
         sb.append(dateStr+"=> [昨:").append(MyUtils.getYuanByCent(getYesterdayShow()));
-        sb.append("] [连:").append(getContinueVal());
-        sb.append("] [温:").append(getNowTemperature());
-        sb.append("] [涨:").append(getRaiseUp()).append(", 跌:").append(getDownUp()).append(", 炸:").append(getOpen());
+        sb.append("] [连:").append(getContinueShow());
+        sb.append("] [温:").append(getTemperature());
+        sb.append("] [涨:").append(getRaiseUp()).append(", 跌:").append(getDownUp()).append(", 炸:").append(getBroken());
         sb.append("] [涨:").append(getRaise()).append(", 跌:").append(getDown()).append("] [额:").append(getTradeVal()).append("亿]");
         if(dateStr.substring(6,8).equals("15")){
             sb.append(" [负:").append(getStrongDowns()).append("] [正:").append(getContinueCount()).append("]<br>");
