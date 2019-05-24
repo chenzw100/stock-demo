@@ -1,5 +1,5 @@
 var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData,yAverageTodayOpenData,yAverageTodayCloseData,yAverageTomorrowOpenData,yAverageTomorrowCloseData,hotData;
-var yLimitUpCountData,yLimitUpCountData,yBrokenData;
+var yLimitUpCountData,yLimitUpCountData,yBrokenData,yFirstContinueData,ySecondContinueData;
 var myChartContinueVal = echarts.init(document.getElementById('mainContinueVal'));
 var myChartNowTemperature = echarts.init(document.getElementById('mainNowTemperature'));
 var myChartTradeVal = echarts.init(document.getElementById('mainTradeVal'));
@@ -15,6 +15,7 @@ var myChartAverageTodayClose = echarts.init(document.getElementById('mainAverage
 var myChartAverageTomorrowOpen = echarts.init(document.getElementById('mainAverageTomorrowOpen'));
 var myChartAverageTomorrowClose = echarts.init(document.getElementById('mainAverageTomorrowClose'));
 
+var myChartSpaceHeight = echarts.init(document.getElementById('mainSpaceHeight'));
 $(function() {
 
     initView();
@@ -68,11 +69,80 @@ function getViewData(){
             yAverageTomorrowOpenData=d["yAverageTomorrowOpen"];
             yAverageTomorrowCloseData=d["yAverageTomorrowClose"];
 
+            yFirstContinueData=d["firstContinue"];
+            ySecondContinueData=d["secondContinue"];
+
             hotData=d["hot"];
         }
     });
 }
 function drawing(){
+
+    var optionSpaceHeight = {
+        /*title : {
+         text: '连板&昨日'
+         },*/
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : xData
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel : {
+                    formatter: '{value} '
+                }
+            }
+        ],
+        series : [
+            {
+                name:'最高',
+                type:'line',
+                smooth:true,
+                data:yFirstContinueData,
+                itemStyle: {
+                    normal: {
+                        lineStyle: {
+                            color : 'gray'
+                        }
+                    }
+                },
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'次高',
+                type:'line',
+                data:ySecondContinueData,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChartSpaceHeight.setOption(optionSpaceHeight);
+
+
     var optionContinueVal = {
         /*title : {
             text: '连板&昨日'

@@ -15,9 +15,9 @@ public class SpaceHeight {
     @Column(nullable = false)
     private Date created;
 
-    @Column(nullable = false,columnDefinition="varchar(8)")
+    @Column(nullable = true,columnDefinition="varchar(8)")
     private String firstCode;
-    @Column(nullable = false,columnDefinition="varchar(8)")
+    @Column(nullable = true,columnDefinition="varchar(8)")
     private String firstName;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '开板次数'")
     private int firstOpen;
@@ -26,8 +26,9 @@ public class SpaceHeight {
     @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
     private String firstPlate;
 
+    @Column(nullable = true,columnDefinition="varchar(8)")
     private String secondCode;
-    @Column(nullable = false,columnDefinition="varchar(8)")
+    @Column(nullable = true,columnDefinition="varchar(8)")
     private String secondName;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '开板次数'")
     private int secondOpen;

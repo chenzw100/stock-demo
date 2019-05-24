@@ -234,15 +234,26 @@ public class ChartsController {
 
         List<MeStock> hotSortFive = meStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
         resultMap.put("hot",hotSortFive);
+
+        TreeMap firstContinue = new TreeMap<>();
+        TreeMap secondContinue = new TreeMap<>();
+        List<SpaceHeight> spaceHeights = spaceHeightRepository.close(start, queryEnd);
+        for(SpaceHeight sh:spaceHeights){
+            firstContinue.put(sh.getDayFormat(),sh.getFirstContinue());
+            secondContinue.put(sh.getDayFormat(),sh.getSecondContinue());
+        }
+        resultMap.put("firstContinue", firstContinue.values());
+        resultMap.put("secondContinue", secondContinue.values());
         //s(queryEnd);
+        //h(queryEnd);
         return resultMap;
     }
     void h(String end) {
         List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(end);
-            SpaceHeight spaceHeight = new SpaceHeight();
+        SpaceHeight spaceHeight = new SpaceHeight();
+        spaceHeight.setCreated(new Date());
         if(hs!=null && hs.size()>0){
             XGBStock hstock = hs.get(0);
-            spaceHeight.setCreated(new Date());
             spaceHeight.setDayFormat(end);
             spaceHeight.setFirstCode(hstock.getCode());
             spaceHeight.setFirstName(hstock.getName());
@@ -253,14 +264,11 @@ public class ChartsController {
         }
         if(hs!=null && hs.size()>1){
             XGBStock hstock = hs.get(1);
-            spaceHeight.setCreated(new Date());
-            spaceHeight.setDayFormat(end);
             spaceHeight.setSecondCode(hstock.getCode());
             spaceHeight.setSecondName(hstock.getName());
             spaceHeight.setSecondOpen(hstock.getOpenCount());
             spaceHeight.setSecondContinue(hstock.getContinueBoardCount());
             spaceHeight.setSecondPlate(hstock.getPlateName());
-
         }
         spaceHeightRepository.save(spaceHeight);
     }

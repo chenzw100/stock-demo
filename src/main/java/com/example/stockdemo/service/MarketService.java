@@ -2,10 +2,7 @@ package com.example.stockdemo.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.stockdemo.dao.DownStockRepository;
-import com.example.stockdemo.dao.StrongStocksDownRepository;
-import com.example.stockdemo.dao.TemperatureRepository;
-import com.example.stockdemo.dao.XgbStockRepository;
+import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.utils.MyUtils;
@@ -44,6 +41,8 @@ public class MarketService {
     private DownStockRepository downStockRepository;
     @Autowired
     private XgbStockRepository xgbStockRepository;
+    @Autowired
+    SpaceHeightRepository spaceHeightRepository;
     //3.10执行
     public String boomStock(){
         Object response =  restTemplate.getForObject(boom_stock_url, String.class);
@@ -201,8 +200,9 @@ public class MarketService {
     public String temperatureOpen()  {
         return temperature(NumberEnum.TemperatureType.OPEN.getCode());
     }
-    public String temperatureClose()  {
-        return temperature(NumberEnum.TemperatureType.CLOSE.getCode());
+    public void temperatureClose()  {
+        temperature(NumberEnum.TemperatureType.CLOSE.getCode());
+        spaceHeight();
     }
     public String temperatureNormal()  {
         return temperature(NumberEnum.TemperatureType.NORMAL.getCode());
@@ -231,5 +231,29 @@ public class MarketService {
         }
         str =stockObj[5];
         return str;
+    }
+    void spaceHeight() {
+        String end = MyUtils.getDayFormat();
+        List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(end);
+        SpaceHeight spaceHeight = new SpaceHeight();
+        spaceHeight.setCreated(new Date());
+        if(hs!=null && hs.size()>0){
+            XGBStock hstock = hs.get(0);
+            spaceHeight.setFirstCode(hstock.getCode());
+            spaceHeight.setFirstName(hstock.getName());
+            spaceHeight.setFirstOpen(hstock.getOpenCount());
+            spaceHeight.setFirstContinue(hstock.getContinueBoardCount());
+            spaceHeight.setFirstPlate(hstock.getPlateName());
+
+        }
+        if(hs!=null && hs.size()>1){
+            XGBStock hstock = hs.get(1);
+            spaceHeight.setSecondCode(hstock.getCode());
+            spaceHeight.setSecondName(hstock.getName());
+            spaceHeight.setSecondOpen(hstock.getOpenCount());
+            spaceHeight.setSecondContinue(hstock.getContinueBoardCount());
+            spaceHeight.setSecondPlate(hstock.getPlateName());
+        }
+        spaceHeightRepository.save(spaceHeight);
     }
 }
