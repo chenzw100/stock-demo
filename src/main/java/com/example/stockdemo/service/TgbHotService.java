@@ -215,7 +215,7 @@ public class TgbHotService {
                 e1.printStackTrace();
             }
             log.info("==>重新执行");
-            dayTimeStockWorkday();
+            //dayTimeStockWorkday();
         }
     }
     public void dayTimeStockHoliday(){
@@ -270,7 +270,7 @@ public class TgbHotService {
                 e1.printStackTrace();
             }
             log.info("==>重新执行");
-            dayTimeStockHoliday();
+            //dayTimeStockHoliday();
         }
     }
     public void taogubaCurrent(){
