@@ -248,6 +248,63 @@ public class ChartsController {
         //h(queryEnd);
         return resultMap;
     }
+    @RequestMapping(value = "/risk/{end}", method = RequestMethod.GET)
+     public Map risk(@PathVariable("end")String end){
+        String queryEnd = end;
+        if("1".equals(end)){
+            queryEnd=MyUtils.getDayFormat();
+        }else if("2".equals(end)){
+            Date endDate =  MyUtils.getFormatDate(PRE_END);
+            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay(endDate));
+        }else if("3".equals(end)){
+            Date endDate =  MyUtils.getFormatDate(PRE_END);
+            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.nextWorkDay(endDate));
+        }
+        Date endDate =  MyUtils.getFormatDate(queryEnd);
+        PRE_END=queryEnd;
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(12, endDate));
+        List<Temperature> temperaturesClose=temperatureRepository.close(start, queryEnd);
+
+        TreeMap continueValMap = new TreeMap<>();
+        TreeMap nowTemperatureMap = new TreeMap<>();
+        TreeMap firstContinue = new TreeMap<>();
+
+        TreeMap continueCountMap = new TreeMap<>();
+        TreeMap downCountMap = new TreeMap<>();
+
+        TreeMap limitUpMap = new TreeMap<>();
+        TreeMap limitDownMap = new TreeMap<>();
+
+        for (Temperature t:temperaturesClose){
+            continueValMap.put(t.getDayFormat(), t.getContinueVal());
+            nowTemperatureMap.put(t.getDayFormat(), t.getNowTemperature());
+            continueCountMap.put(t.getDayFormat(), t.getContinueCount());
+            downCountMap.put(t.getDayFormat(), t.getStrongDowns());
+            limitUpMap.put(t.getDayFormat(), t.getLimitUp());
+            limitDownMap.put(t.getDayFormat(), t.getLimitDown());
+        }
+
+        HashMap resultMap =new HashMap();
+        resultMap.put("x", continueValMap.keySet());
+
+        resultMap.put("yContinueVal", continueValMap.values());
+        resultMap.put("yNowTemperature", nowTemperatureMap.values());
+
+        resultMap.put("yContinueCount", continueCountMap.values());
+        resultMap.put("yLimitUp", limitUpMap.values());
+
+        resultMap.put("yDownCount", downCountMap.values());
+        resultMap.put("yLimitDown", limitDownMap.values());
+
+
+        List<SpaceHeight> spaceHeights = spaceHeightRepository.close(start, queryEnd);
+        for(SpaceHeight sh:spaceHeights){
+            firstContinue.put(sh.getDayFormat(),sh.getFirstContinue());
+        }
+        resultMap.put("firstContinue", firstContinue.values());
+
+        return resultMap;
+    }
     void h(String end) {
         List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(end);
         SpaceHeight spaceHeight = new SpaceHeight();
