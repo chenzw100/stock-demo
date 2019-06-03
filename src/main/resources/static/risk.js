@@ -1,15 +1,16 @@
-var xData,yContinueValData,yYesterdayShowData,yNowTemperatureData,yTradeValData,yContinueCountData,yDownCountData,yUpData,yDownData,yAverageTodayOpenData,yAverageTodayCloseData,yAverageTomorrowOpenData,yAverageTomorrowCloseData,hotData;
-var yLimitUpCountData,yLimitUpCountData,yBrokenData,yFirstContinueData,ySecondContinueData;
+var xData,yContinueValData,yNowTemperatureData,yContinueCountData,yDownCountData,hotData;
+var yLimitUpCountData,yLimitUpCountData,yBrokenData,yFirstContinueData;
 var myChartNowTemperature = echarts.init(document.getElementById('mainNowTemperature'));
 var myChartContinueVal = echarts.init(document.getElementById('mainContinueVal'));
+var myChartSpaceHeight = echarts.init(document.getElementById('mainSpaceHeight'));
+
 var myChartStrongCount = echarts.init(document.getElementById('mainStrongCount'));
+var myChartLimitUpCount= echarts.init(document.getElementById('mainLimitUp'));
+
 var myChartDownCount = echarts.init(document.getElementById('mainDownCount'));
 var myChartLimitDownCount= echarts.init(document.getElementById('mainLimitDown'));
-var myChartLimitUpCount= echarts.init(document.getElementById('mainLimitUp'));
-var myChartBroken= echarts.init(document.getElementById('mainBroken'));
 
 
-var myChartSpaceHeight = echarts.init(document.getElementById('mainSpaceHeight'));
 $(function() {
 
     initView();
@@ -481,7 +482,7 @@ function drawing(){
         ]
     };
     myChartBroken.setOption(optionBroken);
-    hotDataShow();
+    //hotDataShow();
 
 }
 function hotDataShow() {

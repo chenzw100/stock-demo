@@ -2,6 +2,9 @@ package com.example.stockdemo.controller;
 
 import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
+import com.example.stockdemo.service.DownService;
+import com.example.stockdemo.service.MarketService;
+import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,12 @@ public class ChartsController {
     XgbStockRepository xgbStockRepository;
     @Autowired
     SpaceHeightRepository spaceHeightRepository;
+    @Autowired
+    DownService downService;
+    @Autowired
+    MarketService marketService;
+    @Autowired
+    protected TgbHotService tgbHotService;
 
     private static String PRE_END="";
     @RequestMapping("/t/{end}")
@@ -246,6 +255,9 @@ public class ChartsController {
         resultMap.put("secondContinue", secondContinue.values());
         //s(queryEnd);
         //h(queryEnd);
+        if(temperaturesClose.size()==0){
+            close();
+        }
         return resultMap;
     }
     @RequestMapping(value = "/risk/{end}", method = RequestMethod.GET)
@@ -380,6 +392,11 @@ public class ChartsController {
         return downStockAverageRepository.save(downStockAverage);
     }
 
+    private void close(){
+        tgbHotService.closeLimitUp();
+        downService.choice();
+        marketService.temperatureClose();
+    }
 
 
 }
