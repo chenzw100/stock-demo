@@ -253,8 +253,7 @@ public class ChartsController {
         }
         resultMap.put("firstContinue", firstContinue.values());
         resultMap.put("secondContinue", secondContinue.values());
-        //s(queryEnd);
-        //h(queryEnd);
+
         if(temperaturesClose.size()==0){
             close();
         }
