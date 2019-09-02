@@ -5,6 +5,7 @@ import com.example.stockdemo.domain.*;
 import com.example.stockdemo.service.DownService;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.TgbHotService;
+import com.example.stockdemo.service.pan.PanService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class ChartsController {
     MarketService marketService;
     @Autowired
     protected TgbHotService tgbHotService;
+    @Autowired
+    PanService panService;
+
 
     private static String PRE_END="";
     @RequestMapping("/t/{end}")
@@ -392,9 +396,7 @@ public class ChartsController {
     }
 
     private void close(){
-        tgbHotService.closeLimitUp();
-        downService.choice();
-        marketService.temperatureClose();
+        panService.closePan();
     }
 
 
