@@ -6,6 +6,7 @@ import com.example.stockdemo.service.qt.QtService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Map;
 /**
  * Created by laikui on 2019/9/2.
  */
+@Component
 public class TgbDealDataService extends QtService{
     @Autowired
     TgbStockRepository tgbStockRepository;

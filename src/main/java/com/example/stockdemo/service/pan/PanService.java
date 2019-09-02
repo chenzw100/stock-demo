@@ -26,7 +26,7 @@ public class PanService {
     @Autowired
     TgbDealDataService tgbDealDataService;
     @Autowired
-    TgbService tgbService;
+    TgbService tgbNewService;
     @Autowired
     XgbDealDataService xgbDealDataService;
     //盘前处理数据 9:03点获取
@@ -35,7 +35,7 @@ public class PanService {
         //获取数据
         if(isWorkday()){
             log.info("preOne-ready data");
-            tgbService.dayDate();
+            tgbNewService.dayDate();
             tgbDealDataService.prePan();
         }
     }
@@ -78,7 +78,7 @@ public class PanService {
     public void allDay(){
         if(isWorkday()) {
             log.info("currentDate-ready data");
-            tgbService.currentDate();
+            tgbNewService.currentDate();
         }
     }
 

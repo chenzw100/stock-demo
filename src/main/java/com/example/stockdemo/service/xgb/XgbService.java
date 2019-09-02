@@ -101,13 +101,13 @@ public class XgbService extends QtService {
                 } else {
                     xgbStock.setCode("sh" + code);
                 }
-                xgbStock.setCode(code);
+                log.info(i+":zt==================>"+xgbStock.getCode());
                 xgbStock.setOpenCount(jsonStock.getInteger("break_limit_up_times"));
                 xgbStock.setContinueBoardCount(jsonStock.getInteger("limit_up_days"));
                 xgbStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(jsonStock.getString("price")));
 
                 JSONObject jsonReason = jsonStock.getJSONObject("surge_reason");
-                xgbStock.setPlateName(jsonReason.getString("related_plates"));
+                xgbStock.setPlateName(jsonReason.getString("stock_reason"));
 
                 xgbStockRepository.save(xgbStock);
                 if (xgbStock.getContinueBoardCount() > spaceHeight) {
@@ -115,8 +115,9 @@ public class XgbService extends QtService {
                     spaceHeight = xgbStock.getContinueBoardCount();
                 }
             }
+        }
+        if(spaceHeightStock!=null){
             spaceHeight(spaceHeightStock);
-
         }
     }
     void spaceHeight(XGBStock hstock) {
@@ -126,6 +127,8 @@ public class XgbService extends QtService {
         spaceHeight.setFirstOpen(hstock.getOpenCount());
         spaceHeight.setFirstContinue(hstock.getContinueBoardCount());
         spaceHeight.setFirstPlate(hstock.getPlateName());
+        spaceHeight.setCreated(hstock.getCreated());
+        spaceHeight.setDayFormat(hstock.getDayFormat());
         spaceHeightRepository.save(spaceHeight);
     }
     public void limitUpBroken(){

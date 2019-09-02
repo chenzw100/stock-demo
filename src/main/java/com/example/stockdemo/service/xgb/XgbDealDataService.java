@@ -7,6 +7,7 @@ import com.example.stockdemo.service.qt.QtService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.Map;
 /**
  * Created by laikui on 2019/9/2.
  */
+@Component
 public class XgbDealDataService extends QtService{
 
     @Autowired

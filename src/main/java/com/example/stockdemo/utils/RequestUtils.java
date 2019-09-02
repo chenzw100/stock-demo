@@ -1,11 +1,13 @@
 package com.example.stockdemo.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by laikui on 2019/9/2.
  */
+@Component
 public class RequestUtils {
     @Autowired
     private RestTemplate restTemplate;

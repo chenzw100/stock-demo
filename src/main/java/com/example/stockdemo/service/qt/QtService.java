@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 public class QtService extends BaseService{
     static String url ="http://qt.gtimg.cn/q=s_";
     public String getCurrentPrice(String code){
-        String[] stockObj = getStock(url + code);
+        String[] stockObj = getStock(code);
         if(stockObj.length<3){
             return "-1";
         }
         return stockObj[3];
     }
     public Integer currentTradeVal() {
-        String[] stockObj = getStock(url + "sh000001");
+        String[] stockObj = getStock("sh000001");
         if(stockObj.length<7){
             log.error( ":err=qt");
-            return null;
+            return -1;
         }
         String str =stockObj[7];
         str = str.substring(0,str.length()-4);

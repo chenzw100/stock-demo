@@ -4,7 +4,6 @@ import com.example.stockdemo.dao.CurrentStockRepository;
 import com.example.stockdemo.dao.TgbStockRepository;
 import com.example.stockdemo.dao.XgbStockRepository;
 import com.example.stockdemo.domain.CurrentStock;
-import com.example.stockdemo.domain.MyTotalStock;
 import com.example.stockdemo.domain.TgbStock;
 import com.example.stockdemo.domain.XGBStock;
 import com.example.stockdemo.enums.NumberEnum;
@@ -15,7 +14,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,7 +24,7 @@ import java.util.List;
  * Created by laikui on 2019/9/2.
  * 此乃题材挖掘利器
  */
-@Component
+@Component(value = "tgbNewService")
 public class TgbService extends QtService {
     @Autowired
     TgbStockRepository tgbStockRepository;
