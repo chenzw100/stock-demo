@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class DownScheduledService {
     Log log = LogFactory.getLog(DownScheduledService.class);
     private static final String openCron = "40 26 9 ? * MON-FRI";
@@ -78,7 +78,6 @@ public class DownScheduledService {
     //@Scheduled(cron = "0 35 1 ? * MON-FRI")
     public void topen(){
         log.info("==>>exe t open==>"+ DateFormatUtils.format(MyUtils.getCurrentDate(), "yyMMdd HH:mm:ss"));
-
         ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
         try {
             if(chineseWorkDay.isWorkday()){

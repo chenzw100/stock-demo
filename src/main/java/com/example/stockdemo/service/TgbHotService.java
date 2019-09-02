@@ -8,7 +8,6 @@ import com.example.stockdemo.dao.TgbStockRepository;
 import com.example.stockdemo.dao.XgbStockRepository;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
-import com.example.stockdemo.mail.MailSendUtil;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -24,9 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class TgbHotService {
@@ -34,9 +31,9 @@ public class TgbHotService {
     @Autowired
     TgbStockRepository tgbStockRepository;
     @Autowired
-    CurrentStockRepository currentStockRepository;
-    @Autowired
     XgbStockRepository xgbStockRepository;
+    @Autowired
+    CurrentStockRepository currentStockRepository;
     @Autowired
     FiveTgbStockRepository fiveTgbStockRepository;
     @Autowired
