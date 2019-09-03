@@ -38,7 +38,6 @@ public class TgbService extends QtService {
         try {
             Document doc = Jsoup.connect("https://www.taoguba.com.cn/hotPop").get();
             Elements elements = doc.getElementsByClass("tbleft");
-            Date nextWorkDay = MyUtils.getTomorrowDate();
             for(int i=10;i<20;i++){
                 Element element = elements.get(i);
                 Element parent =element.parent();
@@ -48,21 +47,21 @@ public class TgbService extends QtService {
                 int length = url.length();
                 String code = url.substring(length-9,length-1);
                 String currentPrice = getCurrentPrice(code);
-                if(currentPrice == null){
+                if(currentPrice == "-1"){
                     continue;
                 }
                 TgbStock tgbStock = new TgbStock(code,stockName);
                 tgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
-                List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(nextWorkDay));
+                List<TgbStock> list = tgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat());
                 if(list!=null && list.size()>0){
                     tgbStock = list.get(0);
                 }
-                tgbStock.setStockType(NumberEnum.StockType.HOLIDAY.getCode());
+                tgbStock.setStockType(NumberEnum.StockType.WORKDAY.getCode());
                 tgbStock.setHotSort(i - 9);
                 tgbStock.setHotValue(Integer.parseInt(tds.get(2).text()));
                 tgbStock.setHotSeven(Integer.parseInt(tds.get(3).text()));
-                tgbStock.setCreated(nextWorkDay);
-                log.info(tgbStock.getDayFormat()+"==>HOLIDAY:"+code+":"+stockName);
+                tgbStock.setCreated(MyUtils.getCurrentDate());
+                log.info("==>WORKDAY:"+code+":"+stockName);
                 List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
                 if(xgbStocks!=null && xgbStocks.size()>0){
                     XGBStock xgbStock =xgbStocks.get(0);
@@ -77,6 +76,7 @@ public class TgbService extends QtService {
                     tgbStock.setLimitUp(0);
                 }
                 tgbStockRepository.save(tgbStock);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
