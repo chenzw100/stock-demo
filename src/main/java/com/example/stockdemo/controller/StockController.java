@@ -1,6 +1,5 @@
 package com.example.stockdemo.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
@@ -56,6 +55,7 @@ public class StockController {
     private DownService downService;
     @Autowired
     MeStockRepository meStockRepository;
+    private static String PRE_END="";
 
     @RequestMapping("/e/{end}")
     String e(@PathVariable("end")String end) {
@@ -82,33 +82,43 @@ public class StockController {
     }
     @RequestMapping("/m/{end}")
     String m(@PathVariable("end")String end) {
-        LOG.info("day："+end);
+        String queryEnd = end;
+        if("1".equals(end)){
+            queryEnd=MyUtils.getDayFormat();
+        }else if("2".equals(end)){
+            Date endDate =  MyUtils.getFormatDate(PRE_END);
+            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay(endDate));
+        }else if("3".equals(end)){
+            Date endDate =  MyUtils.getFormatDate(PRE_END);
+            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.nextWorkDay(endDate));
+        }
+        Date endDate =  MyUtils.getFormatDate(queryEnd);
+        PRE_END=queryEnd;
         String desc ="查询20190124之后的数据，坚持模式！！【聚焦主流前排】！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>【热闹之后，强势股开盘大跌；开一字封单跟不上；大牛市沸点到冰点一根稻草20190308，一天时间逆转那么多】<br>" +
                 "【有利空的还是尽量规避!如：20190317之002750龙津药业】<br>【市场疯狂调整更疯狂，请查看20190226,20190308,20190313,20190321,20190328】<br><br>查询日期";
-        Date endDate =  MyUtils.getFormatDate(end);
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(5,endDate));
-        endDate =  MyUtils.getFormatDate(end);
+        endDate =  MyUtils.getFormatDate(queryEnd);
         String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
         List<XGBStock> xs=xgbStockRepository.findByDayFormatAndContinueBoardCountGreaterThan(yesterday,1);
         //List<Temperature> yesterdays = temperatureRepository.findByDayFormatAndType(yesterday,NumberEnum.TemperatureType.CLOSE.getCode());
-        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
 
-        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
-        List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
+        List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
 
-        List<TgbStock> tgbHots = tgbStockRepository.findByDayFormatOrderByOpenBidRate(end);
+        List<TgbStock> tgbHots = tgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
 
-        List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderById(end);
-        List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(end);
+        List<Temperature> temperatures = temperatureRepository.findByDayFormatOrderById(queryEnd);
+        List<DownStock> downBeforeStocks =downStockRepository.findByPreFormatOrderByOpenBidRateDesc(queryEnd);
 
-        List<Temperature> temperaturesOpen=temperatureRepository.open(start,end);
-        List<Temperature> temperaturesClose=temperatureRepository.close(start,end);
+        List<Temperature> temperaturesOpen=temperatureRepository.open(start,queryEnd);
+        List<Temperature> temperaturesClose=temperatureRepository.close(start,queryEnd);
         List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(yesterday);
         XGBStock hstock=null;
         if(hs!=null && hs.size()>0){
             hstock = hs.get(0);
         }
-        return desc+end+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>市场（新题材）最高版:"+hstock+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+end+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+end+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
+        return desc+queryEnd+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>市场（新题材）最高版:"+hstock+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+queryEnd+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+queryEnd+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
     }
 
     String s(String end) {

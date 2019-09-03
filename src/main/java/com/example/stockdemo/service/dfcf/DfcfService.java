@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DfcfService extends BaseService {
     private static String current_Continue="http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd=BK08161&sty=FDPBPFB&token=7bc05d0d4c3c22ef9fca8c2a912d779c";
-    private static String current_Yesterday="http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd=BK08161&sty=FDPBPFB&token=7bc05d0d4c3c22ef9fca8c2a912d779c";
+    private static String current_Yesterday="http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd=BK08151&sty=FDPBPFB&token=7bc05d0d4c3c22ef9fca8c2a912d779c";
 
     public String currentContinueVal() {
         Object response =  getRequest(current_Continue);

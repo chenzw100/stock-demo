@@ -1,0 +1,132 @@
+<head>
+    <meta charset="UTF-8">
+    <title>for me</title>
+    <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
+</head>
+
+<style>
+    .mychart{
+        width: 950px;height:200px;
+    }
+</style>
+<div class="container">
+    <div class="">
+        <input type="text" value="1" id="dateEnd" onkeyup="onKeyUpEnter(event)">
+        <input type="button" value="确定" id="search" onclick="getSelect()"  />
+    </div>
+    <div>
+        <div id="main" ></div>
+    </div>
+
+
+</div>
+
+<script type="application/javascript">
+    $(function(){
+        getSelect();
+    })
+    function onKeyUpEnter(e) {
+        if (e.keyCode == 13) {
+            getSelect();
+        }else if(e.keyCode == 37){
+            //pre
+            $("#dateEnd").val(2);
+            getSelect();
+        }
+        else if(e.keyCode == 39){
+            //next
+            $("#dateEnd").val(3);
+            getSelect();
+        }
+    }
+    function getSelect(){
+        getViewData();
+    }
+    function getViewData(){
+        var end = $("#dateEnd").val();
+        if(end==undefined || end==""){
+            end="1";
+        }
+        $.ajax({
+            url : 'm/'+end,
+            dataType : 'json',
+            type : 'get',
+            async : false,
+            success : function(ret){
+                //console.log(ret);
+                $("#main").text(ret.responseText)
+            },
+            error:function(ret){
+                $("#main").html(ret.responseText)
+                //console.log("失败："+ret);
+            }
+        });
+    }
+    //-----------时间控件限制的处理 start-----------------------
+    var getFirstAndLastMonthDay = function (year, month){
+        var lastDay = new Date(year,month,0).getDate();
+        return year+'-'+month+'-'+lastDay;
+    }
+
+    var elgo= new Array();
+    elgo.push('^200[0-9]-..-..','^202[0-9]-..-..','^20[3-9][0-9]-..-..');
+
+    var startDFun = function (dp,element) {
+
+        d2=$dp.$('d2');
+        WdatePicker({maxDate:'#F{$dp.$D(\'d2\')}',
+            disabledDates:elgo,
+            onpicked:function(){
+                d2.focus();
+            }
+        })
+    }
+
+    var startMFun = function (dp,element) {
+
+        var d6=$dp.$('d6');
+        WdatePicker({dateFmt:'yyyy-MM',maxDate:'#F{$dp.$D(\'d6\')}',disabledDates:elgo,
+            onpicked:function(){
+                d6.focus()
+            }
+        })
+    }
+
+    var endMFun = function (dp,element) {
+        WdatePicker({maxDate:'%y-%M',dateFmt:'yyyy-MM',minDate:'#F{$dp.$D(\'d5\')}',
+            onpicked:function(){
+                var newDate = getFirstAndLastMonthDay(dp.cal.getP('y'),dp.cal.getP('M'));
+                $("#endD").val(newDate);
+            }
+        })
+    };
+
+    /*$(document).ready(function(){
+        $('input:radio[name="item"]').change(function(){
+            $("#startD").val("");$("#endD").val("");$("#d1").val("");$("#d2").val("");$("#d5").val("");$("#d6").val("");
+            if($('input:radio[name="item"]:checked').val() == "m") {
+                $("#monthCheck").show();
+                $("#dayCheck").hide();
+            } else {
+                $("#monthCheck").hide();
+                $("#dayCheck").show();
+            }
+        });
+
+        var elCurrentYear = $("#el").val();
+        var arrayElCurrentYear = elCurrentYear.split(",");
+        for(var i in arrayElCurrentYear){
+            if(i<=arrayElCurrentYear.length){
+                elgo.push(arrayElCurrentYear[i])
+            }
+        }
+        var disabledStartDate = $("#disabledStartDate").val();
+        var arrayDis = disabledStartDate.split("-");
+        var year = arrayDis[0].substr(3,4);
+
+        var el ="^201[0-5,"+year+"-9]-..-..";
+        elgo.push(el)
+    });*/
+    //-----------时间控件限制的处理 end-----------------------
+
+</script>

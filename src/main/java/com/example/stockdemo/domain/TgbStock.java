@@ -307,7 +307,7 @@ public class TgbStock implements Comparable<TgbStock>{
                 append(continuous).append(",一字").append(oneFlag).append(",开板:").append(openCount).append(",热排:").append(hotSort).append(",:热值").append(hotValue).
                 append("七日:").append(hotSeven)
                 .append(name).append(",竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
-                append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
+                append(":").append(getTomorrowCloseRate()).append("<br>").append(getTodayOpenRate()).append(plateName).append("<br>");
         return sb.toString();
     }
 

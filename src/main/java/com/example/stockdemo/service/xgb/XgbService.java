@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by laikui on 2019/9/2.
@@ -32,11 +33,11 @@ public class XgbService extends QtService {
    // private static String limit_down="https://flash-api.xuangubao.cn/api/pool/detail?pool_name=limit_down";
     private static String super_stock ="https://flash-api.xuangubao.cn/api/pool/detail?pool_name=super_stock";
 
-    //private static String yesterday_limit_up="https://flash-api.xuangubao.cn/api/pool/detail?pool_name=yesterday_limit_up";
-    private static String market_temperature="https://flash-api.xuangubao.cn/api/market_indicator/line?fields=market_temperature";
+    //private static String yesterday_limit_up="https://flash-api.xuangubao.cn/api/pool/detail?pool_name=yesterday_limit_up";yesterday_limit_up_avg_pcp
+    private static String market_temperature="https://flash-api.xuangubao.cn/api/market_indicator/line?fields=market_temperature,limit_up_broken_count,limit_up_broken_ratio,rise_count,fall_count,limit_down_count,limit_up_count";
 
-    private static String market_url="https://flash-api.xuangubao.cn/api/market_indicator/pcp_distribution";
-    private static String broken_url="https://flash-api.xuangubao.cn/api/market_indicator/line?fields=limit_up_broken_count,limit_up_broken_ratio";
+    //private static String market_url="https://flash-api.xuangubao.cn/api/market_indicator/pcp_distribution";
+    //private static String broken_url="https://flash-api.xuangubao.cn/api/market_indicator/line?fields=limit_up_broken_count,limit_up_broken_ratio";
 
     @Autowired
     TemperatureRepository temperatureRepository;
@@ -52,22 +53,24 @@ public class XgbService extends QtService {
     public void temperature(int type)  {
         Temperature temperature = new Temperature(type);
         DecimalFormat decimalFormat=new DecimalFormat("0.00");
-        Object response = getRequest(market_url);
+        Object response = getRequest(market_temperature);
         if(response!=null){
-            JSONObject detailInfo = JSONObject.parseObject(response.toString()).getJSONObject("data");
-            int limitDownCount = detailInfo.getInteger("limit_down_count");
-            int limitUpCount = detailInfo.getInteger("limit_up_count");
-            temperature.setLimitDown(limitDownCount);
-            temperature.setLimitUp(limitUpCount);
-
-            response = getRequest(broken_url);
             JSONArray array = JSONObject.parseObject(response.toString()).getJSONArray("data");
-            JSONObject jsonDataLast = array.getJSONObject(array.size()-1);
+            JSONObject jsonDataLast = array.getJSONObject(array.size() - 1);
+
+            int limitDownCount = jsonDataLast.getInteger("limit_down_count");
+            int limitUpCount = jsonDataLast.getInteger("limit_up_count");
+            temperature.setLimitDown(limitDownCount);
+            temperature.setDownUp(limitDownCount);
+            temperature.setLimitUp(limitUpCount);
+            temperature.setRaiseUp(limitUpCount);
+            temperature.setDown(jsonDataLast.getInteger("fall_count"));
+            temperature.setRaise(jsonDataLast.getInteger("rise_count"));
+
             Double limitUpBrokenCount = jsonDataLast.getDouble("limit_up_broken_ratio")*100;
             temperature.setBrokenRatio(MyUtils.getCentBySinaPriceStr(decimalFormat.format(limitUpBrokenCount)));
             temperature.setOpen(jsonDataLast.getInteger("limit_up_broken_count"));
 
-            response = getRequest(market_temperature);
             array = JSONObject.parseObject(response.toString()).getJSONArray("data");
             jsonDataLast = array.getJSONObject(array.size() - 1);
             Double temperatureNum = jsonDataLast.getDouble("market_temperature");
@@ -77,6 +80,19 @@ public class XgbService extends QtService {
         temperature.setContinueVal(dfcfService.currentContinueVal());
         temperature.setYesterdayShow(MyUtils.getCentByYuanStr(dfcfService.currentYesterdayVal()));
         temperature.setTradeVal(currentTradeVal());
+
+        if(type==NumberEnum.TemperatureType.CLOSE.getCode()){
+            List<DownStock> downStocks =downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat(MyUtils.getTomorrowDate()));
+            temperature.setStrongDowns(downStocks.size());
+            List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatAndContinueBoardCountGreaterThan(MyUtils.getDayFormat(),1);
+            if(xgbStocks!=null){
+                temperature.setContinueCount(xgbStocks.size());
+            }else {
+                temperature.setContinueCount(0);
+            }
+        }else {
+            temperature.setStrongDowns(0);
+        }
 
         temperatureRepository.save(temperature);
     }
