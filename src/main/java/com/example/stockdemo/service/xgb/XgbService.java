@@ -73,8 +73,8 @@ public class XgbService extends QtService {
 
             array = JSONObject.parseObject(response.toString()).getJSONArray("data");
             jsonDataLast = array.getJSONObject(array.size() - 1);
-            Double temperatureNum = jsonDataLast.getDouble("market_temperature");
-            temperature.setNowTemperature(MyUtils.getCentBySinaPriceStr(decimalFormat.format(temperatureNum)));
+            String temperatureNum = jsonDataLast.getString("market_temperature");
+            temperature.setNowTemperature(MyUtils.getCentBySinaPriceStr(temperatureNum));
         }
 
         temperature.setContinueVal(dfcfService.currentContinueVal());
@@ -157,7 +157,8 @@ public class XgbService extends QtService {
             String name = jsonStock.getString("stock_chi_name");
             String changePercent = jsonStock.getString("change_percent");
             int cp =MyUtils.getCentByYuanStr(changePercent);
-            if(!name.contains("S") && cp<-900) {
+            log.info(name+"-broken---->"+cp);
+            if(!name.contains("S") && cp<0) {
                 DownStock downStock = new DownStock();
                 downStock.setStockType(NumberEnum.StockType.OPEN.getCode());
                 downStock.setCreated(MyUtils.getCurrentDate());
@@ -173,7 +174,7 @@ public class XgbService extends QtService {
                 }
                 downStock.setCode(code);
                 downStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(jsonStock.getString("price")));
-                downStock.setDownRate(cp);
+                downStock.setDownRate(cp*100);
                 downStockRepository.save(downStock);
 
             }
@@ -190,7 +191,8 @@ public class XgbService extends QtService {
             String name = jsonStock.getString("stock_chi_name");
             String changePercent = jsonStock.getString("change_percent");
             int cp =MyUtils.getCentByYuanStr(changePercent);
-            if(!name.contains("S") && cp<-900) {
+            log.info(name+"-->super"+cp);
+            if(!name.contains("S") && cp<-8) {
                 DownStock downStock = new DownStock();
                 downStock.setStockType(NumberEnum.StockType.STRONG.getCode());
                 downStock.setCreated(MyUtils.getCurrentDate());
@@ -206,7 +208,7 @@ public class XgbService extends QtService {
                 }
                 downStock.setCode(code);
                 downStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(jsonStock.getString("price")));
-                downStock.setDownRate(cp);
+                downStock.setDownRate(cp*100);
                 downStockRepository.save(downStock);
 
             }

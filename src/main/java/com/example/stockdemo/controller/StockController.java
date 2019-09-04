@@ -5,6 +5,7 @@ import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.service.*;
+import com.example.stockdemo.service.xgb.XgbService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -52,10 +53,16 @@ public class StockController {
     @Autowired
     MyTgbService myTgbService;
     @Autowired
-    private DownService downService;
+    private XgbService xgbService;
     @Autowired
     MeStockRepository meStockRepository;
     private static String PRE_END="";
+    @RequestMapping("/test")
+    String test(){
+        xgbService.limitUpBroken();
+        xgbService.superStock();
+        return "success";
+    }
 
     @RequestMapping("/e/{end}")
     String e(@PathVariable("end")String end) {
