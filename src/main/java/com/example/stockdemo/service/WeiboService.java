@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-public class SinaService {
-    Log log = LogFactory.getLog(SinaService.class);
+@Component
+public class WeiboService {
+    Log log = LogFactory.getLog(WeiboService.class);
     @Autowired
     private RestTemplate restTemplate;
     public Map getHop24Stock() {

@@ -5,6 +5,8 @@ import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.service.*;
+import com.example.stockdemo.service.pan.PanService;
+import com.example.stockdemo.service.xgb.XgbDealDataService;
 import com.example.stockdemo.service.xgb.XgbService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
@@ -56,11 +58,19 @@ public class StockController {
     private XgbService xgbService;
     @Autowired
     MeStockRepository meStockRepository;
+    @Autowired
+    XgbDealDataService xgbDealDataService;
+    @Autowired
+    PanService panService;
     private static String PRE_END="";
     @RequestMapping("/test")
     String test(){
-        xgbService.limitUpBroken();
-        xgbService.superStock();
+        xgbDealDataService.fiveStatistic();
+        return "success";
+    }
+    @RequestMapping("/test2")
+    String test2(){
+        panService.closePan();
         return "success";
     }
 

@@ -150,6 +150,9 @@ public class XGBStock implements Comparable<XGBStock>{
         xgbFiveUpStock.setOpenCount(openCount);
         xgbFiveUpStock.setYesterdayClosePrice(yesterdayClosePrice);
         xgbFiveUpStock.setPlateName(plateName);
+        xgbFiveUpStock.setFiveHighPrice(10);
+        xgbFiveUpStock.setFiveLowPrice(10);
+        xgbFiveUpStock.setTodayOpenPrice(10);
         return xgbFiveUpStock;
     }
 }

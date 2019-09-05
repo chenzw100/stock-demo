@@ -11,7 +11,7 @@ import java.util.Map;
 @Service("wbMarketStockService")
 public class WeiboMarketStockService extends MarketStockService {
     @Autowired
-    private SinaService sinaService;
+    private WeiboService sinaService;
     @Override
     public Map getHopStock() {
         return sinaService.getHop24Stock();

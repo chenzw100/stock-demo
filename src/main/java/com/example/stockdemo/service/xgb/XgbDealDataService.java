@@ -27,6 +27,7 @@ public class XgbDealDataService extends QtService{
     DownStockRepository downStockRepository;
     @Autowired
     DownStockAverageRepository downStockAverageRepository;
+    @Autowired
     XgbFiveUpStockRepository xgbFiveUpStockRepository;
     @Autowired
     SinaService sinaService;
@@ -131,9 +132,10 @@ public class XgbDealDataService extends QtService{
 
     public void fiveStatistic(){
         String end=MyUtils.getDayFormat();
-        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(5,MyUtils.getCurrentDate()));
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
         List<XgbFiveUpStock> xgbFiveUpStocks = xgbFiveUpStockRepository.findByCodeAndDayFormat(start, end);
-        if(xgbFiveUpStocks!=null && xgbFiveUpStocks.size()>0){
+        log.info("--->5day count:"+xgbFiveUpStocks.size());
+        if(xgbFiveUpStocks.size()>0){
             for (XgbFiveUpStock xgbFiveUpStock : xgbFiveUpStocks){
                 SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
                 if(tinyInfoStock.getHighPrice()>xgbFiveUpStock.getFiveHighPrice().intValue()){
@@ -142,9 +144,10 @@ public class XgbDealDataService extends QtService{
                 if(tinyInfoStock.getLowPrice()>xgbFiveUpStock.getFiveLowPrice().intValue()){
                     xgbFiveUpStock.setFiveLowPrice(tinyInfoStock.getLowPrice());
                 }
-                if(xgbFiveUpStock.getTodayOpenPrice()== null ||xgbFiveUpStock.getTodayOpenPrice().intValue()==0){
+                if(xgbFiveUpStock.getTodayOpenPrice().intValue()==10){
                     xgbFiveUpStock.setTodayOpenPrice(tinyInfoStock.getOpenPrice());
                 }
+                xgbFiveUpStockRepository.save(xgbFiveUpStock);
             }
         }
     }
