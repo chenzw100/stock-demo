@@ -202,7 +202,7 @@ public class XgbFiveUpStock implements Comparable<XgbFiveUpStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append(",open:").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append(plateName);
+        sb.append(code).append(name).append(",竞价:").append(getOpenBidRate()).append(",最高:").append(getFiveHighRate()).append(",最低:").append(getFiveLowRate()).append(plateName);
         return sb.toString();
     }
 }

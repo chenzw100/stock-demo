@@ -140,4 +140,16 @@ public class XGBStock implements Comparable<XGBStock>{
         sb.append(code).append(name).append(",open:").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append(plateName);
         return sb.toString();
     }
+    public XgbFiveUpStock toXgbFiveUpStock(){
+        XgbFiveUpStock xgbFiveUpStock = new XgbFiveUpStock();
+        xgbFiveUpStock.setName(name);
+        xgbFiveUpStock.setCode(code);
+        xgbFiveUpStock.setDayFormat(dayFormat);
+        xgbFiveUpStock.setCreated(created);
+        xgbFiveUpStock.setContinueBoardCount(continueBoardCount);
+        xgbFiveUpStock.setOpenCount(openCount);
+        xgbFiveUpStock.setYesterdayClosePrice(yesterdayClosePrice);
+        xgbFiveUpStock.setPlateName(plateName);
+        return xgbFiveUpStock;
+    }
 }

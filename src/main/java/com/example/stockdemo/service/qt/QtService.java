@@ -5,6 +5,17 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by laikui on 2019/9/2.
+ *  * v_s_sh600519="1~贵州茅台~600519~358.74~-2.55~-0.71~27705~99411~~4506.49";
+ 1  0: 未知
+ 2  1: 股票名称
+ 3  2: 股票代码
+ 4  3: 当前价格
+ 5  4: 涨跌
+ 6  5: 涨跌%
+ 7  6: 成交量（手）
+ 8  7: 成交额（万）
+ 9  8:
+ 10  9: 总市值
  */
 @Component
 public class QtService extends BaseService{

@@ -4,6 +4,7 @@ import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.enums.NumberEnum;
 import com.example.stockdemo.service.qt.QtService;
+import com.example.stockdemo.service.sina.SinaService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class XgbDealDataService extends QtService{
     DownStockRepository downStockRepository;
     @Autowired
     DownStockAverageRepository downStockAverageRepository;
+    XgbFiveUpStockRepository xgbFiveUpStockRepository;
+    @Autowired
+    SinaService sinaService;
 
     public void current(){
         xgbService.temperature(NumberEnum.TemperatureType.NORMAL.getCode());
@@ -37,6 +41,7 @@ public class XgbDealDataService extends QtService{
         openDown();
     }
     public void closePan(){
+        fiveStatistic();
         xgbService.limitUp();
         xgbService.limitUpBroken();
         xgbService.superStock();
@@ -122,6 +127,26 @@ public class XgbDealDataService extends QtService{
     }
     private DownStockAverage saveDayFormat(DownStockAverage downStockAverage){
         return downStockAverageRepository.save(downStockAverage);
+    }
+
+    public void fiveStatistic(){
+        String end=MyUtils.getDayFormat();
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(5,MyUtils.getCurrentDate()));
+        List<XgbFiveUpStock> xgbFiveUpStocks = xgbFiveUpStockRepository.findByCodeAndDayFormat(start, end);
+        if(xgbFiveUpStocks!=null && xgbFiveUpStocks.size()>0){
+            for (XgbFiveUpStock xgbFiveUpStock : xgbFiveUpStocks){
+                SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
+                if(tinyInfoStock.getHighPrice()>xgbFiveUpStock.getFiveHighPrice().intValue()){
+                    xgbFiveUpStock.setFiveHighPrice(tinyInfoStock.getHighPrice());
+                }
+                if(tinyInfoStock.getLowPrice()>xgbFiveUpStock.getFiveLowPrice().intValue()){
+                    xgbFiveUpStock.setFiveLowPrice(tinyInfoStock.getLowPrice());
+                }
+                if(xgbFiveUpStock.getTodayOpenPrice()== null ||xgbFiveUpStock.getTodayOpenPrice().intValue()==0){
+                    xgbFiveUpStock.setTodayOpenPrice(tinyInfoStock.getOpenPrice());
+                }
+            }
+        }
     }
 
 }

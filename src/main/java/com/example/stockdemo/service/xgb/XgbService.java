@@ -2,10 +2,7 @@ package com.example.stockdemo.service.xgb;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.stockdemo.dao.DownStockRepository;
-import com.example.stockdemo.dao.SpaceHeightRepository;
-import com.example.stockdemo.dao.TemperatureRepository;
-import com.example.stockdemo.dao.XgbStockRepository;
+import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.DownStock;
 import com.example.stockdemo.domain.SpaceHeight;
 import com.example.stockdemo.domain.Temperature;
@@ -49,6 +46,8 @@ public class XgbService extends QtService {
     SpaceHeightRepository spaceHeightRepository;
     @Autowired
     DownStockRepository downStockRepository;
+    @Autowired
+    XgbFiveUpStockRepository xgbFiveUpStockRepository;
 
     public void temperature(int type)  {
         Temperature temperature = new Temperature(type);
@@ -129,6 +128,9 @@ public class XgbService extends QtService {
                 if (xgbStock.getContinueBoardCount() > spaceHeight) {
                     spaceHeightStock = xgbStock;
                     spaceHeight = xgbStock.getContinueBoardCount();
+                }
+                if(xgbStock.getContinueBoardCount()>4){
+                    xgbFiveUpStockRepository.save(xgbStock.toXgbFiveUpStock());
                 }
             }
         }
