@@ -62,6 +62,8 @@ public class StockController {
     XgbDealDataService xgbDealDataService;
     @Autowired
     PanService panService;
+    @Autowired
+    XgbFiveUpStockRepository xgbFiveUpStockRepository;
     private static String PRE_END="";
     @RequestMapping("/test")
     String test(){
@@ -131,11 +133,12 @@ public class StockController {
         List<Temperature> temperaturesOpen=temperatureRepository.open(start,queryEnd);
         List<Temperature> temperaturesClose=temperatureRepository.close(start,queryEnd);
         List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(yesterday);
+        List<XgbFiveUpStock> xgbFiveUpStocks = xgbFiveUpStockRepository.findByCodeAndDayFormat(start, end);
         XGBStock hstock=null;
         if(hs!=null && hs.size()>0){
             hstock = hs.get(0);
         }
-        return desc+queryEnd+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>市场（新题材）最高版:"+hstock+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+queryEnd+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+queryEnd+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
+        return desc+queryEnd+"昨日情况 计提："+downStocks.size()+"连板:"+xs.size()+"<br>"+xgbFiveUpStocks+"<br>"+downStocks+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>市场（新题材）最高版:"+hstock+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+queryEnd+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+"<br>最近5天市场开盘情况<br>"+temperaturesOpen+":<br>"+temperatures+queryEnd+"<br>股吧热门:<br>"+tgbHots+"当日数量:"+downBeforeStocks.size()+"<br>"+downBeforeStocks;
     }
 
     String s(String end) {
