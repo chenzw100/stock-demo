@@ -3,6 +3,7 @@ package com.example.stockdemo.service.tgb;
 import com.example.stockdemo.dao.*;
 import com.example.stockdemo.domain.*;
 import com.example.stockdemo.service.qt.QtService;
+import com.example.stockdemo.service.sina.SinaService;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class TgbDealDataService extends QtService{
     MeStockRepository meStockRepository;
     @Autowired
     MyTgbStockRepository myTgbStockRepository;
+    @Autowired
+    SinaService sinaService;
 
     public void prePan(){
         choiceFive();
@@ -43,6 +46,8 @@ public class TgbDealDataService extends QtService{
     public void closePan(){
         close();
         closeCurrent();
+        fiveStatistic();
+        myFiveStatistic();
     }
 
     private void choiceFive(){
@@ -368,6 +373,49 @@ public class TgbDealDataService extends QtService{
                     myStock.setOpenCount(-1);
                 }
                 myTgbStockRepository.save(myStock);
+            }
+        }
+    }
+
+    public void fiveStatistic(){
+        String end=MyUtils.getDayFormat();
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
+        List<FiveTgbStock> xgbFiveUpStocks = fiveTgbStockRepository.findByCodeAndDayFormat(start, end);
+        log.info("--->5day count:"+xgbFiveUpStocks.size());
+        if(xgbFiveUpStocks.size()>0){
+            for (FiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){
+                SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
+                if(tinyInfoStock.getHighPrice()>xgbFiveUpStock.getFiveHighPrice().intValue()){
+                    xgbFiveUpStock.setFiveHighPrice(tinyInfoStock.getHighPrice());
+                }
+                if(tinyInfoStock.getLowPrice()>xgbFiveUpStock.getFiveLowPrice().intValue()){
+                    xgbFiveUpStock.setFiveLowPrice(tinyInfoStock.getLowPrice());
+                }
+                if(xgbFiveUpStock.getTodayOpenPrice().intValue()==10){
+                    xgbFiveUpStock.setTodayOpenPrice(tinyInfoStock.getOpenPrice());
+                }
+                fiveTgbStockRepository.save(xgbFiveUpStock);
+            }
+        }
+    }
+    public void myFiveStatistic(){
+        String end=MyUtils.getDayFormat();
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
+        List<MyFiveTgbStock> xgbFiveUpStocks = myFiveTgbStockRepository.findByCodeAndDayFormat(start, end);
+        log.info("--->5day count:"+xgbFiveUpStocks.size());
+        if(xgbFiveUpStocks.size()>0){
+            for (MyFiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){
+                SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
+                if(tinyInfoStock.getHighPrice()>xgbFiveUpStock.getFiveHighPrice().intValue()){
+                    xgbFiveUpStock.setFiveHighPrice(tinyInfoStock.getHighPrice());
+                }
+                if(tinyInfoStock.getLowPrice()>xgbFiveUpStock.getFiveLowPrice().intValue()){
+                    xgbFiveUpStock.setFiveLowPrice(tinyInfoStock.getLowPrice());
+                }
+                if(xgbFiveUpStock.getTodayOpenPrice().intValue()==10){
+                    xgbFiveUpStock.setTodayOpenPrice(tinyInfoStock.getOpenPrice());
+                }
+                myFiveTgbStockRepository.save(xgbFiveUpStock);
             }
         }
     }

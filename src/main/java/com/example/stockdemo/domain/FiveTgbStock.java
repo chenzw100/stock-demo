@@ -61,6 +61,47 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     @Column(nullable = false)
     private Date created;
 
+    @Column(nullable = false,columnDefinition="int(11) DEFAULT 0 COMMENT '5日最高'")
+    private Integer fiveHighPrice;
+    @Column(nullable = false,columnDefinition="int(11) DEFAULT 0 COMMENT '5日最低'")
+    private Integer fiveLowPrice;
+    @Transient
+    private String fiveHighRate;
+    @Transient
+    private String fiveLowRate;
+
+    public String getFiveHighRate() {
+        return MyUtils.getIncreaseRate(getFiveHighPrice(),getTodayOpenPrice()).toString();
+    }
+
+    public void setFiveHighRate(String fiveHighRate) {
+        this.fiveHighRate = fiveHighRate;
+    }
+
+    public String getFiveLowRate() {
+        return MyUtils.getIncreaseRate(getFiveLowPrice(),getTodayOpenPrice()).toString();
+    }
+
+    public void setFiveLowRate(String fiveLowRate) {
+        this.fiveLowRate = fiveLowRate;
+    }
+
+    public Integer getFiveHighPrice() {
+        return fiveHighPrice;
+    }
+
+    public void setFiveHighPrice(Integer fiveHighPrice) {
+        this.fiveHighPrice = fiveHighPrice;
+    }
+
+    public Integer getFiveLowPrice() {
+        return fiveLowPrice;
+    }
+
+    public void setFiveLowPrice(Integer fiveLowPrice) {
+        this.fiveLowPrice = fiveLowPrice;
+    }
+
     public String getRemark() {
         return remark;
     }

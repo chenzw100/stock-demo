@@ -1,7 +1,9 @@
 package com.example.stockdemo.dao;
 
 import com.example.stockdemo.domain.FiveTgbStock;
+import com.example.stockdemo.domain.XgbFiveUpStock;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -25,6 +27,8 @@ public interface FiveTgbStockRepository extends JpaRepository<FiveTgbStock,Long>
     List<FiveTgbStock> findByDayFormatOrderByOpenBidRate(String dayFormat);
 
     FiveTgbStock save(FiveTgbStock tgbStock);
+    @Query(value="SELECT * from five_tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code", nativeQuery = true)
+    public List<FiveTgbStock> fiveStatistic(String start , String end);
 
 
 }
