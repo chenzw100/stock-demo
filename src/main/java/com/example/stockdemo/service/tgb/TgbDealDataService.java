@@ -54,29 +54,35 @@ public class TgbDealDataService extends QtService{
         String end = MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4, MyUtils.getCurrentDate()));
         List<MyTotalStock> totalStocks =  tgbStockRepository.stockInfo(start, end);
+        log.info("five hot size:"+totalStocks.size());
         for(MyTotalStock myTotalStock : totalStocks){
-            FiveTgbStock myFiveTgbStock = new FiveTgbStock(myTotalStock.getCode(),myTotalStock.getName());
-            myFiveTgbStock.setHotSort(myTotalStock.getTotalCount());
-            myFiveTgbStock.setHotValue(myTotalStock.getHotValue());
-            myFiveTgbStock.setHotSeven(myTotalStock.getHotSeven());
+            FiveTgbStock fiveTgbStock = new FiveTgbStock(myTotalStock.getCode(),myTotalStock.getName());
+            fiveTgbStock.setHotSort(myTotalStock.getTotalCount());
+            fiveTgbStock.setHotValue(myTotalStock.getHotValue());
+            fiveTgbStock.setHotSeven(myTotalStock.getHotSeven());
             String currentPrice = getCurrentPrice(myTotalStock.getCode());
-            myFiveTgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
+            fiveTgbStock.setYesterdayClosePrice(MyUtils.getCentBySinaPriceStr(currentPrice));
             List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(myTotalStock.getCode(),MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
             if(xgbStocks!=null && xgbStocks.size()>0){
                 XGBStock xgbStock =xgbStocks.get(0);
-                myFiveTgbStock.setPlateName(xgbStock.getPlateName());
-                myFiveTgbStock.setOneFlag(xgbStock.getOpenCount());
-                myFiveTgbStock.setContinuous(xgbStock.getContinueBoardCount());
-                myFiveTgbStock.setLimitUp(1);
+                fiveTgbStock.setPlateName(xgbStock.getPlateName());
+                fiveTgbStock.setOneFlag(xgbStock.getOpenCount());
+                fiveTgbStock.setContinuous(xgbStock.getContinueBoardCount());
+                fiveTgbStock.setLimitUp(1);
             }else {
-                myFiveTgbStock.setPlateName("");
-                myFiveTgbStock.setOneFlag(1);
-                myFiveTgbStock.setContinuous(0);
-                myFiveTgbStock.setLimitUp(0);
+                fiveTgbStock.setPlateName("");
+                fiveTgbStock.setOneFlag(1);
+                fiveTgbStock.setContinuous(0);
+                fiveTgbStock.setLimitUp(0);
             }
-            myFiveTgbStock.setCreated(MyUtils.getCurrentDate());
-
-            fiveTgbStockRepository.save(myFiveTgbStock);
+            fiveTgbStock.setCreated(MyUtils.getCurrentDate());
+            FiveTgbStock fiveTgbStockTemp =fiveTgbStockRepository.findByCodeAndDayFormat(fiveTgbStock.getCode(),MyUtils.getYesterdayDayFormat());
+            if(fiveTgbStock!=null){
+                fiveTgbStock.setShowCount(fiveTgbStockTemp.getShowCount() + 1);
+            }else {
+                fiveTgbStock.setShowCount(1);
+            }
+            fiveTgbStockRepository.save(fiveTgbStock);
         }
     }
 
@@ -207,6 +213,7 @@ public class TgbDealDataService extends QtService{
         String end = MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4, MyUtils.getCurrentDate()));
         List<MyTotalStock> totalStocks =  currentStockRepository.fiveDayInfo(start, end);
+        log.info("current five hot size:"+totalStocks.size());
         for(MyTotalStock myTotalStock : totalStocks){
             MyFiveTgbStock myFiveTgbStock = new MyFiveTgbStock(myTotalStock.getCode(),myTotalStock.getName());
             myFiveTgbStock.setHotSort(myTotalStock.getTotalCount());
@@ -228,6 +235,12 @@ public class TgbDealDataService extends QtService{
                 myFiveTgbStock.setLimitUp(0);
             }
             myFiveTgbStock.setCreated(MyUtils.getCurrentDate());
+            MyFiveTgbStock fiveTgbStock =myFiveTgbStockRepository.findByCodeAndDayFormat(myFiveTgbStock.getCode(),MyUtils.getYesterdayDayFormat());
+            if(fiveTgbStock!=null){
+                myFiveTgbStock.setShowCount(fiveTgbStock.getShowCount()+1);
+            }else {
+                myFiveTgbStock.setShowCount(1);
+            }
             myFiveTgbStockRepository.save(myFiveTgbStock);
         }
     }
@@ -380,7 +393,7 @@ public class TgbDealDataService extends QtService{
     public void fiveStatistic(){
         String end=MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
-        List<FiveTgbStock> xgbFiveUpStocks = fiveTgbStockRepository.findByCodeAndDayFormat(start, end);
+        List<FiveTgbStock> xgbFiveUpStocks = fiveTgbStockRepository.fiveStatistic(start, end);
         log.info("--->5day count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
             for (FiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){
@@ -401,7 +414,7 @@ public class TgbDealDataService extends QtService{
     public void myFiveStatistic(){
         String end=MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
-        List<MyFiveTgbStock> xgbFiveUpStocks = myFiveTgbStockRepository.findByCodeAndDayFormat(start, end);
+        List<MyFiveTgbStock> xgbFiveUpStocks = myFiveTgbStockRepository.fiveStatistic(start, end);
         log.info("--->5day count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
             for (MyFiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){

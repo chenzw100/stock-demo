@@ -48,6 +48,8 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
     private String remark;
 
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '出现次数'")
+    private Integer showCount;
 
 
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '今日开盘'")
@@ -60,6 +62,14 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private Integer tomorrowClosePrice;
     @Column(nullable = false)
     private Date created;
+
+    public Integer getShowCount() {
+        return showCount;
+    }
+
+    public void setShowCount(Integer showCount) {
+        this.showCount = showCount;
+    }
 
     @Column(nullable = false,columnDefinition="int(11) DEFAULT 0 COMMENT '5日最高'")
     private Integer fiveHighPrice;

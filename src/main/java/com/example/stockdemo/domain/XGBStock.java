@@ -147,6 +147,7 @@ public class XGBStock implements Comparable<XGBStock>{
         xgbFiveUpStock.setDayFormat(dayFormat);
         xgbFiveUpStock.setCreated(created);
         xgbFiveUpStock.setContinueBoardCount(continueBoardCount);
+        xgbFiveUpStock.setShowCount(continueBoardCount-4);
         xgbFiveUpStock.setOpenCount(openCount);
         xgbFiveUpStock.setYesterdayClosePrice(yesterdayClosePrice);
         xgbFiveUpStock.setPlateName(plateName);

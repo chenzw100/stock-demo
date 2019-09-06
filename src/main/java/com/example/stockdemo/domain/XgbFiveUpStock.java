@@ -36,6 +36,8 @@ public class XgbFiveUpStock implements Comparable<XgbFiveUpStock>{
     private Integer fiveHighPrice;
     @Column(nullable = false,columnDefinition="int(11) DEFAULT 0 COMMENT '5日最低'")
     private Integer fiveLowPrice;
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '出现次数'")
+    private Integer showCount;
     @Column(nullable = false)
     private Date created;
     @Transient
@@ -46,6 +48,14 @@ public class XgbFiveUpStock implements Comparable<XgbFiveUpStock>{
     private String fiveHighRate;
     @Transient
     private String fiveLowRate;
+
+    public Integer getShowCount() {
+        return showCount;
+    }
+
+    public void setShowCount(Integer showCount) {
+        this.showCount = showCount;
+    }
 
     public String getFiveHighRate() {
         return MyUtils.getIncreaseRate(getFiveHighPrice(),getTodayOpenPrice()).toString();
@@ -202,7 +212,7 @@ public class XgbFiveUpStock implements Comparable<XgbFiveUpStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append(",竞价:").append(getOpenBidRate()).append(",最高:").append(getFiveHighRate()).append(",最低:").append(getFiveLowRate())
+        sb.append(code).append(name).append("出现:").append(showCount).append(",竞价:").append(getOpenBidRate()).append(",最高:").append(getFiveHighRate()).append(",最低:").append(getFiveLowRate())
                 .append("<br>").append(name).append(":").append(getTodayOpenPrice()).append(plateName).append("<br>");
         return sb.toString();
     }

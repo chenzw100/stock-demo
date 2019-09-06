@@ -62,6 +62,8 @@ public class MyFiveTgbStock implements Comparable<MyFiveTgbStock>{
     private Integer fiveLowPrice;
     @Column(nullable = false)
     private Date created;
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '出现次数'")
+    private Integer showCount;
 
     @Transient
     private String todayOpenRate;
@@ -121,6 +123,13 @@ public class MyFiveTgbStock implements Comparable<MyFiveTgbStock>{
     @Transient
     private String sinaUrl;
 
+    public Integer getShowCount() {
+        return showCount;
+    }
+
+    public void setShowCount(Integer showCount) {
+        this.showCount = showCount;
+    }
 
     public Integer getLimitUp() {
         return limitUp;
@@ -336,7 +345,7 @@ public class MyFiveTgbStock implements Comparable<MyFiveTgbStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append("[热值:").append(hotValue).
+        sb.append(code).append(name).append("出现:").append(showCount).append("[热值:").append(hotValue).
                 append("七日:").append(hotSeven).append(",连板:").append(continuous).append("]竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
                 append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
         return sb.toString();

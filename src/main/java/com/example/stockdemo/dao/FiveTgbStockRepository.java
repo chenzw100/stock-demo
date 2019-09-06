@@ -20,7 +20,7 @@ import java.util.List;
  */
 public interface FiveTgbStockRepository extends JpaRepository<FiveTgbStock,Long> {
     List<FiveTgbStock> findAll();
-    List<FiveTgbStock> findByCodeAndDayFormat(String code, String dayFormat);
+    FiveTgbStock findByCodeAndDayFormat(String code, String dayFormat);
     List<FiveTgbStock> findByDayFormatOrderByHotSort(String dayFormat);
     List<FiveTgbStock> findByDayFormatOrderByHotSevenDesc(String dayFormat);
     List<FiveTgbStock> findByDayFormatOrderByOpenBidRateDesc(String dayFormat);

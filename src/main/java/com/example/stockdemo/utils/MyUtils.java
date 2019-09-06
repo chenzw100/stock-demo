@@ -38,6 +38,12 @@ public class MyUtils {
     public static String getDayFormat(){
         return DateFormatUtils.format(getCurrentDate(), "yyyyMMdd");
     }
+    public static String getYesterdayDayFormat(){
+        return DateFormatUtils.format(MyChineseWorkDay.preWorkDay(), "yyyyMMdd");
+    }
+    public static String getTomorrowDayFormat(){
+        return DateFormatUtils.format(MyChineseWorkDay.nextWorkDay(), "yyyyMMdd");
+    }
     public static String getDayHHFormat(Date date){
         return DateFormatUtils.format(date, "MMdd HH");
     }
