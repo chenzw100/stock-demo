@@ -25,7 +25,7 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private String name;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '热门排序'")
     private Integer hotSort;
-    @Column(nullable = true,columnDefinition="varchar(30) COMMENT '板块'")
+    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
     private String plateName;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '0未涨停;1涨停'")
     private Integer limitUp;
@@ -64,6 +64,9 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
     private Date created;
 
     public Integer getShowCount() {
+        if(showCount==null){
+            showCount=0;
+        }
         return showCount;
     }
 
@@ -196,6 +199,8 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
         this.todayClosePrice=10;
         this.tomorrowOpenPrice=10;
         this.tomorrowClosePrice=10;
+        this.fiveHighPrice=10;
+        this.fiveLowPrice=10;
         this.oneFlag=-1;
         this.openCount=-1;
         this.continuous=-1;
@@ -357,9 +362,9 @@ public class FiveTgbStock implements Comparable<FiveTgbStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append("[热值:").append(hotValue).
+        sb.append(code).append(name).append("[出现:").append(showCount).append("热值:").append(hotValue).
                 append("七日:").append(hotSeven).append(",连板:").append(continuous).append("]竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
-                append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
+                append(":").append(getTomorrowCloseRate()).append(name).append("<br>").append(plateName).append("<br>");
         return sb.toString();
     }
     public MeStock toMeStock(){

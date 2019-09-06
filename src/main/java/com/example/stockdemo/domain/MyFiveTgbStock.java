@@ -124,6 +124,9 @@ public class MyFiveTgbStock implements Comparable<MyFiveTgbStock>{
     private String sinaUrl;
 
     public Integer getShowCount() {
+        if(showCount==null){
+            showCount=0;
+        }
         return showCount;
     }
 
@@ -184,6 +187,8 @@ public class MyFiveTgbStock implements Comparable<MyFiveTgbStock>{
         this.todayClosePrice=10;
         this.tomorrowOpenPrice=10;
         this.tomorrowClosePrice=10;
+        this.fiveHighPrice=10;
+        this.fiveLowPrice=10;
         this.oneFlag=-1;
         this.openCount=-1;
         this.continuous=-1;
@@ -345,9 +350,9 @@ public class MyFiveTgbStock implements Comparable<MyFiveTgbStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append("出现:").append(showCount).append("[热值:").append(hotValue).
+        sb.append(code).append(name).append("[出现:").append(showCount).append("热值:").append(hotValue).
                 append("七日:").append(hotSeven).append(",连板:").append(continuous).append("]竞价:").append(getTodayOpenRate()).append(",收盘:").append(getTodayCloseRate()).append(",明天:").append(getTomorrowOpenRate()).
-                append(":").append(getTomorrowCloseRate()).append(plateName).append("<br>");
+                append(":").append(getTomorrowCloseRate()).append(name).append("<br>").append(plateName).append("<br>");
         return sb.toString();
     }
 

@@ -50,7 +50,7 @@ public class TgbDealDataService extends QtService{
         myFiveStatistic();
     }
 
-    private void choiceFive(){
+    public void choiceFive(){
         String end = MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4, MyUtils.getCurrentDate()));
         List<MyTotalStock> totalStocks =  tgbStockRepository.stockInfo(start, end);
@@ -77,7 +77,7 @@ public class TgbDealDataService extends QtService{
             }
             fiveTgbStock.setCreated(MyUtils.getCurrentDate());
             FiveTgbStock fiveTgbStockTemp =fiveTgbStockRepository.findByCodeAndDayFormat(fiveTgbStock.getCode(),MyUtils.getYesterdayDayFormat());
-            if(fiveTgbStock!=null){
+            if(fiveTgbStockTemp!=null){
                 fiveTgbStock.setShowCount(fiveTgbStockTemp.getShowCount() + 1);
             }else {
                 fiveTgbStock.setShowCount(1);
@@ -178,7 +178,7 @@ public class TgbDealDataService extends QtService{
     }
     //----------------------处理实时获取的数据-----------------------------
 
-    private void choiceCurrent(){
+    public void choiceCurrent(){
         choiceCurrentFive();
         choiceMe();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay());

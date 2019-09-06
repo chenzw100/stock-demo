@@ -50,6 +50,9 @@ public class XgbFiveUpStock implements Comparable<XgbFiveUpStock>{
     private String fiveLowRate;
 
     public Integer getShowCount() {
+        if(showCount==null){
+            showCount=0;
+        }
         return showCount;
     }
 

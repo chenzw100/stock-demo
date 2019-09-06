@@ -23,7 +23,7 @@ public class MeStock {
     @Column(nullable = false,columnDefinition="varchar(8)")
     private String name;
 
-    @Column(nullable = true,columnDefinition="varchar(30) COMMENT '板块'")
+    @Column(nullable = true,columnDefinition="varchar(200) COMMENT '板块'")
     private String plateName;
 
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '开盘竞价'")
