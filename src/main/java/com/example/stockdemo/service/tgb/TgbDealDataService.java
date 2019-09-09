@@ -90,6 +90,7 @@ public class TgbDealDataService extends QtService{
 
     private void openFive(){
         List<FiveTgbStock> todayStocks = fiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
+        log.info("openFive size:"+todayStocks.size());
         if(todayStocks!=null){
             for(FiveTgbStock myStock :todayStocks){
                 String currentPrice = getCurrentPrice(myStock.getCode());
@@ -283,6 +284,7 @@ public class TgbDealDataService extends QtService{
     }
     private void openCurrentFive(){
         List<MyFiveTgbStock> todayStocks = myFiveTgbStockRepository.findByDayFormatOrderByHotSort(MyUtils.getDayFormat());
+        log.info("openCurrentFive size"+todayStocks.size());
         if(todayStocks!=null){
             for(MyFiveTgbStock myStock :todayStocks){
                 String currentPrice = getCurrentPrice(myStock.getCode());
@@ -398,7 +400,7 @@ public class TgbDealDataService extends QtService{
         String end=MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
         List<FiveTgbStock> xgbFiveUpStocks = fiveTgbStockRepository.fiveStatistic(start, end);
-        log.info("--->5day count:"+xgbFiveUpStocks.size());
+        log.info(start+"tgb --->5day FiveTgbStock count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
             for (FiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){
                 SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
@@ -419,7 +421,7 @@ public class TgbDealDataService extends QtService{
         String end=MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
         List<MyFiveTgbStock> xgbFiveUpStocks = myFiveTgbStockRepository.fiveStatistic(start, end);
-        log.info("--->5day count:"+xgbFiveUpStocks.size());
+        log.info(start+"tgb--->5day MyFiveTgbStock count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
             for (MyFiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){
                 SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());

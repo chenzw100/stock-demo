@@ -87,6 +87,7 @@ public class XgbDealDataService extends QtService{
         List<DownStock> myStocksTomorrow = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
         int openAverageTomorrow = 0;
         int openSizeTomorrow = myStocksTomorrow.size();
+        log.info("closeDown openSizeTomorrow size:"+openSizeTomorrow);
         if(myStocksTomorrow!=null){
             for(DownStock downStock :myStocksTomorrow){
                 String currentPrice = getCurrentPrice(downStock.getCode());
@@ -102,6 +103,7 @@ public class XgbDealDataService extends QtService{
         List<DownStock> myStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat());
         int openAverage = 0;
         int openSize = myStocks.size();
+        log.info("closeDown openSize size:"+openSize);
         if(myStocks!=null){
             for(DownStock downStock :myStocks){
                 String currentPrice = getCurrentPrice(downStock.getCode());
@@ -134,7 +136,7 @@ public class XgbDealDataService extends QtService{
         String end=MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
         List<XgbFiveUpStock> xgbFiveUpStocks = xgbFiveUpStockRepository.findByCodeAndDayFormat(start, end);
-        log.info("--->5day count:"+xgbFiveUpStocks.size());
+        log.info(start+"--->xgb.fiveStatistic 5day count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
             for (XgbFiveUpStock xgbFiveUpStock : xgbFiveUpStocks){
                 SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
