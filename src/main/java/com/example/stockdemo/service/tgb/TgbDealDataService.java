@@ -54,7 +54,7 @@ public class TgbDealDataService extends QtService{
         String end = MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4, MyUtils.getCurrentDate()));
         List<MyTotalStock> totalStocks =  tgbStockRepository.stockInfo(start, end);
-        log.info("five hot size:"+totalStocks.size());
+        log.info(start+","+end+"<==five hot size:"+totalStocks.size());
         for(MyTotalStock myTotalStock : totalStocks){
             FiveTgbStock fiveTgbStock = new FiveTgbStock(myTotalStock.getCode(),myTotalStock.getName());
             fiveTgbStock.setHotSort(myTotalStock.getTotalCount());
@@ -76,7 +76,9 @@ public class TgbDealDataService extends QtService{
                 fiveTgbStock.setLimitUp(0);
             }
             fiveTgbStock.setCreated(MyUtils.getCurrentDate());
-            FiveTgbStock fiveTgbStockTemp =fiveTgbStockRepository.findByCodeAndDayFormat(fiveTgbStock.getCode(),MyUtils.getYesterdayDayFormat());
+            String yesterdayFormat = MyUtils.getYesterdayDayFormat();
+            log.info(fiveTgbStock.getCode()+":code,fiveTgbStockRepository condition:"+yesterdayFormat);
+            FiveTgbStock fiveTgbStockTemp =fiveTgbStockRepository.findByCodeAndDayFormat(fiveTgbStock.getCode(),yesterdayFormat);
             if(fiveTgbStockTemp!=null){
                 fiveTgbStock.setShowCount(fiveTgbStockTemp.getShowCount() + 1);
             }else {
@@ -213,7 +215,7 @@ public class TgbDealDataService extends QtService{
         String end = MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4, MyUtils.getCurrentDate()));
         List<MyTotalStock> totalStocks =  currentStockRepository.fiveDayInfo(start, end);
-        log.info("current five hot size:"+totalStocks.size());
+        log.info(start+","+end+"<==query,current five hot size:"+totalStocks.size());
         for(MyTotalStock myTotalStock : totalStocks){
             MyFiveTgbStock myFiveTgbStock = new MyFiveTgbStock(myTotalStock.getCode(),myTotalStock.getName());
             myFiveTgbStock.setHotSort(myTotalStock.getTotalCount());
@@ -235,7 +237,9 @@ public class TgbDealDataService extends QtService{
                 myFiveTgbStock.setLimitUp(0);
             }
             myFiveTgbStock.setCreated(MyUtils.getCurrentDate());
-            MyFiveTgbStock fiveTgbStock =myFiveTgbStockRepository.findByCodeAndDayFormat(myFiveTgbStock.getCode(),MyUtils.getYesterdayDayFormat());
+            String yesterdayFormat = MyUtils.getYesterdayDayFormat();
+            log.info(myFiveTgbStock.getCode()+":code,myFiveTgbStockRepository condition:"+yesterdayFormat);
+            MyFiveTgbStock fiveTgbStock =myFiveTgbStockRepository.findByCodeAndDayFormat(myFiveTgbStock.getCode(),yesterdayFormat);
             if(fiveTgbStock!=null){
                 myFiveTgbStock.setShowCount(fiveTgbStock.getShowCount()+1);
             }else {
