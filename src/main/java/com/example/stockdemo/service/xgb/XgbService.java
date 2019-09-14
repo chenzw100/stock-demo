@@ -106,11 +106,10 @@ public class XgbService extends QtService {
             JSONObject jsonStock =  array.getJSONObject(i);
             String name = jsonStock.getString("stock_chi_name");
             if(!name.contains("S")) {
-                XGBStock xgbStock = new XGBStock();
-                xgbStock.setCreated(new Date());
-                xgbStock.setName(name);
                 String codeStr = jsonStock.getString("symbol");
                 String code = codeStr.substring(0, 6);
+                XGBStock xgbStock = new XGBStock(code,name);
+                xgbStock.setCreated(new Date());
                 if (codeStr.contains("Z")) {
                     xgbStock.setCode("sz" + code);
                 } else {
@@ -122,8 +121,15 @@ public class XgbService extends QtService {
                 xgbStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(jsonStock.getString("price")));
 
                 JSONObject jsonReason = jsonStock.getJSONObject("surge_reason");
-                xgbStock.setPlateName(jsonReason.getString("stock_reason"));
-
+                JSONArray jsonPlateArray = jsonReason.getJSONArray("related_plates");
+                int length = jsonPlateArray.size();
+                String plateName="";
+                for (int j = 0; j < length; j++) {
+                    JSONObject jsonPalte = (JSONObject) jsonPlateArray.get(j);
+                    plateName+=jsonPalte.getString("plate_name");
+                }
+               // xgbStock.setPlateName(jsonReason.getString("stock_reason"));
+                xgbStock.setPlateName(plateName);
                 xgbStockRepository.save(xgbStock);
                 if (xgbStock.getContinueBoardCount() > spaceHeight) {
                     spaceHeightStock = xgbStock;

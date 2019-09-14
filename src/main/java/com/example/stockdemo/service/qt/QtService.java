@@ -1,6 +1,7 @@
 package com.example.stockdemo.service.qt;
 
 import com.example.stockdemo.service.base.BaseService;
+import com.example.stockdemo.utils.MyUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,6 +27,10 @@ public class QtService extends BaseService{
             return "-1";
         }
         return stockObj[3];
+    }
+    public Integer getIntCurrentPrice(String code){
+        String stockObj = getCurrentPrice(code);
+        return MyUtils.getCentByYuanStr(stockObj);
     }
     public Integer currentTradeVal() {
         String[] stockObj = getStock("sh000001");

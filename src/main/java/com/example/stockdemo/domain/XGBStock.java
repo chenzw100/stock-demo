@@ -24,6 +24,58 @@ public class XGBStock implements Comparable<XGBStock>{
     private String plateName;
     @Column(nullable = false,columnDefinition="int(11) DEFAULT 0 COMMENT '昨日收盘'")
     private Integer yesterdayClosePrice;
+
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '今日开盘'")
+    private Integer todayOpenPrice;
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '今日收盘'")
+    private Integer todayClosePrice;
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '明天开盘'")
+    private Integer tomorrowOpenPrice;
+    @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '明天收盘'")
+    private Integer tomorrowClosePrice;
+
+    public XGBStock(String code, String name){
+        this.code =code;
+        this.name = name;
+        this.yesterdayClosePrice=10;
+        this.todayOpenPrice=10;
+        this.todayClosePrice=10;
+        this.tomorrowOpenPrice=10;
+        this.tomorrowClosePrice=10;
+        this.openCount=-1;
+    }
+    public Integer getTodayOpenPrice() {
+        return todayOpenPrice;
+    }
+
+    public void setTodayOpenPrice(Integer todayOpenPrice) {
+        this.todayOpenPrice = todayOpenPrice;
+    }
+
+    public Integer getTodayClosePrice() {
+        return todayClosePrice;
+    }
+
+    public void setTodayClosePrice(Integer todayClosePrice) {
+        this.todayClosePrice = todayClosePrice;
+    }
+
+    public Integer getTomorrowOpenPrice() {
+        return tomorrowOpenPrice;
+    }
+
+    public void setTomorrowOpenPrice(Integer tomorrowOpenPrice) {
+        this.tomorrowOpenPrice = tomorrowOpenPrice;
+    }
+
+    public Integer getTomorrowClosePrice() {
+        return tomorrowClosePrice;
+    }
+
+    public void setTomorrowClosePrice(Integer tomorrowClosePrice) {
+        this.tomorrowClosePrice = tomorrowClosePrice;
+    }
+
     @Column(nullable = false)
     private Date created;
     @Transient

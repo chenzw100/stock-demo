@@ -31,6 +31,8 @@ public class XgbDealDataService extends QtService{
     XgbFiveUpStockRepository xgbFiveUpStockRepository;
     @Autowired
     SinaService sinaService;
+    @Autowired
+    XgbStockRepository xgbStockRepository;
 
     public void current(){
         xgbService.temperature(NumberEnum.TemperatureType.NORMAL.getCode());
@@ -41,11 +43,13 @@ public class XgbDealDataService extends QtService{
     public void openPan(){
         log.info("xgb==>openPan start");
         openDown();
+        openLimitUp();
         log.info("xgb==>openPan end");
     }
     public void closePan(){
         log.info("xgb==>start closePan");
         fiveStatistic();
+        closeLimitUp();
         xgbService.limitUp();
         xgbService.limitUpBroken();
         xgbService.superStock();
@@ -54,6 +58,32 @@ public class XgbDealDataService extends QtService{
         log.info("xgb===>end closePan");
     }
 
+    private void openLimitUp(){
+        List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(MyUtils.getYesterdayDayFormat());
+        for (XGBStock xgbStock :xgbStocks){
+            xgbStock.setTodayOpenPrice(getIntCurrentPrice(xgbStock.getCode()));
+            xgbStockRepository.save(xgbStock);
+        }
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(2,MyUtils.getCurrentDate()));
+        xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(start);
+        for (XGBStock xgbStock :xgbStocks){
+            xgbStock.setTomorrowOpenPrice(getIntCurrentPrice(xgbStock.getCode()));
+            xgbStockRepository.save(xgbStock);
+        }
+    }
+    private void closeLimitUp(){
+        List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(MyUtils.getYesterdayDayFormat());
+        for (XGBStock xgbStock :xgbStocks){
+            xgbStock.setTodayClosePrice(getIntCurrentPrice(xgbStock.getCode()));
+            xgbStockRepository.save(xgbStock);
+        }
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(2,MyUtils.getCurrentDate()));
+        xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(start);
+        for (XGBStock xgbStock :xgbStocks){
+            xgbStock.setTomorrowClosePrice(getIntCurrentPrice(xgbStock.getCode()));
+            xgbStockRepository.save(xgbStock);
+        }
+    }
     private void openDown(){
         List<DownStock> downStocks = downStockRepository.findByDayFormatOrderByOpenBidRate(MyUtils.getDayFormat());
         int openAverage = 0;
