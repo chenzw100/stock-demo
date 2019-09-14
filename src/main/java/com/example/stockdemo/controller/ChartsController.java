@@ -6,6 +6,7 @@ import com.example.stockdemo.service.DownService;
 import com.example.stockdemo.service.MarketService;
 import com.example.stockdemo.service.TgbHotService;
 import com.example.stockdemo.service.pan.PanService;
+import com.example.stockdemo.utils.ChineseWorkDay;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -263,11 +264,26 @@ public class ChartsController {
         }
         return resultMap;
     }
+    public boolean isWorkday(){
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     @RequestMapping(value = "/risk/{end}", method = RequestMethod.GET)
      public Map risk(@PathVariable("end")String end){
         String queryEnd = end;
         if("1".equals(end)){
-            queryEnd=MyUtils.getDayFormat();
+            if(isWorkday()){
+                queryEnd=MyUtils.getDayFormat();
+            }else {
+                queryEnd=MyUtils.getYesterdayDayFormat();
+            }
         }else if("2".equals(end)){
             Date endDate =  MyUtils.getFormatDate(PRE_END);
             queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay(endDate));

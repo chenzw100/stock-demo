@@ -9,6 +9,7 @@ import com.example.stockdemo.service.pan.PanService;
 import com.example.stockdemo.service.tgb.TgbDealDataService;
 import com.example.stockdemo.service.xgb.XgbDealDataService;
 import com.example.stockdemo.service.xgb.XgbService;
+import com.example.stockdemo.utils.ChineseWorkDay;
 import com.example.stockdemo.utils.MyChineseWorkDay;
 import com.example.stockdemo.utils.MyUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -107,7 +108,11 @@ public class StockController {
     String m(@PathVariable("end")String end) {
         String queryEnd = end;
         if("1".equals(end)){
-            queryEnd=MyUtils.getDayFormat();
+            if(isWorkday()){
+                queryEnd=MyUtils.getDayFormat();
+            }else {
+                queryEnd=MyUtils.getYesterdayDayFormat();
+            }
         }else if("2".equals(end)){
             Date endDate =  MyUtils.getFormatDate(PRE_END);
             queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay(endDate));
@@ -117,7 +122,7 @@ public class StockController {
         }
         Date endDate =  MyUtils.getFormatDate(queryEnd);
         PRE_END=queryEnd;
-        String desc ="查询20190124之后的数据，坚持模式！！【聚焦主流前排】！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>【热闹之后，强势股开盘大跌；开一字封单跟不上；大牛市沸点到冰点一根稻草20190308，一天时间逆转那么多】<br>" +
+        String desc ="查询20190124之后的数据，20190610-20190901中断数据，坚持模式！！【聚焦主流前排】！<br>【跌停数,炸板，强势股计提,焦点股不涨停计提】<br>【热闹之后，强势股开盘大跌；开一字封单跟不上；大牛市沸点到冰点一根稻草20190308，一天时间逆转那么多】<br>" +
                 "【有利空的还是尽量规避!如：20190317之002750龙津药业】<br>【市场疯狂调整更疯狂，请查看20190226,20190308,20190313,20190321,20190328】<br><br>查询日期";
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(5,endDate));
         endDate =  MyUtils.getFormatDate(queryEnd);
@@ -295,5 +300,17 @@ public class StockController {
         String detail = "{\"code\":20000,\"message\":\"OK\",\"data\":{\"-1\":191,\"-10\":1,\"-2\":80,\"-3\":43,\"-4\":26,\"-5\":17,\"-6\":8,\"-7\":2,\"-8\":2,\"-9\":1,\"0\":41,\"1\":765,\"10\":0,\"2\":1116,\"3\":607,\"4\":260,\"5\":149,\"6\":82,\"7\":44,\"8\":23,\"9\":14,\"halt_count\":31,\"limit_down_count\":6,\"limit_up_count\":72,\"st_limit_down_count\":20,\"st_limit_up_count\":4,\"total_count\":3564,\"ts\":1558430530}}";
         JSONObject detailInfo = JSONObject.parseObject(detail).getJSONObject("data");
         System.out.printf(detailInfo.getInteger("limit_down_count")+"zt"+detailInfo.getInteger("limit_up_count"));
+    }
+
+    public boolean isWorkday(){
+        ChineseWorkDay chineseWorkDay = new ChineseWorkDay(MyUtils.getCurrentDate());
+        try {
+            if(chineseWorkDay.isWorkday()){
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

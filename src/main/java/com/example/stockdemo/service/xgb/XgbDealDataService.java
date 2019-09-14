@@ -39,15 +39,19 @@ public class XgbDealDataService extends QtService{
         xgbService.temperature(NumberEnum.TemperatureType.OPEN.getCode());
     }
     public void openPan(){
+        log.info("xgb==>openPan start");
         openDown();
+        log.info("xgb==>openPan end");
     }
     public void closePan(){
+        log.info("xgb==>start closePan");
         fiveStatistic();
         xgbService.limitUp();
         xgbService.limitUpBroken();
         xgbService.superStock();
         closeDown();
         xgbService.temperature(NumberEnum.TemperatureType.CLOSE.getCode());
+        log.info("xgb===>end closePan");
     }
 
     private void openDown(){
