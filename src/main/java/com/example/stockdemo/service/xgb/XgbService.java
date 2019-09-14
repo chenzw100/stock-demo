@@ -145,9 +145,7 @@ public class XgbService extends QtService {
         }
     }
     void spaceHeight(XGBStock hstock) {
-        SpaceHeight spaceHeight = new SpaceHeight();
-        spaceHeight.setFirstCode(hstock.getCode());
-        spaceHeight.setFirstName(hstock.getName());
+        SpaceHeight spaceHeight = new SpaceHeight(hstock.getCode(),hstock.getName());
         spaceHeight.setFirstOpen(hstock.getOpenCount());
         spaceHeight.setFirstContinue(hstock.getContinueBoardCount());
         spaceHeight.setFirstPlate(hstock.getPlateName());

@@ -33,6 +33,8 @@ public class XgbDealDataService extends QtService{
     SinaService sinaService;
     @Autowired
     XgbStockRepository xgbStockRepository;
+    @Autowired
+    SpaceHeightRepository spaceHeightRepository;
 
     public void current(){
         xgbService.temperature(NumberEnum.TemperatureType.NORMAL.getCode());
@@ -59,12 +61,26 @@ public class XgbDealDataService extends QtService{
     }
 
     private void openLimitUp(){
+        List<SpaceHeight> spaceHeights = spaceHeightRepository.findByDayFormat(MyUtils.getYesterdayDayFormat());
+        if(spaceHeights!=null && spaceHeights.size()>0){
+            SpaceHeight spaceHeight = spaceHeights.get(0);
+            spaceHeight.setTodayOpenPrice(getIntCurrentPrice(spaceHeight.getFirstCode()));
+            spaceHeightRepository.save(spaceHeight);
+        }
         List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(MyUtils.getYesterdayDayFormat());
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTodayOpenPrice(getIntCurrentPrice(xgbStock.getCode()));
             xgbStockRepository.save(xgbStock);
         }
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(2,MyUtils.getCurrentDate()));
+
+        spaceHeights = spaceHeightRepository.findByDayFormat(start);
+        if(spaceHeights!=null && spaceHeights.size()>0){
+            SpaceHeight spaceHeight = spaceHeights.get(0);
+            spaceHeight.setTomorrowOpenPrice(getIntCurrentPrice(spaceHeight.getFirstCode()));
+            spaceHeightRepository.save(spaceHeight);
+        }
+
         xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(start);
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTomorrowOpenPrice(getIntCurrentPrice(xgbStock.getCode()));
@@ -72,12 +88,24 @@ public class XgbDealDataService extends QtService{
         }
     }
     private void closeLimitUp(){
+        List<SpaceHeight> spaceHeights = spaceHeightRepository.findByDayFormat(MyUtils.getYesterdayDayFormat());
+        if(spaceHeights!=null && spaceHeights.size()>0){
+            SpaceHeight spaceHeight = spaceHeights.get(0);
+            spaceHeight.setTomorrowOpenPrice(getIntCurrentPrice(spaceHeight.getFirstCode()));
+            spaceHeightRepository.save(spaceHeight);
+        }
         List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(MyUtils.getYesterdayDayFormat());
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTodayClosePrice(getIntCurrentPrice(xgbStock.getCode()));
             xgbStockRepository.save(xgbStock);
         }
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(2,MyUtils.getCurrentDate()));
+        spaceHeights = spaceHeightRepository.findByDayFormat(start);
+        if(spaceHeights!=null && spaceHeights.size()>0){
+            SpaceHeight spaceHeight = spaceHeights.get(0);
+            spaceHeight.setTomorrowOpenPrice(getIntCurrentPrice(spaceHeight.getFirstCode()));
+            spaceHeightRepository.save(spaceHeight);
+        }
         xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(start);
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTomorrowClosePrice(getIntCurrentPrice(xgbStock.getCode()));
