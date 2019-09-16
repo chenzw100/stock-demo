@@ -48,7 +48,7 @@ public class SpaceHeight {
     private Integer tomorrowOpenPrice;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '明天收盘'")
     private Integer tomorrowClosePrice;
-
+    public SpaceHeight(){}
     public SpaceHeight(String code, String name){
         this.firstCode =code;
         this.firstName = name;

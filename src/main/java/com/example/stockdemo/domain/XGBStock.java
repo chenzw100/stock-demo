@@ -33,7 +33,7 @@ public class XGBStock implements Comparable<XGBStock>{
     private Integer tomorrowOpenPrice;
     @Column(nullable = true,columnDefinition="int(11) DEFAULT 0 COMMENT '明天收盘'")
     private Integer tomorrowClosePrice;
-
+    public XGBStock(){}
     public XGBStock(String code, String name){
         this.code =code;
         this.name = name;

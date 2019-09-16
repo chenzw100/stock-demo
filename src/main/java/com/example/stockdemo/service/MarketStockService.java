@@ -46,7 +46,7 @@ public abstract class MarketStockService {
 
         for(int i=0;i<closeLimitUp.size();i++){
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
-            XGBStock xgbStock = new XGBStock();
+            XGBStock xgbStock = new XGBStock("1","1");
             xgbStock.setName(jsonArray.toArray()[1].toString());
             String codeStr = jsonArray.toArray()[0].toString();
             String code = codeStr.substring(0, 6);
@@ -89,7 +89,7 @@ public abstract class MarketStockService {
 
         for(int i=0;i<closeLimitUp.size();i++){
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
-            XGBStock xgbStock = new XGBStock();
+            XGBStock xgbStock = new XGBStock("1","1");
             xgbStock.setName(jsonArray.toArray()[1].toString());
             String codeStr = jsonArray.toArray()[0].toString();
             String code = codeStr.substring(0, 6);
@@ -123,7 +123,7 @@ public abstract class MarketStockService {
         JSONArray closeLimitUp = JSONObject.parseObject(response.toString()).getJSONObject("data").getJSONArray("items");
         for(int i=0;i<closeLimitUp.size();i++){
             JSONArray jsonArray =  closeLimitUp.getJSONArray(i);
-            XGBStock xgbStock = new XGBStock();
+            XGBStock xgbStock = new XGBStock("1","1");
             xgbStock.setName(jsonArray.toArray()[1].toString());
             String code = jsonArray.toArray()[0].toString().substring(0,6);
             xgbStock.setCode(code);
