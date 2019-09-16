@@ -178,7 +178,6 @@ public class XgbService extends QtService {
                 } else {
                     downStock.setCode("sh" + code);
                 }
-                downStock.setCode(code);
                 downStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(jsonStock.getString("price")));
                 downStock.setDownRate(cp*100);
                 downStockRepository.save(downStock);
@@ -212,7 +211,6 @@ public class XgbService extends QtService {
                 } else {
                     downStock.setCode("sh" + code);
                 }
-                downStock.setCode(code);
                 downStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(jsonStock.getString("price")));
                 downStock.setDownRate(cp*100);
                 downStockRepository.save(downStock);
