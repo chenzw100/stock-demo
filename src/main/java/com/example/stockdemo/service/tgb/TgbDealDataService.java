@@ -34,10 +34,13 @@ public class TgbDealDataService extends QtService{
     MyTgbStockRepository myTgbStockRepository;
     @Autowired
     SinaService sinaService;
-
+    public void preFivePan(){
+        log.info("tgb==> preFivePan start");
+        choiceFive();
+        log.info("tgb==> preFivePan end");
+    }
     public void prePan(){
         log.info("tgb==> prePan start");
-        choiceFive();
         choiceCurrent();
         log.info("tgb==> prePan end");
     }

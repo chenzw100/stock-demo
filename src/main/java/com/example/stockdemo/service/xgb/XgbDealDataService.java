@@ -68,6 +68,7 @@ public class XgbDealDataService extends QtService{
             spaceHeightRepository.save(spaceHeight);
         }
         List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(MyUtils.getYesterdayDayFormat());
+        log.info("openLimitUp xgbStocks size:"+xgbStocks.size());
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTodayOpenPrice(getIntCurrentPrice(xgbStock.getCode()));
             xgbStockRepository.save(xgbStock);
@@ -82,6 +83,7 @@ public class XgbDealDataService extends QtService{
         }
 
         xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(start);
+        log.info("openLimitUp pre xgbStocks size:"+xgbStocks.size());
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTomorrowOpenPrice(getIntCurrentPrice(xgbStock.getCode()));
             xgbStockRepository.save(xgbStock);
@@ -89,12 +91,14 @@ public class XgbDealDataService extends QtService{
     }
     private void closeLimitUp(){
         List<SpaceHeight> spaceHeights = spaceHeightRepository.findByDayFormat(MyUtils.getYesterdayDayFormat());
+        log.info("closeLimitUp SpaceHeight size:"+spaceHeights.size());
         if(spaceHeights!=null && spaceHeights.size()>0){
             SpaceHeight spaceHeight = spaceHeights.get(0);
             spaceHeight.setTomorrowOpenPrice(getIntCurrentPrice(spaceHeight.getFirstCode()));
             spaceHeightRepository.save(spaceHeight);
         }
         List<XGBStock> xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(MyUtils.getYesterdayDayFormat());
+        log.info("closeLimitUp xgbStocks size:"+xgbStocks.size());
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTodayClosePrice(getIntCurrentPrice(xgbStock.getCode()));
             xgbStockRepository.save(xgbStock);
@@ -107,6 +111,7 @@ public class XgbDealDataService extends QtService{
             spaceHeightRepository.save(spaceHeight);
         }
         xgbStocks = xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(start);
+        log.info("closeLimitUp per xgbStocks size:"+xgbStocks.size());
         for (XGBStock xgbStock :xgbStocks){
             xgbStock.setTomorrowClosePrice(getIntCurrentPrice(xgbStock.getCode()));
             xgbStockRepository.save(xgbStock);

@@ -61,7 +61,7 @@ public class TgbService extends QtService {
                 tgbStock.setHotValue(Integer.parseInt(tds.get(2).text()));
                 tgbStock.setHotSeven(Integer.parseInt(tds.get(3).text()));
                 tgbStock.setCreated(MyUtils.getCurrentDate());
-                log.info("==>WORKDAY:"+code+":"+stockName);
+                log.info("==>WORKDAY:"+code);
                 List<XGBStock> xgbStocks = xgbStockRepository.findByCodeAndDayFormat(code,MyUtils.getDayFormat(MyUtils.getYesterdayDate()));
                 if(xgbStocks!=null && xgbStocks.size()>0){
                     XGBStock xgbStock =xgbStocks.get(0);

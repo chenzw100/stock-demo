@@ -104,6 +104,39 @@ public class StockController {
 
         return desc+start+"-"+end+"最终:<br>"+hotMe+"股吧热议:<br>"+totalStocks1+"自助热议:<br>"+myTotalStocks+"当日股吧:<br>"+list;
     }
+    @RequestMapping("/info/{end}")
+    String info(@PathVariable("end")String end) {
+        String queryEnd = end;
+        if("1".equals(end)){
+            if(isWorkday()){
+                queryEnd=MyUtils.getDayFormat();
+            }else {
+                queryEnd=MyUtils.getYesterdayDayFormat();
+            }
+        }else if("2".equals(end)){
+            Date endDate =  MyUtils.getFormatDate(PRE_END);
+            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.preWorkDay(endDate));
+        }else if("3".equals(end)){
+            Date endDate =  MyUtils.getFormatDate(PRE_END);
+            queryEnd =MyUtils.getDayFormat(MyChineseWorkDay.nextWorkDay(endDate));
+        }
+        Date endDate =  MyUtils.getFormatDate(queryEnd);
+        PRE_END=queryEnd;
+        String desc ="查询20190124之后的数据，20190610-20190901中断数据，坚持模式！！<br>查询日期";
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(5,endDate));
+        endDate =  MyUtils.getFormatDate(queryEnd);
+        String yesterday =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(1,endDate));
+        List<FiveTgbStock> hotSortFive = fiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
+        List<MyFiveTgbStock> myTgbStockFive = myFiveTgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
+        List<TgbStock> tgbHots = tgbStockRepository.findByDayFormatOrderByOpenBidRate(queryEnd);
+        List<Temperature> temperaturesClose=temperatureRepository.close(start,queryEnd);
+        List<XGBStock> hs=xgbStockRepository.findByDayFormatOrderByContinueBoardCountDesc(yesterday);
+        XGBStock hstock=null;
+        if(hs!=null && hs.size()>0){
+            hstock = hs.get(0);
+        }
+        return desc+queryEnd+"<br>最近5天市场情况<br>"+temperaturesClose+"<br>市场（新题材）最高版:"+hstock+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】股吧数量:"+hotSortFive.size()+"<br>"+hotSortFive+"end"+queryEnd+"<br>【信号123 注意集体高潮（全涨停、大亏） 相信数据 新题材】实时数量:"+myTgbStockFive.size()+"<br>"+myTgbStockFive+queryEnd+"<br>股吧热门:<br>"+tgbHots;
+    }
     @RequestMapping("/m/{end}")
     String m(@PathVariable("end")String end) {
         String queryEnd = end;

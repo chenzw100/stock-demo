@@ -165,6 +165,7 @@ public class ChartsController {
         resultMap.put("yTradeVal", tradeValMap.values());
 
 
+
         return resultMap;
     }
     @RequestMapping(value = "/close/{end}", method = RequestMethod.GET)

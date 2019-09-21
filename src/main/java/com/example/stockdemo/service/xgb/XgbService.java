@@ -101,7 +101,7 @@ public class XgbService extends QtService {
         int spaceHeight = 1;
         Object response = getRequest(limit_up);
         JSONArray array = JSONObject.parseObject(response.toString()).getJSONArray("data");
-
+        log.info(":zt==================>"+array.size());
         for(int i=0;i<array.size();i++){
             JSONObject jsonStock =  array.getJSONObject(i);
             String name = jsonStock.getString("stock_chi_name");
@@ -115,7 +115,7 @@ public class XgbService extends QtService {
                 } else {
                     xgbStock.setCode("sh" + code);
                 }
-                log.info(i+":zt==================>"+xgbStock.getCode());
+                //log.info(i+":zt==================>"+xgbStock.getCode());
                 xgbStock.setOpenCount(jsonStock.getInteger("break_limit_up_times"));
                 xgbStock.setContinueBoardCount(jsonStock.getInteger("limit_up_days"));
                 xgbStock.setYesterdayClosePrice(MyUtils.getCentByYuanStr(jsonStock.getString("price")));
@@ -157,13 +157,13 @@ public class XgbService extends QtService {
 
         Object response = getRequest(limit_up_broken);
         JSONArray array = JSONObject.parseObject(response.toString()).getJSONArray("data");
-
+        log.info("-broken---->"+array.size());
         for(int i=0;i<array.size();i++){
             JSONObject jsonStock =  array.getJSONObject(i);
             String name = jsonStock.getString("stock_chi_name");
             String changePercent = jsonStock.getString("change_percent");
             int cp =MyUtils.getCentByYuanStr(changePercent);
-            log.info(name+"-broken---->"+cp);
+            //log.info(name+"-broken---->"+cp);
             if(!name.contains("S") && cp<0) {
                 DownStock downStock = new DownStock();
                 downStock.setStockType(NumberEnum.StockType.OPEN.getCode());
@@ -190,13 +190,13 @@ public class XgbService extends QtService {
 
         Object response = getRequest(super_stock);
         JSONArray array = JSONObject.parseObject(response.toString()).getJSONArray("data");
-
+        log.info("-->super"+array.size());
         for(int i=0;i<array.size();i++){
             JSONObject jsonStock =  array.getJSONObject(i);
             String name = jsonStock.getString("stock_chi_name");
             String changePercent = jsonStock.getString("change_percent");
             int cp =MyUtils.getCentByYuanStr(changePercent);
-            log.info(name+"-->super"+cp);
+            //log.info(name+"-->super"+cp);
             if(!name.contains("S") && cp<-8) {
                 DownStock downStock = new DownStock();
                 downStock.setStockType(NumberEnum.StockType.STRONG.getCode());
