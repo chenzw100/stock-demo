@@ -25,5 +25,6 @@ public interface XgbStockRepository extends JpaRepository<XGBStock,Long> {
     List<XGBStock> findByDayFormatAndContinueBoardCountGreaterThan(String dayFormat,int min);
     XGBStock save(XGBStock xgbStock);
     List<XGBStock> findByDayFormatOrderByContinueBoardCountDesc(String dayFormat);
+    List<XGBStock> findByCodeAndPlateNameIsNotNullOrderByIdDesc(String code);
 
 }

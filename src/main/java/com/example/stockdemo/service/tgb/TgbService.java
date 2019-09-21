@@ -70,7 +70,12 @@ public class TgbService extends QtService {
                     tgbStock.setContinuous(xgbStock.getContinueBoardCount());
                     tgbStock.setLimitUp(1);
                 }else {
-                    tgbStock.setPlateName("");
+                    xgbStocks =xgbStockRepository.findByCodeAndPlateNameIsNotNullOrderByIdDesc(code);
+                    if(xgbStocks!=null && xgbStocks.size()>0){
+                        tgbStock.setPlateName(xgbStocks.get(0).getPlateName());
+                    }else {
+                        tgbStock.setPlateName("");
+                    }
                     tgbStock.setOneFlag(1);
                     tgbStock.setContinuous(0);
                     tgbStock.setLimitUp(0);

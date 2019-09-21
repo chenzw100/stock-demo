@@ -71,9 +71,10 @@ public class StockController {
     private static String PRE_END="";
     @RequestMapping("/test")
     String test(){
-        tgbDealDataService.choiceFive();
-        tgbDealDataService.choiceCurrent();
-        return "success";
+        //tgbDealDataService.choiceFive();
+        //tgbDealDataService.choiceCurrent();
+        List<XGBStock>stocks =  xgbStockRepository.findByCodeAndPlateNameIsNotNullOrderByIdDesc("sz300052");
+        return "success"+stocks.get(0);
     }
     @RequestMapping("/test2")
     String test2(){

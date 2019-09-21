@@ -79,7 +79,12 @@ public class TgbDealDataService extends QtService{
                 fiveTgbStock.setContinuous(xgbStock.getContinueBoardCount());
                 fiveTgbStock.setLimitUp(1);
             }else {
-                fiveTgbStock.setPlateName("");
+                xgbStocks =xgbStockRepository.findByCodeAndPlateNameIsNotNullOrderByIdDesc(myTotalStock.getCode());
+                if(xgbStocks!=null && xgbStocks.size()>0){
+                    fiveTgbStock.setPlateName(xgbStocks.get(0).getPlateName());
+                }else {
+                    fiveTgbStock.setPlateName("");
+                }
                 fiveTgbStock.setOneFlag(1);
                 fiveTgbStock.setContinuous(0);
                 fiveTgbStock.setLimitUp(0);
@@ -208,7 +213,12 @@ public class TgbDealDataService extends QtService{
                 myTgbStock.setContinuous(xgbStock.getContinueBoardCount());
                 myTgbStock.setLimitUp(1);
             }else {
-                myTgbStock.setPlateName("");
+                xgbStocks =xgbStockRepository.findByCodeAndPlateNameIsNotNullOrderByIdDesc(myTotalStock.getCode());
+                if(xgbStocks!=null && xgbStocks.size()>0){
+                    myTgbStock.setPlateName(xgbStocks.get(0).getPlateName());
+                }else {
+                    myTgbStock.setPlateName("");
+                }
                 myTgbStock.setOneFlag(1);
                 myTgbStock.setContinuous(0);
                 myTgbStock.setLimitUp(0);
@@ -238,7 +248,12 @@ public class TgbDealDataService extends QtService{
                 myFiveTgbStock.setContinuous(xgbStock.getContinueBoardCount());
                 myFiveTgbStock.setLimitUp(1);
             }else {
-                myFiveTgbStock.setPlateName("");
+                xgbStocks =xgbStockRepository.findByCodeAndPlateNameIsNotNullOrderByIdDesc(myTotalStock.getCode());
+                if(xgbStocks!=null && xgbStocks.size()>0){
+                    myFiveTgbStock.setPlateName(xgbStocks.get(0).getPlateName());
+                }else {
+                    myFiveTgbStock.setPlateName("");
+                }
                 myFiveTgbStock.setOneFlag(1);
                 myFiveTgbStock.setContinuous(0);
                 myFiveTgbStock.setLimitUp(0);
