@@ -416,7 +416,7 @@ public class TgbDealDataService extends QtService{
 
     public void fiveStatistic(){
         String end=MyUtils.getDayFormat();
-        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(3,MyUtils.getCurrentDate()));
         List<FiveTgbStock> xgbFiveUpStocks = fiveTgbStockRepository.fiveStatistic(start, end);
         log.info("--->fiveStatistic count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
@@ -438,7 +438,7 @@ public class TgbDealDataService extends QtService{
     }
     public void myFiveStatistic(){
         String end=MyUtils.getDayFormat();
-        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(3,MyUtils.getCurrentDate()));
         List<MyFiveTgbStock> xgbFiveUpStocks = myFiveTgbStockRepository.fiveStatistic(start, end);
         log.info("--->5day count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){

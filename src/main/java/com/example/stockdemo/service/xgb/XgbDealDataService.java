@@ -201,7 +201,7 @@ public class XgbDealDataService extends QtService{
 
     public void fiveStatistic(){
         String end=MyUtils.getDayFormat();
-        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
+        String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(3,MyUtils.getCurrentDate()));
         List<XgbFiveUpStock> xgbFiveUpStocks = xgbFiveUpStockRepository.fiveStatistic(start, end);
         log.info(start+"--->xgb.fiveStatistic 5day count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
