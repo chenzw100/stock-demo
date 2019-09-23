@@ -202,11 +202,12 @@ public class XgbDealDataService extends QtService{
     public void fiveStatistic(){
         String end=MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
-        List<XgbFiveUpStock> xgbFiveUpStocks = xgbFiveUpStockRepository.findByCodeAndDayFormat(start, end);
+        List<XgbFiveUpStock> xgbFiveUpStocks = xgbFiveUpStockRepository.fiveStatistic(start, end);
         log.info(start+"--->xgb.fiveStatistic 5day count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
             for (XgbFiveUpStock xgbFiveUpStock : xgbFiveUpStocks){
                 SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
+                log.info(xgbFiveUpStock.getShowCount()+xgbFiveUpStock.getCode()+",xgb five day High:"+xgbFiveUpStock.getFiveHighPrice()+"low:"+xgbFiveUpStock.getFiveLowPrice()+"==>new High:"+tinyInfoStock.getHighPrice()+",new Low:"+tinyInfoStock.getLowPrice());
                 if(tinyInfoStock.getHighPrice()>xgbFiveUpStock.getFiveHighPrice().intValue()){
                     xgbFiveUpStock.setFiveHighPrice(tinyInfoStock.getHighPrice());
                 }

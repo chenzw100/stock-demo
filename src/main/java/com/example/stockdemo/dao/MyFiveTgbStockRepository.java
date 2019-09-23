@@ -26,7 +26,7 @@ public interface MyFiveTgbStockRepository extends JpaRepository<MyFiveTgbStock,L
     List<MyFiveTgbStock> findByDayFormatOrderByOpenBidRateDesc(String dayFormat);
     List<MyFiveTgbStock> findByDayFormatOrderByOpenBidRate(String dayFormat);
     MyFiveTgbStock save(MyFiveTgbStock tgbStock);
-    @Query(value="SELECT * from my_five_tgb_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code", nativeQuery = true)
+    @Query(value="SELECT * from my_five_tgb_stock WHERE day_format BETWEEN ?1 AND ?2", nativeQuery = true)
     public List<MyFiveTgbStock> fiveStatistic(String start , String end);
 
 

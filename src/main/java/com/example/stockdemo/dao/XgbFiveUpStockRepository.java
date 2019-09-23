@@ -25,7 +25,7 @@ public interface XgbFiveUpStockRepository extends JpaRepository<XgbFiveUpStock,L
     List<XgbFiveUpStock> findByDayFormatAndContinueBoardCountGreaterThan(String dayFormat, int min);
     XgbFiveUpStock save(XgbFiveUpStock xgbStock);
     List<XgbFiveUpStock> findByDayFormatOrderByContinueBoardCountDesc(String dayFormat);
-    @Query(value="SELECT * from xgb_five_up_stock WHERE day_format BETWEEN ?1 AND ?2  GROUP BY code", nativeQuery = true)
+    @Query(value="SELECT * from xgb_five_up_stock WHERE day_format BETWEEN ?1 AND ?2", nativeQuery = true)
     public List<XgbFiveUpStock> fiveStatistic(String start ,String end);
 
 }

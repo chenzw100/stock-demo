@@ -73,8 +73,10 @@ public class StockController {
     String test(){
         //tgbDealDataService.choiceFive();
         //tgbDealDataService.choiceCurrent();
-        List<XGBStock>stocks =  xgbStockRepository.findByCodeAndPlateNameIsNotNullOrderByIdDesc("sz300052");
-        return "success"+stocks.get(0);
+        //List<XGBStock>stocks =  xgbStockRepository.findByCodeAndPlateNameIsNotNullOrderByIdDesc("sz300052");
+        tgbDealDataService.fiveStatistic();
+        tgbDealDataService.myFiveStatistic();
+        return "success";
     }
     @RequestMapping("/test2")
     String test2(){

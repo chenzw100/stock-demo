@@ -418,10 +418,11 @@ public class TgbDealDataService extends QtService{
         String end=MyUtils.getDayFormat();
         String start =MyUtils.getDayFormat(MyChineseWorkDay.preDaysWorkDay(4,MyUtils.getCurrentDate()));
         List<FiveTgbStock> xgbFiveUpStocks = fiveTgbStockRepository.fiveStatistic(start, end);
-        log.info("--->5day count:"+xgbFiveUpStocks.size());
+        log.info("--->fiveStatistic count:"+xgbFiveUpStocks.size());
         if(xgbFiveUpStocks.size()>0){
             for (FiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){
                 SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
+                log.info(xgbFiveUpStock.getShowCount()+xgbFiveUpStock.getCode()+",five day High:"+xgbFiveUpStock.getFiveHighPrice()+"low:"+xgbFiveUpStock.getFiveLowPrice()+"==>new High:"+tinyInfoStock.getHighPrice()+",new Low:"+tinyInfoStock.getLowPrice());
                 if(tinyInfoStock.getHighPrice()>xgbFiveUpStock.getFiveHighPrice().intValue()){
                     xgbFiveUpStock.setFiveHighPrice(tinyInfoStock.getHighPrice());
                 }
@@ -443,6 +444,7 @@ public class TgbDealDataService extends QtService{
         if(xgbFiveUpStocks.size()>0){
             for (MyFiveTgbStock xgbFiveUpStock : xgbFiveUpStocks){
                 SinaTinyInfoStock tinyInfoStock = sinaService.getTiny(xgbFiveUpStock.getCode());
+                log.info(xgbFiveUpStock.getShowCount()+xgbFiveUpStock.getCode()+",myfive day High:"+xgbFiveUpStock.getFiveHighPrice()+"low:"+xgbFiveUpStock.getFiveLowPrice()+"==>new High:"+tinyInfoStock.getHighPrice()+",new Low:"+tinyInfoStock.getLowPrice());
                 if(tinyInfoStock.getHighPrice()>xgbFiveUpStock.getFiveHighPrice().intValue()){
                     xgbFiveUpStock.setFiveHighPrice(tinyInfoStock.getHighPrice());
                 }
