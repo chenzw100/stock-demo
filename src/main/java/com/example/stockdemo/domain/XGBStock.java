@@ -86,6 +86,46 @@ public class XGBStock implements Comparable<XGBStock>{
     public Date getCreated() {
         return created;
     }
+    @Transient
+    private String todayOpenRate;
+    @Transient
+    private String todayCloseRate;
+    @Transient
+    private String tomorrowOpenRate;
+    @Transient
+    private String tomorrowCloseRate;
+
+    public String getTodayOpenRate() {
+        return MyUtils.getIncreaseRate(getTodayOpenPrice(), getYesterdayClosePrice()).toString();
+    }
+
+    public void setTodayOpenRate(String todayOpenRate) {
+        this.todayOpenRate = todayOpenRate;
+    }
+
+    public String getTodayCloseRate() {
+        return MyUtils.getIncreaseRate(getTodayClosePrice(),getTodayOpenPrice()).toString();
+    }
+
+    public void setTodayCloseRate(String todayCloseRate) {
+        this.todayCloseRate = todayCloseRate;
+    }
+
+    public String getTomorrowOpenRate() {
+        return MyUtils.getIncreaseRate(getTomorrowOpenPrice(),getTodayOpenPrice()).toString();
+    }
+
+    public void setTomorrowOpenRate(String tomorrowOpenRate) {
+        this.tomorrowOpenRate = tomorrowOpenRate;
+    }
+
+    public String getTomorrowCloseRate() {
+        return MyUtils.getIncreaseRate(getTomorrowClosePrice(),getTodayOpenPrice()).toString();
+    }
+
+    public void setTomorrowCloseRate(String tomorrowCloseRate) {
+        this.tomorrowCloseRate = tomorrowCloseRate;
+    }
 
     public void setCreated(Date created) {
         this.dayFormat=MyUtils.getDayFormat(created);
@@ -189,8 +229,7 @@ public class XGBStock implements Comparable<XGBStock>{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(code).append(name).append(",open:").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").
-                append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append(plateName);
+        sb.append(code).append(name).append(",open:").append(getOpenCount()).append(",continue:").append(getContinueBoardCount()).append(",price:").append(MyUtils.getYuanByCent(getYesterdayClosePrice())).append(plateName);
         return sb.toString();
     }
     public XgbFiveUpStock toXgbFiveUpStock(){
